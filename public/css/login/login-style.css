@@ -1,0 +1,9 @@
+div#login-container,
+div#message-container{
+	width: 360px;
+	margin: 0 auto;
+}
+
+div#login-container{
+	padding: 20px 20px 5px 20px;
+}

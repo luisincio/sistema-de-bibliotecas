@@ -15,9 +15,14 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	public function home()
 	{
-		return View::make('hello');
+		if(Auth::check()){
+			return Redirect::to('/dashboard');
+		}else{
+			$data["config"] = GeneralConfiguration::first();
+			return View::make('login/login',$data);
+		}
 	}
 
 }

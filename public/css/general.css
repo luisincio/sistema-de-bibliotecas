@@ -1,0 +1,12 @@
+div#content{
+	width: 1120px;
+	margin: 0 auto;
+}
+
+div.search-criteria{
+	margin-top: 20px;
+}
+
+div.loader_container{
+	display: none;
+}
