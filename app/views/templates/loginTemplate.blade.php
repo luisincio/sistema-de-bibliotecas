@@ -27,7 +27,7 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a href="{{ URL::to('/') }}">
-						<img src="{{ asset('img') }}/{{ $config->logo_path }}"/>
+						<img src="{{ asset('img') }}/{{ $config->logo_path }}" width="42" style="display:block;margin-top:4px;"/>
 					</a>
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
