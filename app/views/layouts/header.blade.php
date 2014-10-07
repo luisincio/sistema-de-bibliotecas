@@ -29,8 +29,8 @@
 						<li>{{ HTML::link('/config/list_supplier','Buscar Proveedores') }}</li>
 						<li>{{ HTML::link('/config/create_supplier','Registrar Proveedor') }}</li>
 						<li class="divider"></li>
-						<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Publicaciones') }}</li>
-						<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Publicación') }}</li>
+						<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Materiales') }}</li>
+						<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Material') }}</li>
 					</ul>
 				</li>
 				@endif
