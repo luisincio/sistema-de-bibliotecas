@@ -110,6 +110,16 @@ class UserController extends BaseController {
 				// Check if the current user is the "System Admin"
 				$data["material_types"] = MaterialType::all();
 				$data["profile"] = Profile::find($id);
+				$aux_array = MaterialTypexprofile::getMaterialTypesXProfile($id)->select('material_type_id')->get()->toArray();
+				if(!empty($aux_array)){
+					$data["material_typesxprofile_before"] = $aux_array;
+					$data["material_typesxprofile"] =[];
+					foreach($data["material_typesxprofile_before"] as $item){
+						$data["material_typesxprofile"][]=$item['material_type_id'];
+					}
+				}else{
+					$data["material_typesxprofile"] = [];
+				}
 				return View::make('user/editProfile',$data);
 			}else{
 				return View::make('error/error');
@@ -130,12 +140,31 @@ class UserController extends BaseController {
 			// Check if the current user is the "System Admin"
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Edit the profiles in the database
-				Input::merge(array_map('trim', Input::all()));
+				//Input::merge(array_map('trim', Input::all()));
 				$id = Input::get('id');
 				$url = 'user/edit_profile/'.$id;
 				$profile = Profile::find($id);
 				$profile->description = Input::get('descripcion');
 				$profile->save();
+
+				$data["material_types"] = MaterialType::all();
+				foreach($data["material_types"] as $item){
+					$empty = MaterialTypexprofile::getRowByProfileIdMaterialTypeId($id,$item->id)->get();
+					if(!$empty->isEmpty()){
+						$material_typeXprofile = MaterialTypexprofile::find($empty[0]->id);
+						$material_typeXprofile->delete();
+					}
+				}
+
+				$selected_material_types = Input::get('selected_material_types');
+				if($selected_material_types){
+					foreach($selected_material_types as $selected_material_type){
+						$material_typesxprofile = new MaterialTypexprofile;
+						$material_typesxprofile->material_type_id = $selected_material_type;
+						$material_typesxprofile->profile_id = $id;
+						$material_typesxprofile->save();
+					}
+				}
 				Session::flash('message', 'Se editó correctamente el Perfil.');
 				return Redirect::to($url);
 			}else{

@@ -65,13 +65,16 @@
 					{{ $material_type->description }}
 				</td>
 				<td class="text-center">
-					{{ Form::checkbox('selected_material_types[]',$material_type->id) }}
+					@if(in_array($material_type->id, $material_typesxprofile))
+						{{ Form::checkbox('selected_material_types[]', $material_type->id, true)}}
+					@else
+						{{ Form::checkbox('selected_material_types[]', $material_type->id)}}
+					@endif
+
 				</td>
 			</tr>
 			@endforeach
 		</table>
-	{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
-	{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+	{{ Form::submit('Guardar',array('id'=>'submit-edit', 'class'=>'btn btn-primary')) }}
 	{{ Form::close() }}	
-	
 @stop
