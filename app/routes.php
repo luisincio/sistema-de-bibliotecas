@@ -54,4 +54,8 @@ Route::group(array('prefix'=>'myaccount', 'before'=>'auth'),function(){
 Route::group(array('prefix'=>'user', 'before'=>'auth'),function(){
 	Route::get('/create_profile','UserController@render_create_profile');
 	Route::post('/submit_create_profile','UserController@submit_create_profile');
+	Route::get('/list_profile','UserController@list_profile');
+	Route::get('/edit_profile/{id}','UserController@render_edit_profile');
+	Route::post('/submit_edit_profile','UserController@submit_edit_profile');
+	Route::post('/delete_profile_ajax','UserController@delete_profile_ajax');
 });
