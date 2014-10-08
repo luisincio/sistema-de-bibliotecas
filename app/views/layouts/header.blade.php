@@ -58,7 +58,7 @@
 						<li>{{ HTML::link('#','Buscar Usuarios') }}</li>
 						<li>{{ HTML::link('#','Registrar Usuario') }}</li>
 						<li class="divider"></li>
-						<li>{{ HTML::link('#','Mostrar Perfiles') }}</li>
+						<li>{{ HTML::link('/user/list_profile','Mostrar Perfiles') }}</li>
 						<li>{{ HTML::link('/user/create_profile','Registrar Perfil') }}</li>
 					</ul>
 				</li>
