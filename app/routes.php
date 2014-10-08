@@ -48,3 +48,10 @@ Route::group(array('prefix'=>'myaccount', 'before'=>'auth'),function(){
 	Route::get('/change_password','MyAccountController@render_change_password');
 	Route::post('/submit_change_password','MyAccountController@submit_change_password');
 });
+
+
+/* Users */
+Route::group(array('prefix'=>'user', 'before'=>'auth'),function(){
+	Route::get('/create_profile','UserController@render_create_profile');
+	Route::post('/submit_create_profile','UserController@submit_create_profile');
+});
