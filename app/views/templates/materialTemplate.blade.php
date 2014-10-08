@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/general.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/material/material.js') }}"></script>
 	<script type="text/javascript">
 		var inside_url = "{{$inside_url}}";
 	</script>
