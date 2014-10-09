@@ -142,7 +142,9 @@ class ConfigurationController extends BaseController
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
 				$supplier = Supplier::find($selected_id);
-				$supplier->delete();
+				if($supplier){
+					$supplier->delete();
+				}
 			}
 			return Response::json(array( 'success' => true ),200);
 		}else{
@@ -395,7 +397,9 @@ class ConfigurationController extends BaseController
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
 				$material_type = MaterialType::find($selected_id);
-				$material_type->delete();
+				if($material_type){
+					$material_type->delete();
+				}
 			}
 			return Response::json(array( 'success' => true ),200);
 		}else{

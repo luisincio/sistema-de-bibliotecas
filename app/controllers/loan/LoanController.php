@@ -39,6 +39,7 @@ class LoanController extends BaseController
 				$data["search"] = $data["search_criteria"];
 				$person = Person::searchPersonByDocument($data["search_criteria"])->first();
 				$data["loans"] = null;
+				$data["searched_user_name"] = null;
 				if($person){
 					$user = User::searchUserByPerson($person->id)->first();
 					if($user){
@@ -72,12 +73,15 @@ class LoanController extends BaseController
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
 				$loan = Loan::find($selected_id);
-				$loan->delete();
-
-				$material = Material::find($loan->material_id);
-				$material->available = 1;
-				$material->save();
-
+				if($loan){
+					$loan->delete();
+					
+					$material = Material::find($loan->material_id);
+					if($material){
+						$material->available = 1;
+						$material->save();
+					}
+				}
 			}
 			return Response::json(array( 'success' => true ),200);
 		}else{

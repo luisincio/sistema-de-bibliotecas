@@ -12,7 +12,11 @@
 		<div class="search-criteria">
 			@if($search_criteria)
 				<h3>
-					Préstamos activos de {{ $searched_user_name }} ({{ $search_criteria }})
+					@if($searched_user_name)
+						Préstamos activos de {{ $searched_user_name }} ({{ $search_criteria }})
+					@else
+						No se encontró usuario con número de documento {{ $search_criteria }}
+					@endif
 				</h3>
 			@endif
 		</div>
@@ -24,7 +28,7 @@
 				<th>Editorial</th>
 				<th>Edición</th>
 				<th>Fecha de vencimiento</th>
-				<th class="text-center">Seleccione</th>
+				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
 			@if($loans)
 				@foreach( $loans as $loan )
@@ -48,7 +52,7 @@
 						{{ $loan->expire_at }}
 					</td>
 					<td class="text-center">
-						{{ Form::checkbox('selected_id[]',$loan->id) }}
+						{{ Form::checkbox('loans',$loan->id) }}
 					</td>
 				</tr>
 				@endforeach

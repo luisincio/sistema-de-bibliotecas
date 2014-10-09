@@ -5,24 +5,26 @@ $( document ).ready(function(){
 		e.preventDefault();
 		if(return_register){
 			return_register = false;
-			var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
 			var selected = [];
-			if(confirmation){
-				$("input[type=checkbox]:checked").each(function(){
-					selected.push($(this).val());
-				});
-				if(selected.length > 0){
+			$("input[type=checkbox][name=loans]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea registrar la devolución de los materiales seleccionados?");
+				if(confirmation){
 					$.ajax({
 						url: inside_url+'loan/return_register_ajax',
 						type: 'POST',
 						data: { 'selected_id' : selected },
 						beforeSend: function(){
 							$("#delete-selected-loans").addClass("disabled");
+							$("#delete-selected-loans").hide();
 							$(".loader_container").show();
 						},
 						complete: function(){
 							$(".loader_container").hide();
 							$("#delete-selected-loans").removeClass("disabled");
+							$("#delete-selected-loans").show();
 							return_register = true;
 						},
 						success: function(response){
@@ -37,6 +39,9 @@ $( document ).ready(function(){
 						}
 					});
 				}
+			}else{
+				return_register = true;
+				alert('Seleccione alguna casilla.');
 			}
 		}
 	});

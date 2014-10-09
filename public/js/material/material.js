@@ -5,24 +5,26 @@ $( document ).ready(function(){
 		e.preventDefault();
 		if(delete_selected_materials){
 			delete_selected_materials = false;
-			var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
 			var selected = [];
-			if(confirmation){
-				$("input[type=checkbox]:checked").each(function(){
-					selected.push($(this).val());
-				});
-				if(selected.length > 0){
+			$("input[type=checkbox][name=material]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				if(confirmation){
 					$.ajax({
 						url: inside_url+'material/delete_material_ajax',
 						type: 'POST',
 						data: { 'selected_id' : selected },
 						beforeSend: function(){
 							$("#delete-selected-materials").addClass("disabled");
+							$("#delete-selected-materials").hide();
 							$(".loader_container").show();
 						},
 						complete: function(){
 							$(".loader_container").hide();
 							$("#delete-selected-materials").removeClass("disabled");
+							$("#delete-selected-materials").show();
 							delete_selected_materials = true;
 						},
 						success: function(response){
@@ -37,6 +39,9 @@ $( document ).ready(function(){
 						}
 					});
 				}
+			}else{
+				delete_selected_materials = true;
+				alert('Seleccione alguna casilla.');
 			}
 		}
 	});

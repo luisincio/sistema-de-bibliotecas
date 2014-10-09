@@ -8,7 +8,7 @@
 				<th>Nombre</th>
 				<th>¿Físico o Digital?</th>
 				<th>Descripcion</th>
-				<th class="text-center">Seleccione</th>
+				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
 			@foreach( $material_types as $material_type)
 			<tr>
@@ -26,7 +26,7 @@
 					{{ $material_type->description }}
 				</td>
 				<td class="text-center">
-					{{ Form::checkbox('donador',$material_type->id) }}
+					{{ Form::checkbox('material_types',$material_type->id) }}
 				</td>
 			</tr>
 			@endforeach

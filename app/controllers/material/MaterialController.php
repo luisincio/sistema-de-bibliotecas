@@ -84,7 +84,7 @@ class MaterialController extends BaseController
 					}
 
 					Session::flash('message', 'Se registró correctamente el material.');
-					return Redirect::to('material/createMaterial');
+					return Redirect::to('material/create_material');
 				}
 			}else{
 				return View::make('error/error');
@@ -168,11 +168,13 @@ class MaterialController extends BaseController
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 3){
-			// Check if the current user is the "System Admin"
+			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
 				$material = Material::find($selected_id);
-				$material->delete();
+				if($material){
+					$material->delete();
+				}
 			}
 			return Response::json(array( 'success' => true ),200);
 		}else{

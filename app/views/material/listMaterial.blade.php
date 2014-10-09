@@ -32,7 +32,7 @@
 				<th>Autor</th>
 				<th>Editorial</th>
 				<th>ISBN</th>
-				<th class="text-center">Seleccione</th>
+				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
 			@foreach( $materials as $material)
 			<tr>

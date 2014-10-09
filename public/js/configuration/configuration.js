@@ -5,24 +5,26 @@ $( document ).ready(function(){
 		e.preventDefault();
 		if(delete_selected_suppliers){
 			delete_selected_suppliers = false;
-			var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
 			var selected = [];
-			if(confirmation){
-				$("input[type=checkbox]:checked").each(function(){
-					selected.push($(this).val());
-				});
-				if(selected.length > 0){
+			$("input[type=checkbox][name=suppliers]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				if(confirmation){
 					$.ajax({
 						url: inside_url+'config/delete_supplier_ajax',
 						type: 'POST',
 						data: { 'selected_id' : selected },
 						beforeSend: function(){
 							$("#delete-selected-suppliers").addClass("disabled");
+							$("#delete-selected-suppliers").hide();
 							$(".loader_container").show();
 						},
 						complete: function(){
 							$(".loader_container").hide();
 							$("#delete-selected-suppliers").removeClass("disabled");
+							$("#delete-selected-suppliers").show();
 							delete_selected_suppliers = true;
 						},
 						success: function(response){
@@ -37,6 +39,9 @@ $( document ).ready(function(){
 						}
 					});
 				}
+			}else{
+				delete_selected_suppliers = true;
+				alert('Seleccione alguna casilla.');
 			}
 		}
 	});
@@ -46,38 +51,43 @@ $( document ).ready(function(){
 		e.preventDefault();
 		if(delete_selected_material_types){
 			delete_selected_material_types = false;
-			var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
 			var selected = [];
-			if(confirmation){
-				$("input[type=checkbox]:checked").each(function(){
-					selected.push($(this).val());
-				});
-				if(selected.length > 0){
-					$.ajax({
-						url: inside_url+'config/delete_material_type_ajax',
-						type: 'POST',
-						data: { 'selected_id' : selected },
-						beforeSend: function(){
-							$("#delete-selected-material-types").addClass("disabled");
-							$(".loader_container").show();
-						},
-						complete: function(){
-							$(".loader_container").hide();
-							$("#delete-selected-material-types").removeClass("disabled");
-							delete_selected_material_types = true;
-						},
-						success: function(response){
-							if(response.success){
-								location.reload();
-							}else{
+			$("input[type=checkbox][name=material_types]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				if(confirmation){
+						$.ajax({
+							url: inside_url+'config/delete_material_type_ajax',
+							type: 'POST',
+							data: { 'selected_id' : selected },
+							beforeSend: function(){
+								$("#delete-selected-material-types").addClass("disabled");
+								$("#delete-selected-material-types").hide();
+								$(".loader_container").show();
+							},
+							complete: function(){
+								$(".loader_container").hide();
+								$("#delete-selected-material-types").removeClass("disabled");
+								$("#delete-selected-material-types").show();
+								delete_selected_material_types = true;
+							},
+							success: function(response){
+								if(response.success){
+									location.reload();
+								}else{
+									alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								}
+							},
+							error: function(){
 								alert('¡Ocurrió un error! Inténtelo de nuevo.');
 							}
-						},
-						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
-						}
-					});
+						});
 				}
+			}else{
+				delete_selected_material_types = true;
+				alert('Seleccione alguna casilla.');
 			}
 		}
 	});

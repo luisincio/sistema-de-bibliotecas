@@ -6,7 +6,7 @@
 		<table class="table table-hover">
 			<tr class="info">
 				<th>Nombre</th>
-				<th class="text-center">Seleccione</th>
+				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
 			@foreach($profiles as $profile)
 			<tr>
@@ -14,7 +14,7 @@
 					<a href="{{URL::to('/user/edit_profile/')}}/{{$profile->id}}">{{$profile->name}}</a>
 				</td>
 				<td class="text-center">
-					{{ Form::checkbox('perfil',$profile->id) }}
+					{{ Form::checkbox('profiles',$profile->id) }}
 				</td>
 			</tr>
 			@endforeach

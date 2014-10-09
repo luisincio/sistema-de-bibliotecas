@@ -46,7 +46,7 @@
 				<th>Teléfono</th>
 				<th>Celular</th>
 				<th>E-mail</th>
-				<th class="text-center">Seleccione</th>
+				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
 			@foreach( $suppliers as $supplier)
 			<tr>
@@ -76,7 +76,7 @@
 					{{ $supplier->email }}
 				</td>
 				<td class="text-center">
-					{{ Form::checkbox('supplier',$supplier->id) }}
+					{{ Form::checkbox('suppliers',$supplier->id) }}
 				</td>
 			</tr>
 			@endforeach
