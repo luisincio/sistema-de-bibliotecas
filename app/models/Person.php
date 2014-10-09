@@ -35,4 +35,10 @@ class Person extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->hasOne('User');
 	}
 
+	public function scopeSearchPersonByDocument($query,$document)
+	{
+		$query->where('doc_number','=',$document);
+		return $query;
+	}
+
 }

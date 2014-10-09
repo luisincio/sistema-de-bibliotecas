@@ -34,7 +34,7 @@
 					</ul>
 				</li>
 				@endif
-				@if($staff)
+				@if($staff && $staff->role_id == 3)
 				<li class="dropdown">
 					<a href="" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="glyphicon glyphicon-book"></span> Materiales <span class="caret"></span>
@@ -44,8 +44,8 @@
 						<li>{{ HTML::link('#','Registrar Orden de Compra') }}</li>
 						<li>{{ HTML::link('#','Ver Solicitudes') }}</li>
 						<li class="divider"></li>
-						<li>{{ HTML::link('#','Buscar Materiales') }}</li>
-						<li>{{ HTML::link('#','Registrar Material') }}</li>
+						<li>{{ HTML::link('/material/list_material','Buscar Materiales') }}</li>
+						<li>{{ HTML::link('/material/create_material','Registrar Material') }}</li>
 					</ul>
 				</li>
 				@endif
@@ -80,7 +80,7 @@
 					<ul class="dropdown-menu" role="menu">
 						@if($staff->role_id == 3)
 						<li>{{ HTML::link('#','Registrar Préstamo') }}</li>
-						<li>{{ HTML::link('#','Registrar Devolución') }}</li>
+						<li>{{ HTML::link('/loan/return_register','Registrar Devolución') }}</li>
 						@endif
 						@if($user)
 						<li>{{ HTML::link('#','Mis Préstamos') }}</li>

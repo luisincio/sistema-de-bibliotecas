@@ -1,0 +1,72 @@
+@extends('templates/loanTemplate')
+@section('content')
+
+	<h1>Registrar Devolución</h1>
+	<div class="container">
+		{{ Form::open(array('url'=>'/loan/search_user_loans','method'=>'get' ,'role'=>'form', 'id'=>'search-form','class' => 'form-inline')) }}
+			<div class="search_bar">
+				{{ Form::text('search',$search,array('class'=>'form-control','placeholder'=>'Ingrese Num. de documento')) }}
+				{{ Form::submit('Buscar',array('id'=>'submit-search-form','class'=>'btn btn-info')) }}
+			</div>
+		{{ Form::close() }}
+		<div class="search-criteria">
+			@if($search_criteria)
+				<h3>
+					Préstamos activos de {{ $searched_user_name }} ({{ $search_criteria }})
+				</h3>
+			@endif
+		</div>
+		<table class="table table-hover">
+			<tr class="info">
+				<th>Código</th>
+				<th>Título</th>
+				<th>Autor</th>
+				<th>Editorial</th>
+				<th>Edición</th>
+				<th>Fecha de vencimiento</th>
+				<th class="text-center">Seleccione</th>
+			</tr>
+			@if($loans)
+				@foreach( $loans as $loan )
+				<tr>
+					<td>
+						{{ $loan->auto_cod }}</a>
+					</td>
+					<td>
+						{{ $loan->title }}</a>
+					</td>
+					<td>
+						{{ $loan->author }}
+					</td>
+					<td>
+						{{ $loan->editorial }}
+					</td>
+					<td>
+						{{ $loan->edition }}
+					</td>
+					<td>
+						{{ $loan->expire_at }}
+					</td>
+					<td class="text-center">
+						{{ Form::checkbox('selected_id[]',$loan->id) }}
+					</td>
+				</tr>
+				@endforeach
+			@endif
+		</table>
+		@if($loans)
+			@if(!$loans->isEmpty())
+				<div class="text-right">
+					<div class="loader_container">
+						{{ HTML::image('img/loader.gif') }}
+					</div>
+					{{ HTML::link('','Devolución',array('id'=>'delete-selected-loans', 'class'=>'btn btn-warning')) }}
+				</div>
+			@endif
+		@endif
+		@if($loans)
+			{{ $loans->links() }}
+		@endif
+	</div>
+	
+@stop

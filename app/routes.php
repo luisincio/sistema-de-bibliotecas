@@ -59,3 +59,21 @@ Route::group(array('prefix'=>'user', 'before'=>'auth'),function(){
 	Route::post('/submit_edit_profile','UserController@submit_edit_profile');
 	Route::post('/delete_profile_ajax','UserController@delete_profile_ajax');
 });
+
+/* Materials */
+Route::group(array('prefix'=>'material', 'before'=>'auth'),function(){
+	Route::get('/create_material','MaterialController@render_create_material');
+	Route::post('/submit_create_material','MaterialController@submit_create_material');
+	Route::get('/list_material','MaterialController@list_material');
+	Route::get('/search_material','MaterialController@search_material');
+	Route::post('/delete_material_ajax','MaterialController@delete_material_ajax');
+	Route::get('/edit_material/{id}','MaterialController@render_edit_material');
+	Route::post('/submit_edit_material','MaterialController@submit_edit_material');
+});
+
+/* Loans */
+Route::group(array('prefix'=>'loan', 'before'=>'auth'),function(){
+	Route::get('/return_register','LoanController@render_return_register');
+	Route::get('/search_user_loans','LoanController@search_user_loans');
+	Route::post('/return_register_ajax','LoanController@return_register_ajax');
+});
