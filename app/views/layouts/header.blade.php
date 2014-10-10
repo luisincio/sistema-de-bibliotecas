@@ -13,66 +13,68 @@
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				@if($staff->role_id == 1)
-				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-cog"></span> Configuración <span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu">
-						<li>{{ HTML::link('/config/general_configuration','Configuración General') }}</li>
-						<li>{{ HTML::link('#','Políticas') }}</li>
-						<li>{{ HTML::link('#','Registrar Infraestructura') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('#','Mostrar Sedes') }}</li>
-						<li>{{ HTML::link('#','Registrar Sede') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('/config/list_supplier','Buscar Proveedores') }}</li>
-						<li>{{ HTML::link('/config/create_supplier','Registrar Proveedor') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Materiales') }}</li>
-						<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Material') }}</li>
-					</ul>
-				</li>
+				@if($staff)
+					@if($staff->role_id == 1)
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-cog"></span> Configuración <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>{{ HTML::link('/config/general_configuration','Configuración General') }}</li>
+							<li>{{ HTML::link('#','Políticas') }}</li>
+							<li>{{ HTML::link('#','Registrar Infraestructura') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('#','Mostrar Sedes') }}</li>
+							<li>{{ HTML::link('#','Registrar Sede') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('/config/list_supplier','Buscar Proveedores') }}</li>
+							<li>{{ HTML::link('/config/create_supplier','Registrar Proveedor') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Materiales') }}</li>
+							<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Material') }}</li>
+						</ul>
+					</li>
+					@endif
+					@if($staff->role_id == 3)
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-book"></span> Materiales <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>{{ HTML::link('#','Buscar Ordenes de Compra') }}</li>
+							<li>{{ HTML::link('#','Registrar Orden de Compra') }}</li>
+							<li>{{ HTML::link('#','Ver Solicitudes') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('/material/list_material','Buscar Materiales') }}</li>
+							<li>{{ HTML::link('/material/create_material','Registrar Material') }}</li>
+						</ul>
+					</li>
+					@endif
+					@if($staff->role_id == 1 || $staff->role_id == 2)
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-user"></span> Usuarios <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>{{ HTML::link('#','Buscar Usuarios') }}</li>
+							<li>{{ HTML::link('#','Registrar Usuario') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('/user/list_profile','Mostrar Perfiles') }}</li>
+							<li>{{ HTML::link('/user/create_profile','Registrar Perfil') }}</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-eye-open"></span> Personal <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>{{ HTML::link('#','Buscar Personal') }}</li>
+							<li>{{ HTML::link('#','Registrar Personal') }}</li>
+						</ul>
+					</li>
+					@endif
 				@endif
-				@if($staff && $staff->role_id == 3)
-				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-book"></span> Materiales <span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu">
-						<li>{{ HTML::link('#','Buscar Ordenes de Compra') }}</li>
-						<li>{{ HTML::link('#','Registrar Orden de Compra') }}</li>
-						<li>{{ HTML::link('#','Ver Solicitudes') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('/material/list_material','Buscar Materiales') }}</li>
-						<li>{{ HTML::link('/material/create_material','Registrar Material') }}</li>
-					</ul>
-				</li>
-				@endif
-				@if($staff->role_id == 1 || $staff->role_id == 2)
-				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-user"></span> Usuarios <span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu">
-						<li>{{ HTML::link('#','Buscar Usuarios') }}</li>
-						<li>{{ HTML::link('#','Registrar Usuario') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('/user/list_profile','Mostrar Perfiles') }}</li>
-						<li>{{ HTML::link('/user/create_profile','Registrar Perfil') }}</li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-eye-open"></span> Personal <span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu">
-						<li>{{ HTML::link('#','Buscar Personal') }}</li>
-						<li>{{ HTML::link('#','Registrar Personal') }}</li>
-					</ul>
-				</li>
-				@endif
-				@if($user || $staff->role_id == 3)
+				@if($user || ($staff && $staff->role_id == 3))
 				<li class="dropdown">
 					<a href="" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="glyphicon glyphicon-refresh"></span> Préstamos <span class="caret"></span>
@@ -116,21 +118,23 @@
 						@endif
 					</ul>
 				</li>
-				@if($staff->role_id == 1 || $staff->role_id == 2)
-				<li class="dropdown">
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-stats"></span> Reportes <span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu">
-						<li>{{ HTML::link('#','Materiales más Solicitados') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('#','Usuarios con Multa') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('#','Libros Ingresados') }}</li>
-						<li class="divider"></li>
-						<li>{{ HTML::link('#','Solicitudes de Compra') }}</li>
-					</ul>
-				</li>
+				@if($staff)
+					@if($staff->role_id == 1 || $staff->role_id == 2)
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-stats"></span> Reportes <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>{{ HTML::link('#','Materiales más Solicitados') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('#','Usuarios con Multa') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('#','Libros Ingresados') }}</li>
+							<li class="divider"></li>
+							<li>{{ HTML::link('#','Solicitudes de Compra') }}</li>
+						</ul>
+					</li>
+					@endif
 				@endif
 				<li>{{ HTML::link('#','Catálogo') }}</li>
 			</ul>
