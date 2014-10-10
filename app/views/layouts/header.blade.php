@@ -80,7 +80,7 @@
 						<span class="glyphicon glyphicon-refresh"></span> Préstamos <span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" role="menu">
-						@if($staff->role_id == 3)
+						@if($staff && $staff->role_id == 3)
 						<li>{{ HTML::link('#','Registrar Préstamo') }}</li>
 						<li>{{ HTML::link('/loan/return_register','Registrar Devolución') }}</li>
 						@endif
@@ -94,12 +94,14 @@
 						<span class="glyphicon glyphicon-tags"></span> Reservas <span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" role="menu">
-						@if($staff->role_id == 3)
+						@if($staff && $staff->role_id == 3)
 						<li>{{ HTML::link('#','Materiales Reservados') }}</li>
 						<li>{{ HTML::link('#','Ver Reserva de Cubículos') }}</li>
 						@endif
-						@if($user)
+						@if($user && $staff)
 						<li class="divider"></li>
+						@endif
+						@if($user)
 						<li>{{ HTML::link('#','Reservar Cubículo') }}</li>
 						<li>{{ HTML::link('#','Mis Cubículos Reservados') }}</li>
 						@endif
