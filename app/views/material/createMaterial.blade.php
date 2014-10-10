@@ -20,6 +20,12 @@
 	@if (Session::has('message'))
 		<div class="alert alert-success">{{ Session::get('message') }}</div>
 	@endif
+
+	@if (Session::has('danger'))
+		<div class="alert alert-danger">
+			<p><strong>{{ Session::get('danger') }}</strong></p>
+		</div>
+	@endif
 	
 	{{ Form::open(array('url'=>'material/submit_create_material', 'role'=>'form')) }}
 		<div class="col-xs-6">
@@ -113,7 +119,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('orden_compra')) has-error has-feedback @endif">
+				<div class="form-group col-xs-8 @if($errors->first('orden_compra') || Session::has('danger')) has-error has-feedback @endif">
 					{{ Form::label('orden_compra','Orden de compra') }}
 					{{ Form::text('orden_compra',Input::old('orden_compra'),array('class'=>'form-control')) }}
 				</div>

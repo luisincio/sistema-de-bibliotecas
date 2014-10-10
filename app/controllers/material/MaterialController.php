@@ -58,33 +58,39 @@ class MaterialController extends BaseController
 				if($validator->fails()){
 					return Redirect::to('material/create_material')->withErrors($validator)->withInput(Input::all());
 				}else{
-					// Insert the material in the database
-					$cant = Input::get('cant_ejemplares');
-					$fecha = date_create();
-					$timestamp = date_timestamp_get($fecha);
-					for($i=0;$i<$cant;$i++){
-						$auto_cod = Input::get('codigo').($timestamp);
-						$timestamp++;
-						$material = new Material;
-						$material->title = Input::get('titulo');
-						$material->auto_cod = $auto_cod;
-						$material->author = Input::get('autor');
-						$material->editorial = Input::get('editorial');
-						$material->additional_materials = Input::get('materiales_adicionales');
-						$material->num_pages = Input::get('num_paginas');
-						$material->edition = Input::get('num_edicion');
-						$material->publication_year = Input::get('anio_publicacion');
-						$material->isbn = Input::get('isbn');
-						$material->subscription = Input::get('suscripcion');
-						$material->material_type = Input::get('tipo_material');
-						$material->thematic_area = Input::get('area_tematica');
-						$material->shelve_id = Input::get('estante');
-						$material->purchase_order_id = Input::get('orden_compra');
-						$material->save();
+					// Check if the purchase order exists
+					$purchase_order_id = Input::get('orden_compra');
+					$purchase_order = PurchaseOrder::find($purchase_order_id);
+					if($purchase_order){
+						// Insert the material in the database
+						$cant = Input::get('cant_ejemplares');
+						$fecha = date_create();
+						$timestamp = date_timestamp_get($fecha);
+						for($i=0;$i<$cant;$i++){
+							$auto_cod = Input::get('codigo').($timestamp);
+							$timestamp++;
+							$material = new Material;
+							$material->title = Input::get('titulo');
+							$material->auto_cod = $auto_cod;
+							$material->author = Input::get('autor');
+							$material->editorial = Input::get('editorial');
+							$material->additional_materials = Input::get('materiales_adicionales');
+							$material->num_pages = Input::get('num_paginas');
+							$material->edition = Input::get('num_edicion');
+							$material->publication_year = Input::get('anio_publicacion');
+							$material->isbn = Input::get('isbn');
+							$material->subscription = Input::get('suscripcion');
+							$material->material_type = Input::get('tipo_material');
+							$material->thematic_area = Input::get('area_tematica');
+							$material->shelve_id = Input::get('estante');
+							$material->purchase_order_id = Input::get('orden_compra');
+							$material->save();
+						}
+						Session::flash('message', 'Se registró correctamente el material.');
+					}else{
+						Session::flash('danger', 'El código de la Orden de Compra es inválido.');
 					}
-
-					Session::flash('message', 'Se registró correctamente el material.');
-					return Redirect::to('material/create_material');
+					return Redirect::to('material/create_material')->withInput(Input::all());
 				}
 			}else{
 				return View::make('error/error');
