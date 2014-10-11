@@ -26,6 +26,7 @@
 				</div>
 			</div>
 			{{ Form::submit('Guardar',array('id'=>'submit-edit', 'class'=>'btn btn-primary')) }}
+			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
 		</div>
 	{{ Form::close() }}
 @stop

@@ -444,6 +444,7 @@ class ConfigurationController extends BaseController
 				$url = 'config/edit_material_type/'.$id;
 				$material_type = MaterialType::find($id);
 				$material_type->description = Input::get('descripcion');
+				$material_type->flag_phys_dig = Input::get('phys_dig');
 				$material_type->save();
 
 				Session::flash('message', 'Se editó correctamente el tipo de material.');

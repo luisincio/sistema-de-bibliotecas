@@ -13,15 +13,25 @@
 					<select name="search_filter" class="form-control">
 						<option value="0">Todo</option>
 						@foreach($thematic_areas as $thematic_area)
-							<option value="{{ $thematic_area->id }}">{{ $thematic_area->name }}</option>
+							@if($search_filter && ($thematic_area->id == $search_filter))
+								<option value="{{ $thematic_area->id }}" selected>{{ $thematic_area->name }}</option>
+							@else
+								<option value="{{ $thematic_area->id }}">{{ $thematic_area->name }}</option>
+							@endif
 						@endforeach
 					</select>
+					{{ HTML::link('material/list_material','Listar Todos') }}
 				</div>
 		{{ Form::close() }}
 		<div class="search-criteria">
 			@if($search_criteria)
 				<h3>
-					Resultados de la búsqueda "{{ $search_criteria }}"
+					Resultados de la búsqueda "{{ $search_criteria }}" 
+					@if($search_filter == 0)
+					en todas las áreas temáticas
+					@else
+					en el área temática "{{ $thematic_areas[$search_filter-1]->name }}"
+					@endif
 				</h3>
 			@endif
 		</div>
@@ -29,9 +39,9 @@
 			<tr class="info">
 				<th>Titulo</th>
 				<th>Código</th>
+				<th>ISBN</th>
 				<th>Autor</th>
 				<th>Editorial</th>
-				<th>ISBN</th>
 				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
 			@foreach( $materials as $material)
@@ -43,13 +53,13 @@
 					{{ $material->auto_cod }}
 				</td>
 				<td>
+					{{ $material->isbn }}
+				</td>
+				<td>
 					{{ $material->author }}
 				</td>
 				<td>
 					{{ $material->editorial }}
-				</td>
-				<td>
-					{{ $material->isbn }}
 				</td>
 				<td class="text-center">
 					{{ Form::checkbox('material',$material->mid) }}

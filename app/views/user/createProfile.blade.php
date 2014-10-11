@@ -76,6 +76,7 @@
 
 	{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
 	{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+	{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
 
 	{{ Form::close() }}
 	

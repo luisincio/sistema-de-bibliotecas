@@ -23,10 +23,10 @@
 		<table class="table table-hover">
 			<tr class="info">
 				<th>Código</th>
+				<th>ISBN</th>
 				<th>Título</th>
 				<th>Autor</th>
 				<th>Editorial</th>
-				<th>Edición</th>
 				<th>Fecha de vencimiento</th>
 				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 			</tr>
@@ -37,6 +37,9 @@
 						{{ $loan->auto_cod }}</a>
 					</td>
 					<td>
+						{{ $loan->isbn }}
+					</td>
+					<td>
 						{{ $loan->title }}</a>
 					</td>
 					<td>
@@ -44,9 +47,6 @@
 					</td>
 					<td>
 						{{ $loan->editorial }}
-					</td>
-					<td>
-						{{ $loan->edition }}
 					</td>
 					<td>
 						{{ $loan->expire_at }}

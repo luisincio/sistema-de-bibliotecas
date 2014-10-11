@@ -76,5 +76,6 @@
 			@endforeach
 		</table>
 	{{ Form::submit('Guardar',array('id'=>'submit-edit', 'class'=>'btn btn-primary')) }}
+	{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
 	{{ Form::close() }}	
 @stop

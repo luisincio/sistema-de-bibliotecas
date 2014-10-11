@@ -79,7 +79,7 @@
 				</div>
 			</div>
 			{{ Form::submit('Guardar',array('id'=>'submit-edit', 'class'=>'btn btn-primary')) }}
-			{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
 		</div>
 		<div class="col-xs-6">
 			<div class="row">

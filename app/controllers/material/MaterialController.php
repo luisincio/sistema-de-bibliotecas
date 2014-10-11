@@ -87,10 +87,11 @@ class MaterialController extends BaseController
 							$material->save();
 						}
 						Session::flash('message', 'Se registró correctamente el material.');
+						return Redirect::to('material/create_material');
 					}else{
 						Session::flash('danger', 'El código de la Orden de Compra es inválido.');
+						return Redirect::to('material/create_material')->withInput(Input::all());
 					}
-					return Redirect::to('material/create_material')->withInput(Input::all());
 				}
 			}else{
 				return View::make('error/error');
@@ -119,6 +120,7 @@ class MaterialController extends BaseController
 				$data["materials"] = Material::getMaterialsByBranch($branch_id)->paginate(10);
 
 				$data["search"] = null;
+				$data["search_filter"] = null;
 				$data["thematic_areas"] = ThematicArea::all();
 				return View::make('material/listMaterial',$data);
 			}else{
