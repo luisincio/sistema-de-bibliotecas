@@ -56,8 +56,8 @@
 							<span class="glyphicon glyphicon-user"></span> Usuarios <span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
-							<li>{{ HTML::link('#','Buscar Usuarios') }}</li>
-							<li>{{ HTML::link('#','Registrar Usuario') }}</li>
+							<li>{{ HTML::link('/user/list_user','Buscar Usuarios') }}</li>
+							<li>{{ HTML::link('/user/create_user','Registrar Usuario') }}</li>
 							<li class="divider"></li>
 							<li>{{ HTML::link('/user/list_profile','Mostrar Perfiles') }}</li>
 							<li>{{ HTML::link('/user/create_profile','Registrar Perfil') }}</li>

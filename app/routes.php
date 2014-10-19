@@ -52,12 +52,23 @@ Route::group(array('prefix'=>'myaccount', 'before'=>'auth'),function(){
 
 /* Users */
 Route::group(array('prefix'=>'user', 'before'=>'auth'),function(){
+	/* Profiles */
 	Route::get('/create_profile','UserController@render_create_profile');
 	Route::post('/submit_create_profile','UserController@submit_create_profile');
 	Route::get('/list_profile','UserController@list_profile');
 	Route::get('/edit_profile/{id}','UserController@render_edit_profile');
 	Route::post('/submit_edit_profile','UserController@submit_edit_profile');
 	Route::post('/delete_profile_ajax','UserController@delete_profile_ajax');
+	/* Users */
+	Route::get('/create_user','UserController@render_create_user');
+	Route::post('/validate_doc_number_ajax','UserController@validate_doc_number_ajax');
+	Route::post('/submit_create_user','UserController@submit_create_user');
+	Route::get('/list_user','UserController@list_user');
+	Route::get('/search_user','UserController@search_user');
+	Route::post('/delete_user_ajax','UserController@delete_user_ajax');
+	Route::post('/reactivate_user_ajax','UserController@reactivate_user_ajax');
+	Route::get('/edit_user/{id}','UserController@render_edit_user');
+	Route::post('/submit_edit_user','UserController@submit_edit_user');
 });
 
 /* Materials */

@@ -199,4 +199,304 @@ class UserController extends BaseController {
 		}
 	}
 
+	public function render_create_user()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				
+				$data["document_types"] = DocumentType::all();
+				$data["profiles"] = Profile::all();
+				return View::make('user/createUser',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function validate_doc_number_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+			$document_number = Input::get('document_number');
+			if(is_numeric($document_number) && $document_number > 9999999 && $document_number < 9999999999){
+				$person = Person::searchPersonByDocument($document_number)->get();
+				return Response::json(array( 'success' => true , 'person'=> $person),200);
+			}else{
+				return Response::json(array( 'success' => false ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_create_user()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'num_documento' => 'required|numeric|min:9999999|max:9999999999',
+							'nombres' => 'required|alpha_spaces|min:2',
+							'apellidos' => 'required|alpha_spaces|min:2',
+							'nacionalidad' => 'required|alpha_spaces',
+							'telefono' => 'required|numeric',
+							'email' => 'required|email',
+							'direccion' => 'required',
+							'fecha_nacimiento' => 'required',
+							'genero' => 'required',
+							'perfil' => 'required|numeric|min:1',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('user/create_user')->withErrors($validator)->withInput(Input::all());
+				}else{
+					$document_number = Input::get('num_documento');
+					$person = Person::searchPersonByDocument($document_number)->get();
+					if($person->isEmpty()){
+						// Create a random password
+						$password = Str::random(16);
+						//Create person
+						$person = new Person;
+						$person->doc_number = Input::get('num_documento');
+						$person->password = Hash::make($password);
+						$person->name = Input::get('nombres');
+						$person->lastname = Input::get('apellidos');
+						$person->birth_date = Input::get('fecha_nacimiento');
+						$person->mail = Input::get('email');
+						$person->address = Input::get('direccion');
+						$person->gender = Input::get('genero');
+						$person->phone = Input::get('telefono');
+						$person->document_type = Input::get('tipo_doc');
+						$person->nacionality = Input::get('nacionalidad');
+						$person->save();
+						$person_id = Person::orderBy('id','desc')->first();
+					}else{
+						$person_id = $person[0]->id;
+					}
+					$user = new User;
+					$user->profile_id = Input::get('perfil');
+					$user->person_id = $person_id;
+					$user->save();
+					Session::flash('message', 'Se registró correctamente al usuario.');
+					return Redirect::to('user/create_user');
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function list_user()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				// Check if the current user is the "System Admin"
+				$data["search_criteria"] = null;
+				$data["users"] = User::getUsersInfo()->paginate(10);
+
+				$data["search"] = null;
+				$data["search_filter"] = null;
+				return View::make('user/listUser',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function search_user()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				
+				$data["search_criteria"] = Input::get('search');
+				$data["search_filter"] = Input::get('search_filter');
+				if($data["search_filter"] == 0){
+					$data["users"] = User::searchUsers($data["search_criteria"])->paginate(10);
+				}elseif($data["search_filter"] == 1){
+					$data["users"] = User::searchActiveUsers($data["search_criteria"])->paginate(10);
+				}else{
+					$data["users"] = User::searchDeletedUsers($data["search_criteria"])->paginate(10);
+				}
+				$data["search"] = $data["search_criteria"];
+				return View::make('user/listUser',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function delete_user_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+			// Check if the current user is the "Bibliotecario"
+			$selected_ids = Input::get('selected_id');
+			foreach($selected_ids as $selected_id){
+				$user = User::find($selected_id);
+				if($user){
+					$user->delete();
+				}
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function reactivate_user_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+			// Check if the current user is the "Bibliotecario"
+			$user_id = Input::get('user_id');
+			$user = User::withTrashed()->find($user_id);
+			$user->restore();
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function render_edit_user($id=null)
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if(($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3) && $id){
+				
+				$data["document_types"] = DocumentType::all();
+				$data["profiles"] = Profile::all();
+				$data["user_info"] = User::searchUserById($id)->get();
+				if($data["user_info"]->isEmpty()){
+					return Redirect::to('user/list_user');
+				}
+				$data["user_info"] = $data["user_info"][0];
+				return View::make('user/editUser',$data);
+			}else{
+				return View::make('error/error');
+			}
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_edit_user()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'nombres' => 'required|alpha_spaces|min:2',
+							'apellidos' => 'required|alpha_spaces|min:2',
+							'nacionalidad' => 'required|alpha_spaces',
+							'telefono' => 'required|numeric',
+							'email' => 'required|email',
+							'direccion' => 'required',
+							'fecha_nacimiento' => 'required',
+							'genero' => 'required',
+							'perfil' => 'required|numeric|min:1',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					$user_id = Input::get('user_id');
+					$url = "user/edit_user"."/".$user_id;
+					return Redirect::to($url)->withErrors($validator)->withInput(Input::all());
+				}else{
+					$person_id = Input::get('person_id');
+					$person = Person::find($person_id);
+					$person->name = Input::get('nombres');
+					$person->lastname = Input::get('apellidos');
+					$person->birth_date = Input::get('fecha_nacimiento');
+					$person->mail = Input::get('email');
+					$person->address = Input::get('direccion');
+					$person->gender = Input::get('genero');
+					$person->phone = Input::get('telefono');
+					$person->document_type = Input::get('tipo_doc');
+					$person->nacionality = Input::get('nacionalidad');
+					$person->save();
+
+					$user_id = Input::get('user_id');
+					$user = User::find($user_id);
+					$user->profile_id = Input::get('perfil');
+					$user->save();
+
+					Session::flash('message', 'Se editó correctamente al usuario.');
+					$url = "user/edit_user"."/".$user_id;
+					return Redirect::to($url);
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
 }
