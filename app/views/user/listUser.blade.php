@@ -25,35 +25,35 @@
 				<th>E-mail</th>
 				<th class="text-center">Seleccione @if($search_filter!=2) {{ Form::checkbox('select_all') }} @endif</th>
 			</tr>
-			@foreach($users as $user)
-			<tr class="@if($user->deleted_at) bg-danger @endif">
+			@foreach($users_data as $user_data)
+			<tr class="@if($user_data->deleted_at) bg-danger @endif">
 				<td>
-					{{$user->doc_number}}
+					{{$user_data->doc_number}}
 				</td>
 				<td>
-					@if($user->deleted_at)
-						{{$user->name}}
+					@if($user_data->deleted_at)
+						{{$user_data->name}}
 					@else
-						<a href="{{URL::to('/user/edit_user/')}}/{{$user->id}}">{{$user->name}}</a>
+						<a href="{{URL::to('/user/edit_user/')}}/{{$user_data->id}}">{{$user_data->name}}</a>
 					@endif
 				</td>
 				<td>
-					{{$user->lastname}}
+					{{$user_data->lastname}}
 				</td>
 				<td>
-					{{$user->mail}}
+					{{$user_data->mail}}
 				</td>
 				<td class="text-center">
-					@if($user->deleted_at)
-						{{ HTML::link('','Reactivar',array('class'=>'reactivate-user btn btn-success','data-id'=>$user->id)) }}
+					@if($user_data->deleted_at)
+						{{ HTML::link('','Reactivar',array('class'=>'reactivate-user btn btn-success','data-id'=>$user_data->id)) }}
 					@else
-						{{ Form::checkbox('users',$user->id) }}
+						{{ Form::checkbox('users_data',$user_data->id) }}
 					@endif
 				</td>
 			</tr>
 			@endforeach
 		</table>
-		@if(!$users->isEmpty() && $search_filter!=2)
+		@if(!$users_data->isEmpty() && $search_filter!=2)
 			<div class="text-right">
 				<div class="loader_container">
 					{{ HTML::image('img/loader.gif') }}
@@ -63,9 +63,9 @@
 		@endif
 
 		@if($search)
-			{{ $users->appends(array('search' => $search,'search_filter'=>$search_filter))->links() }}
+			{{ $users_data->appends(array('search' => $search,'search_filter'=>$search_filter))->links() }}
 		@else
-			{{ $users->links() }}
+			{{ $users_data->links() }}
 		@endif
 	</div> 
 	

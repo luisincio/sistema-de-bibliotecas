@@ -323,7 +323,7 @@ class UserController extends BaseController {
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				// Check if the current user is the "System Admin"
 				$data["search_criteria"] = null;
-				$data["users"] = User::getUsersInfo()->paginate(10);
+				$data["users_data"] = User::getUsersInfo()->paginate(10);
 
 				$data["search"] = null;
 				$data["search_filter"] = null;

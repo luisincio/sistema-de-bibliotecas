@@ -105,7 +105,7 @@ $( document ).ready(function(){
 		if(delete_selected_users){
 			delete_selected_users = false;
 			var selected = [];
-			$("input[type=checkbox][name=users]:checked").each(function(){
+			$("input[type=checkbox][name=users_data]:checked").each(function(){
 				selected.push($(this).val());
 			});
 			if(selected.length > 0){
