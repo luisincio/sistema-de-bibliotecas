@@ -457,4 +457,319 @@ class ConfigurationController extends BaseController
 			return View::make('error/error');
 		}
 	}
+
+	public function render_create_branch()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				return View::make('configuration/createBranch',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+	public function submit_create_branch()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'nombre' => 'required|alpha_spaces|min:2|unique:material_types,name|unique:branches,name',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('config/create_branch')->withErrors($validator)->withInput(Input::all());
+				}else{
+					$array_hora_ini = explode(":", Input::get('hora_ini'));
+					$array_hora_fin = explode(":", Input::get('hora_fin'));
+					if($array_hora_ini[0]*100 + $array_hora_ini[1] < $array_hora_fin[0]*100 + $array_hora_fin[1]){
+						// Insert the supplier in the database
+						$branch = new Branch;
+						$branch->name = Input::get('nombre');
+						$branch->address = Input::get('direccion');
+						$branch->hour_ini = Input::get('hora_ini');
+						$branch->hour_end = Input::get('hora_fin');
+						$branch->save();
+
+						$branch_id = Branch::orderBy('id','desc')->first();
+						$turn = new Turn;
+						$turn->name = 'General';
+						$turn->hour_ini = Input::get('hora_ini');
+						$turn->hour_end = Input::get('hora_fin');
+						$turn->branch_id = $branch_id->id;
+						$turn->save();
+
+						Session::flash('message', 'Se registró correctamente la nueva sede.');
+						return Redirect::to('config/create_branch');
+					}
+					else{
+						Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
+						return Redirect::to('config/create_branch')->withInput(Input::all());						
+					}
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function list_branch()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				$data["branches"] = Branch::withTrashed()->get();
+				return View::make('configuration/listBranch',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function render_edit_branch($id=null)
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1 && $id){
+				// Check if the current user is the "System Admin"
+				$data["branch"] = Branch::withTrashed()->find($id);
+				return View::make('configuration/editBranch',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_edit_branch()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1){
+				$array_hora_ini = explode(":", Input::get('hora_ini'));
+				$array_hora_fin = explode(":", Input::get('hora_fin'));
+				if($array_hora_ini[0]*100 + $array_hora_ini[1] < $array_hora_fin[0]*100 + $array_hora_fin[1]){
+					// Edit the branch in the database
+					Input::merge(array_map('trim', Input::all()));
+					$id = Input::get('id');
+					$url = 'config/edit_branch/'.$id;
+					$branch = Branch::find($id);
+					$branch->address = Input::get('direccion');
+					$branch->hour_ini = Input::get('hora_ini');
+					$branch->hour_end = Input::get('hora_fin');
+					$branch->save();
+
+					Session::flash('message', 'Se editó correctamente la sede.');
+					return Redirect::to($url);
+				}
+				else{
+					$id = Input::get('id');
+					$url = 'config/edit_branch/'.$id;
+					Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
+					return Redirect::to($url)->withInput(Input::all());						
+				}	
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function restore_branch_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$branch_id = Input::get('branch_id');
+			$branch = Branch::withTrashed()->find($branch_id);
+			if($branch){
+				$branch->restore();
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}	
+
+	public function delete_branch_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$selected_ids = Input::get('selected_id');
+			foreach($selected_ids as $selected_id){
+				$branch = Branch::find($selected_id);
+				if($branch){
+					$branch->delete();
+				}
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function render_create_turn()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
+				// Check if the current user is the "System Admin"
+				$turn = Turn::find($data["staff"]->turn_id);	
+				if($turn){
+					$data["turns"] = Turn::getTurnsByBranch($turn->branch_id)->get();
+				}else{
+					$data["turns"] = null;
+				}
+				return View::make('configuration/createTurn',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}		
+	}
+
+	public function submit_create_turn()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'nombre' => 'required|alpha_spaces|min:2|unique:turns,name',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('config/create_turn')->withErrors($validator)->withInput(Input::all());
+				}else{
+					$array_hora_ini = explode(":", Input::get('hora_ini'));
+					$array_hora_fin = explode(":", Input::get('hora_fin'));
+					if($array_hora_ini[0]*100 + $array_hora_ini[1] < $array_hora_fin[0]*100 + $array_hora_fin[1]){
+						// Insert the profile in the database
+						$turnSession = Turn::find($data["staff"]->turn_id);
+						$turn = new Turn;
+						$turn->name = Input::get('nombre');
+						$turn->hour_ini = Input::get('hora_ini');
+						$turn->hour_end = Input::get('hora_fin');
+						$turn->branch_id = $turnSession->branch_id;
+						$turn->save();
+
+						$last_turn = Turn::orderBy('id', 'desc')->first();
+						$id = $last_turn->id;
+
+						Session::flash('message', 'Se registró correctamente el turno.');
+						return Redirect::to('config/create_turn');
+					}
+					else{
+						Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
+						return Redirect::to('config/create_turn')->withInput(Input::all());
+					}	
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function delete_turn_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
+			// Check if the current user is the "System Admin"
+			$selected_ids = Input::get('selected_id');
+			foreach($selected_ids as $selected_id){
+				$turn = Turn::find($selected_id);
+				if($turn){
+					$turn->delete();
+				}
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
 }

@@ -9,9 +9,11 @@
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/datepicker.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/general.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/bootstrap-timepicker.min.css') }}">
 	<!-- Scripts -->
 	<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/bootstrap-timepicker.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/general.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/configuration/configuration.js') }}"></script>
