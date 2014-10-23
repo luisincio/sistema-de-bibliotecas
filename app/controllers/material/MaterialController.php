@@ -275,4 +275,317 @@ class MaterialController extends BaseController
 			return View::make('error/error');
 		}
 	}
+
+	public function list_material_request()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "System Admin"				
+				$data["material_request_types"] = MaterialRequestType::all();
+				$data["search_criteria"] = null;				
+				$data["materials_request"] = MaterialRequest::getMaterialsRequest()->paginate(10);
+				$data["search"] = null;
+				$data["search_filter"] = null;
+				$data["date_ini"] = null;
+				$data["date_end"] = null;
+				return View::make('material/listMaterialRequest',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function search_material_request()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "System Admin"
+				$data["search_criteria"] = Input::get('search');
+				$data["search_filter"] = Input::get('search_filter');
+				$data["date_ini"] = Input::get('date_ini');
+				$data["date_end"] = Input::get('date_end');
+				$data["material_request_types"] = MaterialRequestType::all();
+				if($data["search_filter"] == 0){
+					$data["materials_request"] = MaterialRequest::searchMaterialsRequest($data["search_criteria"],$data["date_ini"],$data["date_end"])->paginate(10);
+				}else{
+					$data["materials_request"] = MaterialRequest::searchMaterialsRequestByFilter($data["search_criteria"],$data["search_filter"],$data["date_ini"],$data["date_end"])->paginate(10);
+				}
+				$data["search"] = $data["search_criteria"];
+				return View::make('material/listMaterialRequest',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+
+	}
+
+	public function render_create_purchase_order()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "Bibliotecario"
+				$data["suppliers"] = Supplier::all();			
+				$data["purchase_orders"] = PurchaseOrder::all();
+				$data["details_purchase_orders"]= DetailsPurchaseOrder::all();
+				return View::make('material/createPurchaseOrder',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+
+	public function submit_create_purchase_order()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 3){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'descripcion' => 'required|min:2',
+							'femision' => 'required|min:1',
+							'fecha_vencimiento' => 'required|min:1',							
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('material/create_purchase_order')->withErrors($validator)->withInput(Input::all());
+				}else{
+						
+					$fecha_emision = Input::get('femision');
+					$fecha_vencimiento = Input::get('fecha_vencimiento');
+
+					if(strtotime($fecha_emision) < strtotime($fecha_vencimiento)){
+
+						// Insert the material in the database
+						$details_code =Input::get('details_code');
+						$details_title =Input::get('details_title'); 
+						$details_author =Input::get('details_author'); 
+						$details_quantity =Input::get('details_quantity'); 
+						$details_unit_price =Input::get('details_unit_price');  
+						$cant = count($details_code);
+
+						$purchase_order = new PurchaseOrder;
+						$fecha = date_create();
+						$timestamp = date_timestamp_get($fecha);
+						//Para obtener el total del precio precio
+						$total_amount = 0;
+						for($i=0;$i<$cant;$i++){
+							//Aumento el total precio
+							$total_amount += $details_quantity[$i]*$details_unit_price[$i];
+						}
+						//Insert the purchase order in the database
+						$purchase_order->date_issue = $fecha_emision;
+						$purchase_order->expire_at = $fecha_vencimiento;
+						$purchase_order->description = Input::get('descripcion');
+						$purchase_order->state = 0;
+						$purchase_order->total_amount = $total_amount;
+						$purchase_order->supplier_id = Input::get('proveedor');
+						$purchase_order->save();
+
+						for($i=0;$i<$cant;$i++){
+							//$auto_cod = Input::get('codigo').($timestamp);
+							//$timestamp++;
+							$details_purchase_order = new DetailsPurchaseOrder;
+							$details_purchase_order->code = $details_code[$i];
+							$details_purchase_order->title = $details_title[$i];
+							$details_purchase_order->author = $details_author[$i];
+							$details_purchase_order->quantity = $details_quantity[$i];
+							$details_purchase_order->price = $details_unit_price[$i];						
+							$details_purchase_order->purchase_order_id = $purchase_order->id;	
+							$details_purchase_order->save();
+
+						}																
+						Session::flash('message', 'Se registró correctamente la orden de compra.');
+						return Redirect::to('material/create_purchase_order');
+					}else{
+
+						Session::flash('danger', 'La fecha de vencimiento es menor a la fecha de emisión.');
+						return Redirect::to('material/create_purchase_order')->withInput(Input::all());
+					}
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+	public function list_purchase_order()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "System Admin"
+				//$data["search_criteria"] = null;
+				$data["purchase_orders"] = PurchaseOrder::paginate(10);
+
+				//$data["search"] = null;
+				//$data["search_filter"] = null;
+				
+				return View::make('material/listPurchaseOrder',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}		
+
+	
+	public function search_purchase_order()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "System Admin"
+				$fecha_emision	= Input::get('fecha_emision');					
+				$fecha_vencimiento = Input::get('fecha_vencimiento');
+				$data["purchase_orders"] = PurchaseOrder::searchPurchaseOrderByDate($fecha_emision,$fecha_vencimiento)->paginate(10);
+				
+				//$data["search"] = $data["search_criteria"];
+				//$data["thematic_areas"] = ThematicArea::all();
+				return View::make('material/listPurchaseOrder',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+	public function render_edit_purchase_order($id=null)
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3 && $id){
+				// Check if the current user is the "System Admin"
+				$data["purchase_order"] = PurchaseOrder::find($id);
+				if($data["purchase_order"]){
+					$supplier_id = $data["purchase_order"]->supplier_id;
+					$data["suppliers"] = Supplier::find($supplier_id);					
+					$data["details_purchase_orders"] = DetailsPurchaseOrder::getDetailsByPurchaseOrder($id)->get();
+					//$data["thematic_areas"] = ThematicArea::all();
+					
+					return View::make('material/editPurchaseOrder',$data);
+				}else{
+					return View::make('error/error');
+				}
+			}else{
+				return View::make('error/error');
+			}
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+	public function submit_edit_purchase_order()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 3){
+								
+				
+				// Insert the material in the database
+				$id = Input::get('id');
+				$url = 'material/edit_purchase_order/'.$id;
+				$purchase_order = PurchaseOrder::find($id);
+				$purchase_order->state = 1;
+				$purchase_order->save();
+
+				Session::flash('message', 'Se aprobó la orden de compra.');
+				return Redirect::to($url);
+				
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+	public function submit_reject_purchase_order_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 3){
+			// Check if the current user is the "Bibliotecario"
+			$id = Input::get('id');
+			
+			$purchase_order = PurchaseOrder::find($id);
+			
+			$purchase_order->delete();
+				
+			
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
 }
