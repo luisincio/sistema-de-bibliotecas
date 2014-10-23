@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="robots" content="noindex, follow">
-	<title>Login | {{ $config->name }}</title>
+	<title>Home | {{ $config->name }}</title>
 	<!-- Styles -->
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/datepicker.css') }}">
@@ -13,6 +13,10 @@
 	<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/catalog/catalog.js') }}"></script>
+	<script type="text/javascript">
+		var inside_url = "{{$inside_url}}";
+	</script>
 </head>
 
 <body>
@@ -33,7 +37,7 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="dropdown">
-							<a href="#">Catálogo</a>
+							{{ HTML::link('/catalog','Catálogo') }}
 						</li>
 					</ul>
 				</div>

@@ -1,0 +1,40 @@
+.big-loader-container{
+	display: none;
+	margin-top: 20px;
+	text-align: center;
+}
+
+td.bg-danger:hover{
+	background-color: #E37B6F;
+}
+
+td.drag-cell{
+	background-color: #92D676;
+}
+
+td.selecting-cell{
+	border: 1px solid #000000 !important;
+}
+
+table#cubicle-table{
+	border-collapse: initial;
+}
+
+table#cubicle-table td{
+	padding: 0;
+}
+
+table#cubicle-table td.hour-cell{
+	padding: 8px;
+}
+
+a.reservation-cell{
+	display: block;
+	width: 100%;
+	height: 100%;
+	text-indent: -9999px;
+}
+
+div#cubicle-table-container{
+	margin: 20px 0;
+}

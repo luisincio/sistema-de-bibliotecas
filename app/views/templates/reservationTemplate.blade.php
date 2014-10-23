@@ -4,18 +4,18 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="robots" content="noindex, follow">
-	<title>Personal | {{ $config->name }}</title>
+	<title>Reservas | {{ $config->name }}</title>
 	<!-- Styles -->
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/datepicker.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/general.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/staff/staff-style.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/reservation/reservation-style.css') }}">
 	<!-- Scripts -->
 	<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/general.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('js/staff/staff.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/reservation/reservation.js') }}"></script>
 	<script type="text/javascript">
 		var inside_url = "{{$inside_url}}";
 	</script>

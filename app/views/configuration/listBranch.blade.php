@@ -39,7 +39,7 @@
 			</tr>
 			@endforeach
 		</table>
-		@if(!$branches->isEmpty())
+		@if($branches)
 			<div class="text-right">
 				<div class="loader_container">
 					{{ HTML::image('img/loader.gif') }}

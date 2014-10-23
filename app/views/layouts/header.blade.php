@@ -14,24 +14,28 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				@if($staff)
-					@if($staff->role_id == 1)
+					@if($staff->role_id == 1 || $staff->role_id == 2)
 					<li class="dropdown">
 						<a href="" class="dropdown-toggle" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-cog"></span> Configuración <span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
-							<li>{{ HTML::link('/config/general_configuration','Configuración General') }}</li>
-							<li>{{ HTML::link('#','Políticas') }}</li>
-							<li>{{ HTML::link('#','Registrar Infraestructura') }}</li>
-							<li class="divider"></li>
-							<li>{{ HTML::link('#','Mostrar Sedes') }}</li>
-							<li>{{ HTML::link('#','Registrar Sede') }}</li>
-							<li class="divider"></li>
-							<li>{{ HTML::link('/config/list_supplier','Buscar Proveedores') }}</li>
-							<li>{{ HTML::link('/config/create_supplier','Registrar Proveedor') }}</li>
-							<li class="divider"></li>
-							<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Materiales') }}</li>
-							<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Material') }}</li>
+							@if($staff->role_id == 1)
+								<li>{{ HTML::link('/config/general_configuration','Configuración General') }}</li>
+								<li>{{ HTML::link('#','Políticas') }}</li>
+								<li>{{ HTML::link('#','Registrar Infraestructura') }}</li>
+								<li class="divider"></li>
+							@endif
+								<li>{{ HTML::link('/config/list_branch','Mostrar Sedes') }}</li>
+							@if($staff->role_id == 1)
+								<li>{{ HTML::link('/config/create_branch','Registrar Sede') }}</li>
+								<li class="divider"></li>
+								<li>{{ HTML::link('/config/list_supplier','Buscar Proveedores') }}</li>
+								<li>{{ HTML::link('/config/create_supplier','Registrar Proveedor') }}</li>
+								<li class="divider"></li>
+								<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Materiales') }}</li>
+								<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Material') }}</li>
+							@endif
 						</ul>
 					</li>
 					@endif
@@ -41,9 +45,9 @@
 							<span class="glyphicon glyphicon-book"></span> Materiales <span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
-							<li>{{ HTML::link('#','Buscar Ordenes de Compra') }}</li>
-							<li>{{ HTML::link('#','Registrar Orden de Compra') }}</li>
-							<li>{{ HTML::link('#','Ver Solicitudes') }}</li>
+							<li>{{ HTML::link('/material/list_purchase_order','Buscar Ordenes de Compra') }}</li>
+							<li>{{ HTML::link('/material/create_purchase_order','Registrar Orden de Compra') }}</li>
+							<li>{{ HTML::link('/material/list_material_request','Ver Solicitudes') }}</li>
 							<li class="divider"></li>
 							<li>{{ HTML::link('/material/list_material','Buscar Materiales') }}</li>
 							<li>{{ HTML::link('/material/create_material','Registrar Material') }}</li>
@@ -68,8 +72,8 @@
 							<span class="glyphicon glyphicon-eye-open"></span> Personal <span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
-							<li>{{ HTML::link('#','Buscar Personal') }}</li>
-							<li>{{ HTML::link('#','Registrar Personal') }}</li>
+							<li>{{ HTML::link('/staff/list_staff','Buscar Personal') }}</li>
+							<li>{{ HTML::link('/staff/create_staff','Registrar Personal') }}</li>
 						</ul>
 					</li>
 					@endif
@@ -95,15 +99,15 @@
 					</a>
 					<ul class="dropdown-menu" role="menu">
 						@if($staff && $staff->role_id == 3)
-						<li>{{ HTML::link('#','Materiales Reservados') }}</li>
-						<li>{{ HTML::link('#','Ver Reserva de Cubículos') }}</li>
+						<li>{{ HTML::link('/reservation/my_material_reservations','Materiales Reservados') }}</li>
+						<li>{{ HTML::link('/reservation/search_cubicle_reservations','Ver Reserva de Cubículos') }}</li>
 						@endif
 						@if($user && $staff)
 						<li class="divider"></li>
 						@endif
 						@if($user)
-						<li>{{ HTML::link('#','Reservar Cubículo') }}</li>
-						<li>{{ HTML::link('#','Mis Cubículos Reservados') }}</li>
+						<li>{{ HTML::link('/reservation/cubicle_reservations','Reservar Cubículo') }}</li>
+						<li>{{ HTML::link('/reservation/my_cubicle_reservations','Mis Cubículos Reservados') }}</li>
 						@endif
 					</ul>
 				</li>
@@ -116,7 +120,7 @@
 						<li>{{ HTML::link('/myaccount/change_password','Cambiar Contraseña') }}</li>
 						@if($user)
 						<li class="divider"></li>
-						<li>{{ HTML::link('#','Registrar Solicitud') }}</li>
+						<li>{{ HTML::link('/myaccount/create_material_request','Registrar Solicitud') }}</li>
 						@endif
 					</ul>
 				</li>
@@ -138,10 +142,10 @@
 					</li>
 					@endif
 				@endif
-				<li>{{ HTML::link('#','Catálogo') }}</li>
+				<li>{{ HTML::link('/catalog/catalog','Catálogo') }}</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li>{{ HTML::link('/logout','Cerrar Sesión') }}</li>
+				<li>{{ HTML::link('/logout','Cerrar Sesión( '.$person->name.' )') }}</li>
 			</ul>
 		</div>
 	</div>

@@ -43,4 +43,77 @@ class Material extends Eloquent{
 			  ->orderBy('title','asc');
 		return $query;
 	}
+
+	/* Catalog */
+	public function scopeSearchMaterialsCatalog($query,$search_criteria)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->whereNested(function($query) use($search_criteria){
+			  		$query->where('title','LIKE',"%$search_criteria%")
+			  			  ->orWhere('author','LIKE',"%$search_criteria%")
+			  			  ->orWhere('base_cod','LIKE',"%$search_criteria%")
+			  			  ->orWhere('isbn','LIKE',"%$search_criteria%");
+			  })
+			  ->orderBy('title','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
+		return $query;
+	}
+
+	public function scopeSearchMaterialsCatalogByBranch($query,$search_criteria,$branch_id)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->whereNested(function($query) use($search_criteria){
+			  		$query->where('title','LIKE',"%$search_criteria%")
+			  			  ->orWhere('author','LIKE',"%$search_criteria%")
+			  			  ->orWhere('base_cod','LIKE',"%$search_criteria%")
+			  			  ->orWhere('isbn','LIKE',"%$search_criteria%");
+			  })
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->orderBy('title','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
+		return $query;
+	}
+
+	public function scopeSearchMaterialsCatalogByThematic($query,$search_criteria,$thematic_area_id)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->whereNested(function($query) use($search_criteria){
+			  		$query->where('title','LIKE',"%$search_criteria%")
+			  			  ->orWhere('author','LIKE',"%$search_criteria%")
+			  			  ->orWhere('base_cod','LIKE',"%$search_criteria%")
+			  			  ->orWhere('isbn','LIKE',"%$search_criteria%");
+			  })
+			  ->where('thematic_area','=',$thematic_area_id)
+			  ->orderBy('title','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
+		return $query;
+	}
+
+	public function scopeSearchMaterialsCatalogByBranchThematic($query,$search_criteria,$branch_id,$thematic_area_id)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->whereNested(function($query) use($search_criteria){
+			  		$query->where('title','LIKE',"%$search_criteria%")
+			  			  ->orWhere('author','LIKE',"%$search_criteria%")
+			  			  ->orWhere('base_cod','LIKE',"%$search_criteria%")
+			  			  ->orWhere('isbn','LIKE',"%$search_criteria%");
+			  })
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->where('thematic_area','=',$thematic_area_id)
+			  ->orderBy('title','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
+		return $query;
+	}
+
+	public function scopeGetMaterialForReservation($query,$material_code,$material_shelf)
+	{
+		$query->where('base_cod','=',$material_code)
+			  ->where('shelve_id','=',$material_shelf)
+			  ->orderBy('available','asc');
+		return $query;
+	}
 }

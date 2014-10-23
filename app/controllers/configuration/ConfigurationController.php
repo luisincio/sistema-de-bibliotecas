@@ -544,9 +544,16 @@ class ConfigurationController extends BaseController
 			$data["staff"] = Session::get('staff');
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 1){
-				// Check if the current user is the "System Admin"
-				$data["branches"] = Branch::withTrashed()->get();
+			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
+				if($data["staff"]->role_id == 1){
+					// Check if the current user is the "System Admin"
+					$data["branches"] = Branch::withTrashed()->get();
+				}else{
+					$turn = Turn::find($data["staff"]->turn_id);
+					$branch = Branch::find($turn->branch_id);
+					$data["branches"] = [];
+					$data["branches"][] = $branch;
+				}
 				return View::make('configuration/listBranch',$data);
 			}else{
 				return View::make('error/error');

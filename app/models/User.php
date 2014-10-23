@@ -68,4 +68,10 @@ class User extends Eloquent{
 			  ->where('users.id','=',$search_criteria);
 		return $query;
 	}
+
+	public function scopeSearchUserByPersonId($query,$person_id)
+	{
+		$query->where('person_id','=',$person_id);
+		return $query;
+	}
 }
