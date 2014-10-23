@@ -1,4 +1,4 @@
-@extends('templates/userTemplate')
+@extends('templates/staffTemplate')
 @section('content')
 
 	<h1>Editar Personal</h1>

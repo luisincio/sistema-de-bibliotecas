@@ -317,7 +317,6 @@ class StaffController extends BaseController {
 					$person->address = Input::get('direccion');
 					$person->gender = Input::get('genero');
 					$person->phone = Input::get('telefono');
-					$person->document_type = Input::get('tipo_doc');
 					$person->nacionality = Input::get('nacionalidad');
 					$person->save();
 

@@ -142,8 +142,9 @@ var delete_selected_staffs = true;
 		}
 	});
 
-
-	$("select[name=turno]").prop('disabled', 'disabled');
+	if(window.location.href.indexOf("create_staff") > -1) {
+		$("select[name=turno]").prop('disabled', 'disabled');
+	}
 
 	$("select[name=sede]").change(function(){
 		var branch_id = $(this).val();
