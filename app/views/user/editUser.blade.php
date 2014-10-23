@@ -27,6 +27,7 @@
 	{{ Form::open(array('url'=>'user/submit_edit_user', 'role'=>'form')) }}
 		{{ Form::hidden('user_id', $user_info->id) }}
 		{{ Form::hidden('person_id', $user_info->person_id) }}
+
 		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8">
@@ -98,7 +99,7 @@
 					@if($user_info->gender == 'F')
 						{{ Form::radio('genero', 'F',true,array('style'=>'margin-left:20px')) }} F
 					@else
-						{{ Form::radio('genero', 'F',array('style'=>'margin-left:20px')) }} F
+						{{ Form::radio('genero', 'F',false,array('style'=>'margin-left:20px')) }} F
 					@endif
 				</div>
 			</div>

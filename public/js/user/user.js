@@ -59,7 +59,8 @@ $( document ).ready(function(){
 	});
 
 	$("input[name=fecha_nacimiento]").datepicker({
-		format:'yyyy-mm-dd'
+		format:'yyyy-mm-dd',
+		endDate: '+0d'
 	});
 
 	var num_documento = "";
@@ -109,7 +110,7 @@ $( document ).ready(function(){
 				selected.push($(this).val());
 			});
 			if(selected.length > 0){
-				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				var confirmation = confirm("¿Está seguro que desea eliminar los usuarios seleccionados? si tienen alguna reserva pendiente, ésta será cancelada");
 				if(confirmation){
 					if(selected.length > 0){
 						$.ajax({
@@ -129,6 +130,13 @@ $( document ).ready(function(){
 							},
 							success: function(response){
 								if(response.success){
+									if(response.users_with_loans.length > 0){
+										var str_alert = "Existen usuarios con préstamos pendientes y no se pudieron eliminar, estos son los siguientes:\n";
+										for(i=0;i<response.users_with_loans.length;i++){
+											str_alert += "- "+response.users_with_loans[i] + "\n";
+										}
+										alert(str_alert);
+									}
 									location.reload();
 								}else{
 									alert('¡Ocurrió un error! Inténtelo de nuevo.');

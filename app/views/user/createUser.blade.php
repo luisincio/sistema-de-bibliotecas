@@ -24,6 +24,10 @@
 		<div class="alert alert-success">{{ Session::get('message') }}</div>
 	@endif
 
+	@if (Session::has('error'))
+		<div class="alert alert-danger">{{ Session::get('error') }}</div>
+	@endif
+
 	{{ Form::open(array('url'=>'user/submit_create_user', 'role'=>'form')) }}
 		<div class="col-xs-6">
 			<div class="row">

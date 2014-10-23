@@ -139,34 +139,50 @@ class UserController extends BaseController {
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
-				// Edit the profiles in the database
-				//Input::merge(array_map('trim', Input::all()));
-				$id = Input::get('id');
-				$url = 'user/edit_profile/'.$id;
-				$profile = Profile::find($id);
-				$profile->description = Input::get('descripcion');
-				$profile->save();
+				
+				$rules = array(
+							
+							'max_materiales' => 'required|numeric|min:1|max:50',
+							'max_dias_prestamo' => 'required|numeric|min:1|max:365',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					$profile_id = Input::get('id');
+					$url = "user/edit_profile"."/".$profile_id;
+					return Redirect::to($url)->withErrors($validator)->withInput(Input::all());
+				}else{
 
-				$data["material_types"] = MaterialType::all();
-				foreach($data["material_types"] as $item){
-					$empty = MaterialTypexprofile::getRowByProfileIdMaterialTypeId($id,$item->id)->get();
-					if(!$empty->isEmpty()){
-						$material_typeXprofile = MaterialTypexprofile::find($empty[0]->id);
-						$material_typeXprofile->delete();
-					}
-				}
+					$id = Input::get('id');
+					$url = 'user/edit_profile/'.$id;
+					$profile = Profile::find($id);
+					$profile->description = Input::get('descripcion');
+					$profile->max_material = Input::get('max_materiales');
+					$profile->max_days_loan = Input::get('max_dias_prestamo');
+					$profile->save();
 
-				$selected_material_types = Input::get('selected_material_types');
-				if($selected_material_types){
-					foreach($selected_material_types as $selected_material_type){
-						$material_typesxprofile = new MaterialTypexprofile;
-						$material_typesxprofile->material_type_id = $selected_material_type;
-						$material_typesxprofile->profile_id = $id;
-						$material_typesxprofile->save();
+					$data["material_types"] = MaterialType::all();
+					foreach($data["material_types"] as $item){
+						$empty = MaterialTypexprofile::getRowByProfileIdMaterialTypeId($id,$item->id)->get();
+						if(!$empty->isEmpty()){
+							$material_typeXprofile = MaterialTypexprofile::find($empty[0]->id);
+							$material_typeXprofile->delete();
+						}
 					}
-				}
-				Session::flash('message', 'Se editó correctamente el Perfil.');
-				return Redirect::to($url);
+
+					$selected_material_types = Input::get('selected_material_types');
+					if($selected_material_types){
+						foreach($selected_material_types as $selected_material_type){
+							$material_typesxprofile = new MaterialTypexprofile;
+							$material_typesxprofile->material_type_id = $selected_material_type;
+							$material_typesxprofile->profile_id = $id;
+							$material_typesxprofile->save();
+						}
+					}
+					Session::flash('message', 'Se editó correctamente el Perfil.');
+					return Redirect::to($url);
+				}	
 			}else{
 				return View::make('error/error');
 			}
@@ -257,12 +273,12 @@ class UserController extends BaseController {
 				// Validate the info, create rules for the inputs
 				$rules = array(
 							'num_documento' => 'required|numeric|min:9999999|max:9999999999',
-							'nombres' => 'required|alpha_spaces|min:2',
-							'apellidos' => 'required|alpha_spaces|min:2',
-							'nacionalidad' => 'required|alpha_spaces',
-							'telefono' => 'required|numeric',
-							'email' => 'required|email',
-							'direccion' => 'required',
+							'nombres' => 'required|alpha_spaces|min:2|max:255',
+							'apellidos' => 'required|alpha_spaces|min:2|max:255',
+							'nacionalidad' => 'required|alpha_spaces|max:255',
+							'telefono' => 'required|numeric|max:99999999999999999999',
+							'email' => 'required|email|max:255',
+							'direccion' => 'required|max:255',
 							'fecha_nacimiento' => 'required',
 							'genero' => 'required',
 							'perfil' => 'required|numeric|min:1',
@@ -277,7 +293,7 @@ class UserController extends BaseController {
 					$person = Person::searchPersonByDocument($document_number)->get();
 					if($person->isEmpty()){
 						// Create a random password
-						$password = Str::random(16);
+						$password = Str::random(8);
 						//Create person
 						$person = new Person;
 						$person->doc_number = Input::get('num_documento');
@@ -292,15 +308,28 @@ class UserController extends BaseController {
 						$person->document_type = Input::get('tipo_doc');
 						$person->nacionality = Input::get('nacionalidad');
 						$person->save();
+						Mail::send('emails.user_registration',array('person'=> $person,'password'=>$password),function($message) use ($person)
+						{
+							$message->to($person->mail, $person->name)
+									->subject('Registro de nuevo usuario');
+						});
+
 						$person_id = Person::orderBy('id','desc')->first();
+						$person_id = $person_id->id;
 					}else{
 						$person_id = $person[0]->id;
 					}
-					$user = new User;
-					$user->profile_id = Input::get('perfil');
-					$user->person_id = $person_id;
-					$user->save();
-					Session::flash('message', 'Se registró correctamente al usuario.');
+
+					$user_exist = User::searchUserByPerson($person_id)->get();
+					if($user_exist->isEmpty()){
+						$user = new User;
+						$user->profile_id = Input::get('perfil');
+						$user->person_id = $person_id;
+						$user->save();
+						Session::flash('message', 'Se registró correctamente al usuario.');
+					}else{
+						Session::flash('error', 'El usuario ya existe.');
+					}
 					return Redirect::to('user/create_user');
 				}
 			}else{
@@ -345,16 +374,18 @@ class UserController extends BaseController {
 			$data["staff"] = Session::get('staff');
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
+
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				
 				$data["search_criteria"] = Input::get('search');
 				$data["search_filter"] = Input::get('search_filter');
+
 				if($data["search_filter"] == 0){
-					$data["users"] = User::searchUsers($data["search_criteria"])->paginate(10);
+					$data["users_data"] = User::searchUsers($data["search_criteria"])->paginate(10);
 				}elseif($data["search_filter"] == 1){
-					$data["users"] = User::searchActiveUsers($data["search_criteria"])->paginate(10);
+					$data["users_data"] = User::searchActiveUsers($data["search_criteria"])->paginate(10);
 				}else{
-					$data["users"] = User::searchDeletedUsers($data["search_criteria"])->paginate(10);
+					$data["users_data"] = User::searchDeletedUsers($data["search_criteria"])->paginate(10);
 				}
 				$data["search"] = $data["search_criteria"];
 				return View::make('user/listUser',$data);
@@ -379,13 +410,24 @@ class UserController extends BaseController {
 		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');
+			$users_with_loans = [];
 			foreach($selected_ids as $selected_id){
-				$user = User::find($selected_id);
-				if($user){
-					$user->delete();
+				$loan = Loan::where('user_id','=',$selected_id)->first();
+				if($loan){
+					$user_info = User::searchUserById($selected_id)->first();
+					$users_with_loans[] = $user_info->name;
+				}else{
+					/* Delete the user */
+					$user = User::find($selected_id);
+					if($user){
+						$user->delete();
+					}
+					/* Cancel all reservations */
+					CubicleReservation::where('user_id','=',$selected_id)->delete();
+					MaterialReservation::where('user_id','=',$selected_id)->delete();
 				}
 			}
-			return Response::json(array( 'success' => true ),200);
+			return Response::json(array( 'success' => true,'users_with_loans' => $users_with_loans ),200);
 		}else{
 			return Response::json(array( 'success' => false ),200);
 		}

@@ -1,7 +1,7 @@
-@extends('templates/staffTemplate')
+@extends('templates/userTemplate')
 @section('content')
 
-	<h1>Registrar Personal</h1>
+	<h1>Editar Personal</h1>
 
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
@@ -30,44 +30,42 @@
 		<div class="alert alert-success">{{ Session::get('message') }}</div>
 	@endif
 
-	@if (Session::has('error'))
-		<div class="alert alert-danger">{{ Session::get('error') }}</div>
-	@endif
-
-	{{ Form::open(array('url'=>'staff/submit_create_staff', 'role'=>'form')) }}
+	{{ Form::open(array('url'=>'staff/submit_edit_staff', 'role'=>'form')) }}
+		{{ Form::hidden('staff_id', $staff_info->id) }}
+		{{ Form::hidden('person_id', $staff_info->person_id) }}
 		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8">
-					{{ Form::label('tipo_doc','Tipo de documento') }}
-					<select name="tipo_doc" class="form-control">
-						@foreach($document_types as $document_type)
-							<option value="{{ $document_type->id }}">{{ $document_type->name }}</option>
-						@endforeach
-					</select>
+					{{ Form::label('nacionalidad','Tipo de Documento') }}
+					@foreach($document_types as $document_type)
+						@if($document_type->id == $staff_info->document_type)
+							{{ Form::text('numero_documento',$document_type->name,array('class'=>'form-control','readonly'=>'')) }}
+						@endif	
+					@endforeach
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('nombres')) has-error has-feedback @endif">
 					{{ Form::label('nombres','Nombres') }}
-					{{ Form::text('nombres',Input::old('nombres'),array('class'=>'form-control')) }}
+					{{ Form::text('nombres',$staff_info->name,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('nacionalidad')) has-error has-feedback @endif">
 					{{ Form::label('nacionalidad','Nacionalidad') }}
-					{{ Form::text('nacionalidad',Input::old('nacionalidad'),array('class'=>'form-control')) }}
+					{{ Form::text('nacionalidad',$staff_info->nacionality,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('telefono')) has-error has-feedback @endif">
 					{{ Form::label('telefono','Teléfono') }}
-					{{ Form::text('telefono',Input::old('telefono'),array('class'=>'form-control')) }}
+					{{ Form::text('telefono',$staff_info->phone,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('direccion')) has-error has-feedback @endif">
 					{{ Form::label('direccion','Dirección') }}
-					{{ Form::text('direccion',Input::old('direccion'),array('class'=>'form-control')) }}
+					{{ Form::text('direccion',$staff_info->address,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">
@@ -77,11 +75,14 @@
 						<option value="0">Seleccione una sede</option>
 						@if($staff->role_id == 1)
 							@foreach($branches as $branch)
-									<option value="{{ $branch->id }}" @if(Input::old('branch') && Input::old('branch') == $branch->id) selected @endif>{{ $branch->name }}</option>
+									<option value="{{ $branch->id }}" selected>{{ $branch->name }}</option>
 							@endforeach
-						@else if($staff->role_id == 2)
-							<option value="{{ $staff_branch->id }}">{{ $staff_branch->name }}</option>
+						@else
+							@foreach($branches as $branch)
+									<option value="{{ $branch->id }}" >{{ $branch->name }}</option>
+							@endforeach
 						@endif	
+						
 					</select>
 				</div>
 			</div>
@@ -89,61 +90,61 @@
 				{{ Form::label('fecha_nacimiento','Fecha de nacimiento') }}
 				<div class="form-group input-group col-xs-8 @if($errors->first('fecha_nacimiento')) has-error has-feedback @endif">
 					
-					{{ Form::text('fecha_nacimiento',Input::old('fecha_nacimiento'),array('class'=>'form-control','readonly'=>'')) }}
+					{{ Form::text('fecha_nacimiento',$staff_info->birth_date,array('class'=>'form-control','readonly'=>'')) }}
 					<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
 				</div>
 			</div>
-			{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
-			{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+			{{ Form::submit('Guardar',array('id'=>'submit-edit', 'class'=>'btn btn-primary')) }}
 			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
-			</br>
-			</br>
 		</div>
 		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('num_documento')) has-error has-feedback @endif">
 					{{ Form::label('num_documento','Número de documento') }}
-					{{ Form::text('num_documento',Input::old('num_documento'),array('class'=>'form-control')) }}
-					{{ HTML::image('img/loader.gif') }}
+					{{ Form::text('num_documento',$staff_info->doc_number,array('class'=>'form-control','readonly'=>'')) }}
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('apellidos')) has-error has-feedback @endif">
 					{{ Form::label('apellidos','Apellidos') }}
-					{{ Form::text('apellidos',Input::old('apellidos'),array('class'=>'form-control')) }}
+					{{ Form::text('apellidos',$staff_info->lastname,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8">
 					{{ Form::label('genero','Género') }}</br>
-					{{ Form::radio('genero', 'M') }} M
-					{{ Form::radio('genero', 'F',false,array('style'=>'margin-left:20px')) }} F
+					
+					@if($staff_info->gender == 'M')
+						{{ Form::radio('genero', 'M',true) }} M
+					@else
+						{{ Form::radio('genero', 'M') }} M
+					@endif
+
+					@if($staff_info->gender == 'F')
+						{{ Form::radio('genero', 'F',true,array('style'=>'margin-left:20px')) }} F
+					@else
+						{{ Form::radio('genero', 'F',false,array('style'=>'margin-left:20px')) }} F
+					@endif
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('email')) has-error has-feedback @endif">
 					{{ Form::label('email','E-mail') }}
-					{{ Form::text('email',Input::old('email'),array('class'=>'form-control')) }}
+					{{ Form::text('email',$staff_info->mail,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('rol')) has-error has-feedback @endif">
-					{{ Form::label('role','Rol') }}
+				<div class="form-group col-xs-8">
+					{{ Form::label('role','Role') }}
 					<select name="rol" class="form-control">
 						<option value="0">Seleccione un rol</option>
-						@if($staff->role_id == 1)
-							@foreach($roles as $role)
-								@if($role->id != 1 && $role->id != 4)
-									<option value="{{ $role->id }}" @if(Input::old('role') && Input::old('role') == $role->id) selected @endif>{{ $role->name }}</option>
-								@endif
-							@endforeach
-						@else
-							@foreach($roles as $role)
-								@if($role->id == 3)
-									<option value="{{ $role->id }}" @if(Input::old('role') && Input::old('role') == $role->id) selected @endif>{{ $role->name }}</option>
-								@endif
-							@endforeach
-						@endif	
+						@foreach($roles as $role)
+							@if($role->id == $staff_info->role_id)
+								<option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+							@else
+								<option value="{{ $role->id }}">{{ $role->name }}</option>
+							@endif
+						@endforeach
 					</select>
 				</div>
 			</div>
@@ -151,7 +152,16 @@
 				<div class="form-group col-xs-8 @if($errors->first('turno')) has-error has-feedback @endif">
 					{{ Form::label('turn','Turno') }}
 					<select name="turno" class="form-control">
-						<option value="0">Seleccione primero una sede</option>
+						<option value="0">Seleccione un turno</option>
+						@foreach($turns as $turn)
+								@if($turn->id == $staff_info->turn_id)
+								<option value="{{ $turn->id }}" selected>{{ $turn->name }}</option>
+							@else
+								<option value="{{ $turn->id }}" >{{ $turn->name }}</option>
+							@endif
+
+
+						@endforeach
 					</select>
 				</div>
 			</div>
