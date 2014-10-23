@@ -257,12 +257,15 @@ class StaffController extends BaseController {
 				$data["document_types"] = DocumentType::all();
 				$data["roles"] = Role::all();
 				$data["branches"] = Branch::all();
-				$data["turns"] = Turn::all();
+				//$data["turns"] = Turn::all();
 				$data["staff_info"] = Staff::searchStaffById($id)->get();
 				if($data["staff_info"]->isEmpty()){
 					return Redirect::to('staff/list_staff');
 				}
 				$data["staff_info"] = $data["staff_info"][0];
+				$data["edit_staff_turn"] = Turn::find($data["staff_info"]->turn_id);
+				$data["edit_staff_branch"] = Branch::find($data["edit_staff_turn"]->branch_id);
+				$data["edit_staff_possible_turns"] = Turn::where('branch_id','=',$data["edit_staff_branch"]->id)->get();
 				return View::make('staff/editStaff',$data);
 			}else{
 				return View::make('error/error');

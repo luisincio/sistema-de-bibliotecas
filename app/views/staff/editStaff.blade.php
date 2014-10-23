@@ -71,19 +71,20 @@
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('sede')) has-error has-feedback @endif">
 					{{ Form::label('branch','Sede') }}
-					<select name="sede" class="form-control">
-						<option value="0">Seleccione una sede</option>
 						@if($staff->role_id == 1)
-							@foreach($branches as $branch)
-									<option value="{{ $branch->id }}" selected>{{ $branch->name }}</option>
-							@endforeach
+							<select name="sede" class="form-control">
+								<option value="0">Seleccione una sede</option>
+									@foreach($branches as $branch)
+										@if($edit_staff_turn->branch_id == $branch->id)
+											<option value="{{ $branch->id }}" selected>{{ $branch->name }}</option>
+										@else
+											<option value="{{ $branch->id }}">{{ $branch->name }}</option>
+										@endif
+									@endforeach
+							</select>
 						@else
-							@foreach($branches as $branch)
-									<option value="{{ $branch->id }}" >{{ $branch->name }}</option>
-							@endforeach
-						@endif	
-						
-					</select>
+							{{ Form::text('sede',$edit_staff_branch->name,array('class'=>'form-control','readonly'=>'')) }}
+						@endif
 				</div>
 			</div>
 			<div class="row">
@@ -153,14 +154,12 @@
 					{{ Form::label('turn','Turno') }}
 					<select name="turno" class="form-control">
 						<option value="0">Seleccione un turno</option>
-						@foreach($turns as $turn)
-								@if($turn->id == $staff_info->turn_id)
-								<option value="{{ $turn->id }}" selected>{{ $turn->name }}</option>
+						@foreach($edit_staff_possible_turns as $edit_staff_possible_turn)
+								@if($edit_staff_possible_turn->id == $staff_info->turn_id)
+								<option value="{{ $edit_staff_possible_turn->id }}" selected>{{ $edit_staff_possible_turn->name }} ({{ $edit_staff_possible_turn->hour_ini }} - {{ $edit_staff_possible_turn->hour_end }})</option>
 							@else
-								<option value="{{ $turn->id }}" >{{ $turn->name }}</option>
+								<option value="{{ $edit_staff_possible_turn->id }}" >{{ $edit_staff_possible_turn->name }} ({{ $edit_staff_possible_turn->hour_ini }} - {{ $edit_staff_possible_turn->hour_end }})</option>
 							@endif
-
-
 						@endforeach
 					</select>
 				</div>
