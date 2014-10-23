@@ -20,7 +20,7 @@
 					{{ $branch->address }}
 				</td>
 				<td>
-					<a href="{{URL::to('/config/edit_turns/')}}/{{$branch->id}}">{{'Turnos'}}</a>
+					<a href="{{URL::to('/config/create_turn/')}}/{{$branch->id}}">{{'Turnos'}}</a>
 				</td>
 				<td>
 					@if(!$branch->deleted_at)

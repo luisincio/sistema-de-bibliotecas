@@ -22,6 +22,7 @@
 				<div class="form-group col-xs-4 @if($errors->first('nombre')) has-error has-feedback @endif">
 					{{ Form::label('nombre','Nombre') }}
 					{{ Form::text('nombre',Input::old('nombre'),array('class'=>'form-control')) }}
+					{{ Form::hidden('branch_id',$branch_id) }}
 				</div>
 				<div class="form-group col-xs-4 @if($errors->first('hora_ini')) has-error has-feedback @endif">
 					{{ Form::label('hora_ini','Hora Inicio') }}

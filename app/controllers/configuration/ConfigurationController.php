@@ -669,7 +669,7 @@ class ConfigurationController extends BaseController
 		}
 	}
 
-	public function render_create_turn()
+	public function render_create_turn($branch_id=null)
 	{
 		if(Auth::check()){
 			$data["person"] = Session::get('person');
@@ -679,13 +679,13 @@ class ConfigurationController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Check if the current user is the "System Admin"
-				$turn = Turn::find($data["staff"]->turn_id);	
-				if($turn){
-					$data["turns"] = Turn::getTurnsByBranch($turn->branch_id)->get();
+				if($branch_id){
+					$data["turns"] = Turn::getTurnsByBranch($branch_id)->get();
+					$data["branch_id"] = $branch_id;
+					return View::make('configuration/createTurn',$data);
 				}else{
-					$data["turns"] = null;
+					return View::make('error/error');
 				}
-				return View::make('configuration/createTurn',$data);
 			}else{
 				return View::make('error/error');
 			}
@@ -713,10 +713,13 @@ class ConfigurationController extends BaseController
 				$validator = Validator::make(Input::all(), $rules);
 				// If the validator fails, redirect back to the form
 				if($validator->fails()){
-					return Redirect::to('config/create_turn')->withErrors($validator)->withInput(Input::all());
+					$branch_id = Input::get('branch_id');
+					$url = 'config/create_turn/'.$branch_id;
+					return Redirect::to($url)->withErrors($validator)->withInput(Input::all());
 				}else{
 					$array_hora_ini = explode(":", Input::get('hora_ini'));
 					$array_hora_fin = explode(":", Input::get('hora_fin'));
+					$branch_id = Input::get('branch_id');
 					if($array_hora_ini[0]*100 + $array_hora_ini[1] < $array_hora_fin[0]*100 + $array_hora_fin[1]){
 						// Insert the profile in the database
 						$turnSession = Turn::find($data["staff"]->turn_id);
@@ -724,18 +727,21 @@ class ConfigurationController extends BaseController
 						$turn->name = Input::get('nombre');
 						$turn->hour_ini = Input::get('hora_ini');
 						$turn->hour_end = Input::get('hora_fin');
-						$turn->branch_id = $turnSession->branch_id;
+						//$turn->branch_id = $turnSession->branch_id;
+						$turn->branch_id = $branch_id;
 						$turn->save();
 
 						$last_turn = Turn::orderBy('id', 'desc')->first();
 						$id = $last_turn->id;
 
 						Session::flash('message', 'Se registró correctamente el turno.');
-						return Redirect::to('config/create_turn');
+						$url = 'config/create_turn/'.$branch_id;
+						return Redirect::to($url);
 					}
 					else{
 						Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
-						return Redirect::to('config/create_turn')->withInput(Input::all());
+						$url = 'config/create_turn/'.$branch_id;
+						return Redirect::to($url)->withInput(Input::all());
 					}	
 				}
 			}else{
