@@ -106,6 +106,12 @@ $( document ).ready(function(){
 		str += "<td><a href='' class='btn btn-default delete-detail' onclick='deleteRow(event,this)'>X</a></td></tr>";
 		$("table").append(str);
 		
+		$("input[name=codigo]").val('');
+		$("input[name=titulo]").val('');
+		$("input[name=autor]").val('');
+		$("input[name=cantidad_ordenes]").val('');
+		$("input[name=precio]").val('');
+		
 	});
 
 
@@ -145,6 +151,19 @@ $( document ).ready(function(){
 			}
 		}
 	});
+
+
+	$("#clear-fields-purchase-order").click(function(e){
+		e.preventDefault();
+		$("input[name=codigo]").val('');
+		$("input[name=titulo]").val('');
+		$("input[name=autor]").val('');
+		$("input[name=cantidad_ordenes]").val('');
+		$("input[name=precio]").val('');
+		
+	});
+
+
 
 	
 });

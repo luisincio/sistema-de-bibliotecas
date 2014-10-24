@@ -32,7 +32,7 @@
 		</div>
 		
 		<div class="row">
-			<div class="form-group col-xs-8 @if($errors->first('descripcion')) has-error has-feedback @endif">
+			<div class="form-group input-group col-xs-8 @if($errors->first('descripcion')) has-error has-feedback @endif">
 				{{ Form::label('descripcion','Descripción') }}
 				{{ Form::text('descripcion',$purchase_order->description ,array('class'=>'form-control', 'readonly'=>'')) }}
 			</div>
@@ -49,7 +49,7 @@
 		</div>
 
 		<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('proveedor')) has-error has-feedback @endif">
+				<div class="form-group input-group col-xs-8 @if($errors->first('proveedor')) has-error has-feedback @endif">
 					{{ Form::label('proveedor','Proveedor') }}																		
 					{{ Form::text('proveedor',$suppliers->name,array('class'=>'form-control', 'readonly'=>'')) }}									
 				</div>
@@ -87,7 +87,7 @@
 	<br>
 	<div class = "col-xs-6">
 		<div class ="row">
-			{{ Form::label('total','Total') }}
+			{{ Form::label('total','Precio Total:') }}
 			{{ Form::label('total_price',$purchase_order->total_amount) }}
 		</div>
 		<?php 	

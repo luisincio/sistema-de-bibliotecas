@@ -396,40 +396,44 @@ class MaterialController extends BaseController
 						$details_quantity =Input::get('details_quantity'); 
 						$details_unit_price =Input::get('details_unit_price');  
 						$cant = count($details_code);
+						if($cant>0){
+							$purchase_order = new PurchaseOrder;
+							$fecha = date_create();
+							$timestamp = date_timestamp_get($fecha);
+							//Para obtener el total del precio precio
+							$total_amount = 0;
+							for($i=0;$i<$cant;$i++){
+								//Aumento el total precio
+								$total_amount += $details_quantity[$i]*$details_unit_price[$i];
+							}
+							//Insert the purchase order in the database
+							$purchase_order->date_issue = $fecha_emision;
+							$purchase_order->expire_at = $fecha_vencimiento;
+							$purchase_order->description = Input::get('descripcion');
+							$purchase_order->state = 0;
+							$purchase_order->total_amount = $total_amount;
+							$purchase_order->supplier_id = Input::get('proveedor');
+							$purchase_order->save();
 
-						$purchase_order = new PurchaseOrder;
-						$fecha = date_create();
-						$timestamp = date_timestamp_get($fecha);
-						//Para obtener el total del precio precio
-						$total_amount = 0;
-						for($i=0;$i<$cant;$i++){
-							//Aumento el total precio
-							$total_amount += $details_quantity[$i]*$details_unit_price[$i];
-						}
-						//Insert the purchase order in the database
-						$purchase_order->date_issue = $fecha_emision;
-						$purchase_order->expire_at = $fecha_vencimiento;
-						$purchase_order->description = Input::get('descripcion');
-						$purchase_order->state = 0;
-						$purchase_order->total_amount = $total_amount;
-						$purchase_order->supplier_id = Input::get('proveedor');
-						$purchase_order->save();
+							for($i=0;$i<$cant;$i++){
+								//$auto_cod = Input::get('codigo').($timestamp);
+								//$timestamp++;
+								$details_purchase_order = new DetailsPurchaseOrder;
+								$details_purchase_order->code = $details_code[$i];
+								$details_purchase_order->title = $details_title[$i];
+								$details_purchase_order->author = $details_author[$i];
+								$details_purchase_order->quantity = $details_quantity[$i];
+								$details_purchase_order->price = $details_unit_price[$i];						
+								$details_purchase_order->purchase_order_id = $purchase_order->id;	
+								$details_purchase_order->save();
 
-						for($i=0;$i<$cant;$i++){
-							//$auto_cod = Input::get('codigo').($timestamp);
-							//$timestamp++;
-							$details_purchase_order = new DetailsPurchaseOrder;
-							$details_purchase_order->code = $details_code[$i];
-							$details_purchase_order->title = $details_title[$i];
-							$details_purchase_order->author = $details_author[$i];
-							$details_purchase_order->quantity = $details_quantity[$i];
-							$details_purchase_order->price = $details_unit_price[$i];						
-							$details_purchase_order->purchase_order_id = $purchase_order->id;	
-							$details_purchase_order->save();
-
-						}																
-						Session::flash('message', 'Se registró correctamente la orden de compra.');
-						return Redirect::to('material/create_purchase_order');
+							}
+							Session::flash('message', 'Se registró correctamente la orden de compra.');
+							return Redirect::to('material/create_purchase_order');
+						}else{
+							Session::flash('danger', 'Ingrese por lo menos un material.');
+							return Redirect::to('material/create_purchase_order');		
+						}																											
 					}else{
 
 						Session::flash('danger', 'La fecha de vencimiento es menor a la fecha de emisión.');
@@ -458,7 +462,8 @@ class MaterialController extends BaseController
 				// Check if the current user is the "System Admin"
 				//$data["search_criteria"] = null;
 				$data["purchase_orders"] = PurchaseOrder::paginate(10);
-
+				$data["date_ini"] = null;
+				$data["date_end"] = null;
 				//$data["search"] = null;
 				//$data["search_filter"] = null;
 				
@@ -488,7 +493,8 @@ class MaterialController extends BaseController
 				$data["purchase_orders"] = PurchaseOrder::searchPurchaseOrderByDate($fecha_emision,$fecha_vencimiento)->paginate(10);
 				
 				//$data["search"] = $data["search_criteria"];
-				//$data["thematic_areas"] = ThematicArea::all();
+				$data["date_ini"] = $fecha_emision;
+				$data["date_end"] = $fecha_vencimiento;
 				return View::make('material/listPurchaseOrder',$data);
 			}else{
 				return View::make('error/error');

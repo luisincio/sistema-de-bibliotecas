@@ -1,6 +1,6 @@
 @extends('templates/materialTemplate')
 @section('content')
-
+	
 	<h1>Registrar Orden de Compra</h1>
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
@@ -21,44 +21,46 @@
 	@endif
 	
 	{{ Form::open(array('url'=>'material/submit_create_purchase_order', 'role'=>'form')) }}
-		<div class="col-xs-6">
-			<div class="row">
-				{{ Form::label('femision','Fecha de emisión*') }}
-				<div class="form-group input-group col-xs-8 @if($errors->first('femision')) has-error has-feedback @endif">	
-					<?php 	
-						$today = Date("Y-m-d");			
-					?>									
-					{{ Form::text('femision',$today,array('class'=>'form-control', 'readonly'=>'')) }}
-					<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
-				</div>
+	<div class="col-xs-6">
+		<div class="row">
+			{{ Form::label('femision','Fecha de emisión*') }}
+			<div class="form-group input-group col-xs-8 @if($errors->first('femision')) has-error has-feedback @endif">	
+				<?php 	
+					$today = Date("Y-m-d");			
+				?>									
+				{{ Form::text('femision',$today,array('class'=>'form-control', 'readonly'=>'')) }}
+				<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
 			</div>
+		</div>
+		
+		<div class="row">
+			<div class="form-group input-group col-xs-8 @if($errors->first('descripcion')) has-error has-feedback @endif">
+				{{ Form::label('descripcion','Descripción*') }}
+				{{ Form::text('descripcion',Input::old('descripcion'),array('class'=>'form-control')) }}
+			</div>
+		</div>
+		
+		<hr width="145%" align="left" />			
+		
+		<div class="row">
+			<div class="form-group input-group col-xs-8 @if($errors->first('codigo')) has-error has-feedback @endif">
+				{{ Form::label('codigo','Código') }}
+				{{ Form::text('codigo',Input::old('codigo'),array('class'=>'form-control')) }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group input-group col-xs-8 @if($errors->first('titulo')) has-error has-feedback @endif">
+				{{ Form::label('titulo','Título') }}
+				{{ Form::text('titulo',Input::old('titulo'),array('class'=>'form-control')) }}
+			</div>
+		</div>
 			
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('descripcion')) has-error has-feedback @endif">
-					{{ Form::label('descripcion','Descripción*') }}
-					{{ Form::text('descripcion',Input::old('descripcion'),array('class'=>'form-control')) }}
-				</div>
+		<div class="row">
+			<div class="form-group input-group col-xs-8 @if($errors->first('autor')) has-error has-feedback @endif">
+				{{ Form::label('autor','Autor') }}
+				{{ Form::text('autor',Input::old('autor'),array('class'=>'form-control')) }}
 			</div>
-			
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('codigo')) has-error has-feedback @endif">
-					{{ Form::label('codigo','Código') }}
-					{{ Form::text('codigo',Input::old('codigo'),array('class'=>'form-control')) }}
-				</div>
-			</div>
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('titulo')) has-error has-feedback @endif">
-					{{ Form::label('titulo','Título') }}
-					{{ Form::text('titulo',Input::old('titulo'),array('class'=>'form-control')) }}
-				</div>
-			</div>
-				
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('autor')) has-error has-feedback @endif">
-					{{ Form::label('autor','Autor') }}
-					{{ Form::text('autor',Input::old('autor'),array('class'=>'form-control')) }}
-				</div>
-			</div>
+		</div>
 		
 		<div class="row">
 			<div class="row">
@@ -78,7 +80,7 @@
 		</div>
 
 		<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('proveedor')) has-error has-feedback @endif">
+				<div class="form-group input-group col-xs-8 @if($errors->first('proveedor')) has-error has-feedback @endif">
 					{{ Form::label('proveedor','Proveedor*') }}
 					<select name="proveedor" class="form-control">		
 						@foreach($suppliers as $supplier)
@@ -87,21 +89,21 @@
 					</select>
 				</div>
 		</div>
-		
 
-		
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('cantidad_ordenes')) has-error has-feedback @endif">
-					{{ Form::label('cantidad_ordenes','Cantidad') }}
-					{{ Form::text('cantidad_ordenes',Input::old('cantidad_ordenes'),array('class'=>'form-control')) }}
-				</div>
+		<HR width="30%">
+
+		<div class="row">
+			<div class="form-group input-group col-xs-8 @if($errors->first('cantidad_ordenes')) has-error has-feedback @endif">
+				{{ Form::label('cantidad_ordenes','Cantidad') }}
+				{{ Form::text('cantidad_ordenes',Input::old('cantidad_ordenes'),array('class'=>'form-control')) }}
 			</div>
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('precio')) has-error has-feedback @endif">
-					{{ Form::label('precio','Precio Unitario') }}
-					{{ Form::text('precio',Input::old('precio'),array('class'=>'form-control')) }}
-				</div>
-			</div>	
+		</div>
+		<div class="row">
+			<div class="form-group input-group col-xs-8 @if($errors->first('precio')) has-error has-feedback @endif">
+				{{ Form::label('precio','Precio Unitario') }}
+				{{ Form::text('precio',Input::old('precio'),array('class'=>'form-control')) }}
+			</div>
+		</div>	
 	</div>
 	<table class="table table-hover">
 		<tr class="info">
@@ -114,7 +116,10 @@
 		</tr>
 
 	</table>
+	<br>
 	{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
-	{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+	{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields-purchase-order', 'class'=>'btn btn-default')) }}
 	{{ Form::close() }}
+	<br>
+	<br>
 @stop
