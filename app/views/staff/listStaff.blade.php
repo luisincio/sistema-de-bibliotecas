@@ -1,7 +1,7 @@
 @extends('templates/staffTemplate')
 @section('content')
 	
-	<h1>Personal</h1>
+	<h1>Lista del Personal de Biblioteca</h1>
 	<div class="container">
 
 		{{ Form::open(array('url'=>'/staff/search_staff','method'=>'get' ,'role'=>'form', 'id'=>'search-form','class' => 'form-inline')) }}

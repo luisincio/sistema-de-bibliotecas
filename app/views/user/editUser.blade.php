@@ -5,7 +5,6 @@
 
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
-			<p><strong>{{ $errors->first('num_documento') }}</strong></p>
 			<p><strong>{{ $errors->first('nombres') }}</strong></p>
 			<p><strong>{{ $errors->first('apellidos') }}</strong></p>
 			<p><strong>{{ $errors->first('nacionalidad') }}</strong></p>
@@ -31,7 +30,7 @@
 		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8">
-					{{ Form::label('nacionalidad','Nacionalidad') }}
+					{{ Form::label('tipo_documento','Tipo de documento') }}
 					@foreach($document_types as $document_type)
 						@if($document_type->id == $user_info->document_type)
 							{{ Form::text('numero_documento',$document_type->name,array('class'=>'form-control','readonly'=>'')) }}
