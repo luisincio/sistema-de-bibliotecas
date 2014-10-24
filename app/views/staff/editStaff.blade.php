@@ -136,7 +136,7 @@
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8">
-					{{ Form::label('role','Role') }}
+					{{ Form::label('role','Rol') }}
 					<select name="rol" class="form-control">
 						<option value="0">Seleccione un rol</option>
 						@foreach($roles as $role)
