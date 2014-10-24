@@ -108,6 +108,7 @@
 					{{ HTML::image('img/loader.gif') }}
 				</div>
 		    	<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					<h3 class="modal-title" id="material-title"></h3>
 				</div>
 				<div class="modal-body">
