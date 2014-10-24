@@ -36,7 +36,7 @@ class ConfigurationController extends BaseController
 				// Validate the info, create rules for the inputs
 				$rules = array(
 							'nombre' => 'required|alpha_spaces|min:2|unique:suppliers,name',
-							'ruc' => 'required|numeric|min:10|unique:suppliers,ruc',
+							'ruc' => 'required|numeric|min:10|max:10|unique:suppliers,ruc',
 							'representante' => 'required|alpha_spaces|min:2',
 							'direccion' => 'required',
 							'telefono' => 'numeric',

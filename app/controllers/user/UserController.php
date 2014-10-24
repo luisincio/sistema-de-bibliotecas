@@ -58,11 +58,13 @@ class UserController extends BaseController {
 					$id = $last_profile->id;
 
 					$selected_material_types = Input::get('selected_material_types');
-					foreach($selected_material_types as $selected_material_type){
-						$material_typesxprofile = new MaterialTypexprofile;
-						$material_typesxprofile->material_type_id = $selected_material_type;
-						$material_typesxprofile->profile_id = $id;
-						$material_typesxprofile->save();
+					if($selected_material_types){
+						foreach($selected_material_types as $selected_material_type){
+							$material_typesxprofile = new MaterialTypexprofile;
+							$material_typesxprofile->material_type_id = $selected_material_type;
+							$material_typesxprofile->profile_id = $id;
+							$material_typesxprofile->save();
+						}
 					}
 					Session::flash('message', 'Se registró correctamente el perfil.');
 					return Redirect::to('user/create_profile');

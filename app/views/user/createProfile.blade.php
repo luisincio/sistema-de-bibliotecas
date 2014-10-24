@@ -44,7 +44,8 @@
 				</div>
 			</div>
 		</div>
-
+		<h4>Seleccione los tipos de materiales que podrá tener acceso el perfil que será creado, puede no seleccionar ninguno
+			y agregarlos posteriormente</h4>
 		<table class="table table-hover">
 			<tr class="info">
 				<th>Nombre</th>

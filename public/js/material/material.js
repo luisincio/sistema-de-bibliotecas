@@ -82,20 +82,20 @@ $( document ).ready(function(){
 
 		
 		
-		if(code.length < 1 || title.length < 1 || author.length < 1 || quantity.length < 1 || unit_price < 1){
-			return alert("Datos del detalle inválidos.1");
+		if(code.length < 1 || title.length < 1 || author.length < 1 || quantity.length < 1 || unit_price.length < 1){
+			return alert("No deje ningún campo del detalle vacío.");
 		}
 		var regex = /^[A-Za-z0-9]+$/;
 		if (!regex.test(code)) {
-			return alert("Datos del detalle inválidos.2");
+			return alert("El código del detalle debe ser alfa-numérico.");
 		}
-		var regexNum = /^[A-Za-z0-9]+$/;
+		var regexNum = /^[0-9]+$/;
 		if(!regexNum.test(quantity)){
-			return alert("Datos del detalle inválidos.3");
+			return alert("La cantidad del detalle debe ser numérico.");
 		}
-		var regexPattern = /^\d{0,8}(\.\d{1,2})?$/;
+		var regexPattern = /^\d{1,8}(\.\d{1,2})?$/;
 		if(!regexPattern.test(unit_price)){
-			return alert("Datos del detalle inválidos.4");
+			return alert("El precio unitario del detalle debe contener una parte entera y dos decimales despues del punto.");
 		}
 
 		var str = "<tr><td><input name='details_code[]' value='"+code+"' readonly/></td>";

@@ -38,6 +38,7 @@
 					{{ HTML::image('img/loader.gif') }}
 				</div>
 		    	<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					<h3 class="modal-title" id="cubicle-reservation-title">Información de reserva de cubículo</h3>
 				</div>
 				<div class="modal-body">
@@ -72,6 +73,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 		    	<div class="modal-header">
+		    		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					<h3 class="modal-title" id="cubicle-reservation-form-title">Formulario de reserva de cubículo</h3>
 				</div>
 				<div class="modal-body">

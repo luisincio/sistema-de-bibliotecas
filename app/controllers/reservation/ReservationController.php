@@ -26,8 +26,10 @@ class ReservationController extends BaseController
 				// Check if the current user can reserve the material by its material type permission
 				$material_types_available = MaterialTypexprofile::getMaterialTypesXProfile($data["user"]->profile_id)->get();
 				$material_types_available_array = [];
-				foreach($material_types_available as $material_type_available){
-					$material_types_available_array[] = $material_type_available->material_type_id;
+				if(count($material_types_available)>0){
+					foreach($material_types_available as $material_type_available){
+						$material_types_available_array[] = $material_type_available->material_type_id;
+					}
 				}
 				if( in_array($material->material_type,$material_types_available_array) ){
 					$reservation_date = date("Y-m-d");
@@ -306,7 +308,11 @@ class ReservationController extends BaseController
 				$data["reservation_person"] = Person::searchPersonByDocument($data["search"])->first();
 				if($data["reservation_person"]){
 					$reservation_user = User::searchUserByPersonId($data["reservation_person"]->id)->first();
-					$data["reservations"] = CubicleReservation::getReservationCubicleByUserDate($reservation_user->id,$today)->get();
+					if($reservation_user){
+						$data["reservations"] = CubicleReservation::getReservationCubicleByUserDate($reservation_user->id,$today)->get();
+					}else{
+						$data["reservations"] = null;
+					}
 				}else{
 					$reservation_user = null;
 					$data["reservations"] = null;

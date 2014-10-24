@@ -50,6 +50,7 @@
 				</h3>
 			@endif
 		</div>
+		<h4>Si desea reservar algún material, debe primero ingresar a su cuenta. De no tener una, contáctese con el bibliotecario más cercano.</h4>
 		<table class="table table-hover">
 			<tr class="info">
 				<th>Titulo</th>

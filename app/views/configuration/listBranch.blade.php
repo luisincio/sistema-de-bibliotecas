@@ -14,7 +14,11 @@
 			@foreach( $branches as $branch)
 			<tr class="@if($branch->deleted_at) bg-danger @endif">
 				<td>
-					<a href="{{URL::to('/config/edit_branch/')}}/{{$branch->id}}">{{$branch->name}}</a>
+					@if($branch->deleted_at)
+						{{$branch->name}}
+					@else
+						<a href="{{URL::to('/config/edit_branch/')}}/{{$branch->id}}">{{$branch->name}}</a>
+					@endif
 				</td>
 				<td>
 					{{ $branch->address }}
