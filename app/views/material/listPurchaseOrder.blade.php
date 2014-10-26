@@ -32,6 +32,10 @@
 	<table class="table table-hover">
 		<tr class="info">
 			<th>Código</th>
+			<th>Proveedor</th>
+			<th>Ruc</th>
+			<th>Teléfono</th>
+			<th>E-mail de contacto</th>
 			<th>Fecha Emisión</th>
 			<th>Fecha Vencimiento</th>
 			<th>Estado</th>				
@@ -40,6 +44,18 @@
 		<tr>
 			<td>
 				<a href="{{URL::to('/material/edit_purchase_order/')}}/{{$purchase_order->id}}">{{ $purchase_order->id }}</a>
+			</td>
+			<td>
+				{{ $purchase_order->name }}
+			</td>
+			<td>
+				{{ $purchase_order->ruc }}
+			</td>
+			<td>
+				{{ $purchase_order->phone }}
+			</td>
+			<td>
+				{{ $purchase_order->email }}
 			</td>
 			<td>
 				{{ $purchase_order->date_issue }}

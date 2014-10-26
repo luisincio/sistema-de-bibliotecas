@@ -460,12 +460,9 @@ class MaterialController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
 				// Check if the current user is the "System Admin"
-				//$data["search_criteria"] = null;
-				$data["purchase_orders"] = PurchaseOrder::paginate(10);
+				$data["purchase_orders"] = PurchaseOrder::getPurchaseOrderInfo()->paginate(10);
 				$data["date_ini"] = null;
 				$data["date_end"] = null;
-				//$data["search"] = null;
-				//$data["search_filter"] = null;
 				
 				return View::make('material/listPurchaseOrder',$data);
 			}else{
@@ -492,7 +489,6 @@ class MaterialController extends BaseController
 				$fecha_vencimiento = Input::get('fecha_vencimiento');
 				$data["purchase_orders"] = PurchaseOrder::searchPurchaseOrderByDate($fecha_emision,$fecha_vencimiento)->paginate(10);
 				
-				//$data["search"] = $data["search_criteria"];
 				$data["date_ini"] = $fecha_emision;
 				$data["date_end"] = $fecha_vencimiento;
 				return View::make('material/listPurchaseOrder',$data);
