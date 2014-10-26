@@ -133,7 +133,7 @@
 						<option value="0">Seleccione un rol</option>
 						@if($staff->role_id == 1)
 							@foreach($roles as $role)
-								@if($role->id != 1 && $role->id != 4)
+								@if($role->id != 1)
 									<option value="{{ $role->id }}" @if(Input::old('role') && Input::old('role') == $role->id) selected @endif>{{ $role->name }}</option>
 								@endif
 							@endforeach
