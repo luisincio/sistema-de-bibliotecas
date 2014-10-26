@@ -714,7 +714,7 @@ class ConfigurationController extends BaseController
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|unique:turns,name',
+							'nombre' => 'required|alpha_spaces|min:2',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -728,22 +728,28 @@ class ConfigurationController extends BaseController
 					$array_hora_fin = explode(":", Input::get('hora_fin'));
 					$branch_id = Input::get('branch_id');
 					if($array_hora_ini[0]*100 + $array_hora_ini[1] < $array_hora_fin[0]*100 + $array_hora_fin[1]){
-						// Insert the profile in the database
-						$turnSession = Turn::find($data["staff"]->turn_id);
-						$turn = new Turn;
-						$turn->name = Input::get('nombre');
-						$turn->hour_ini = Input::get('hora_ini');
-						$turn->hour_end = Input::get('hora_fin');
-						//$turn->branch_id = $turnSession->branch_id;
-						$turn->branch_id = $branch_id;
-						$turn->save();
+						// Insert the turn in the database
+						$turn_name = Input::get('nombre');
+						$turn_exists = Turn::getTurnsByNameBranch($turn_name,$branch_id)->first();
+						if(!$turn_exists){
+							$turn = new Turn;
+							$turn->name = $turn_name;
+							$turn->hour_ini = Input::get('hora_ini');
+							$turn->hour_end = Input::get('hora_fin');
+							$turn->branch_id = $branch_id;
+							$turn->save();
 
-						$last_turn = Turn::orderBy('id', 'desc')->first();
-						$id = $last_turn->id;
+							$last_turn = Turn::orderBy('id', 'desc')->first();
+							$id = $last_turn->id;
 
-						Session::flash('message', 'Se registró correctamente el turno.');
-						$url = 'config/create_turn/'.$branch_id;
-						return Redirect::to($url);
+							Session::flash('message', 'Se registró correctamente el turno.');
+							$url = 'config/create_turn/'.$branch_id;
+							return Redirect::to($url);
+						}else{
+							Session::flash('danger', 'Ya existe un turno con ese nombre.');
+							$url = 'config/create_turn/'.$branch_id;
+							return Redirect::to($url)->withInput(Input::all());
+						}
 					}
 					else{
 						Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');

@@ -21,7 +21,10 @@ class Staff extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','staff.person_id')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*');
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
+			  ->where('role_id','<>',1)
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name');
 		return $query;
 	}
 
@@ -29,12 +32,14 @@ class Staff extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','staff.person_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}

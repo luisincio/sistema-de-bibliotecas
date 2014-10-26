@@ -13,4 +13,11 @@ class Turn extends Eloquent{
 		return $query;
 	}
 
+	public function scopeGetTurnsByNameBranch($query,$turn_name,$branch_id)
+	{	
+		$query->where('name','=',$turn_name)
+			  ->where('branch_id','=',$branch_id);
+		return $query;
+	}
+
 }
