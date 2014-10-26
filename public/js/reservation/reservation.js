@@ -203,6 +203,9 @@ function render_cubicle_reservation_table(data)
 		var hour_ini_reservation;
 		var hour_end_reservation;
 		var available = true;
+		var current_date = new Date();
+		var current_hour = current_date.getHours();
+		console.log(current_date.getHours());
 		for(i=0;i<time_interval;i++){
 			str_table += "<tr><td class='info hour-cell'>"+(i+parseInt(hour_ini[0]))+":00</td>";
 			for(j=0;j<data.cubicles.length;j++){
@@ -221,8 +224,10 @@ function render_cubicle_reservation_table(data)
 						}
 					}
 				}
-				if(available){
+				if(available && ( (i+parseInt(hour_ini[0])) > current_hour)){
 					str_table += "<td class='bg-success x-"+j+" y-"+i+"' onclick='selecting_cells("+(i+parseInt(hour_ini[0]))+","+j+","+i+","+data.cubicles[j].id+","+data.cubicles[j].capacity+")' onmouseover='paint_cells("+(i+parseInt(hour_ini[0]))+","+j+","+i+")' onmouseout='unpaint_cells("+(i+parseInt(hour_ini[0]))+","+j+","+i+")'></td>";
+				}else{
+					str_table += "<td class='bg-warning x-"+j+" y-"+i+"'></td>";
 				}
 			}
 			str_table += "</tr>";

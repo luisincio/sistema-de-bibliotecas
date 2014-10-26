@@ -20,7 +20,7 @@
 				<br>
 				<br>
 				{{ Form::submit('Buscar',array('id'=>'submit-search-form','class'=>'btn btn-info')) }}												
-				{{ HTML::link('material/list_purchase_order','Listar Todos',array('class'=>'btn btn-default')) }}
+				{{ HTML::link('material/list_purchase_order','Listar Todos',array('class'=>'')) }}
 			</div>	
 		</div>		
 		<br>
