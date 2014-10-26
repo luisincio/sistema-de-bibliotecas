@@ -39,13 +39,13 @@ class StaffController extends BaseController {
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'num_documento' => 'required|numeric|min:9999999|max:9999999999',
-							'nombres' => 'required|alpha_spaces|min:2',
-							'apellidos' => 'required|alpha_spaces|min:2',
-							'nacionalidad' => 'required|alpha_spaces',
-							'telefono' => 'required|numeric',
-							'email' => 'required|email',
-							'direccion' => 'required',
+							'num_documento' => 'required|numeric|min:9999999|max:999999999999',
+							'nombres' => 'required|alpha_spaces|min:2|max:255',
+							'apellidos' => 'required|alpha_spaces|min:2|max:255',
+							'nacionalidad' => 'required|alpha_spaces|max:128',
+							'telefono' => 'required|numeric|min:999999|max:99999999999999999999',
+							'email' => 'required|email|max:128',
+							'direccion' => 'required|min:999999|max:255',
 							'fecha_nacimiento' => 'required',
 							'genero' => 'required',
 							'rol' => 'required|numeric|min:1',
@@ -288,12 +288,12 @@ class StaffController extends BaseController {
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombres' => 'required|alpha_spaces|min:2',
-							'apellidos' => 'required|alpha_spaces|min:2',
-							'nacionalidad' => 'required|alpha_spaces',
-							'telefono' => 'required|numeric',
-							'email' => 'required|email',
-							'direccion' => 'required',
+							'nombres' => 'required|alpha_spaces|min:2|max:255',
+							'apellidos' => 'required|alpha_spaces|min:2|max:255',
+							'nacionalidad' => 'required|alpha_spaces|max:128',
+							'telefono' => 'required|numeric|min:999999|max:99999999999999999999',
+							'email' => 'required|email|max:128',
+							'direccion' => 'required|max:255',
 							'fecha_nacimiento' => 'required',
 							'genero' => 'required',
 							'rol' => 'required|numeric|min:1',
