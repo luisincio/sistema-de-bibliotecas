@@ -181,7 +181,11 @@ class MaterialController extends BaseController
 			foreach($selected_ids as $selected_id){
 				$material = Material::find($selected_id);
 				if($material){
-					$material->delete();
+					$has_loans = Loan::where('material_id','=',$material->mid)->first();
+					$has_reservation = MaterialReservation::where('material_id','=',$material->mid)->first();
+					if(!$has_loans && !$has_reservation){
+						$material->delete();
+					}
 				}
 			}
 			return Response::json(array( 'success' => true ),200);

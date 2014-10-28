@@ -29,6 +29,7 @@ $( document ).ready(function(){
 						},
 						success: function(response){
 							if(response.success){
+								alert('Algunos materiales no pudieron ser eliminados ya que existen préstamos o reservas pendientes.');
 								location.reload();
 							}else{
 								alert('¡Ocurrió un error! Inténtelo de nuevo.');
