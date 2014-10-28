@@ -44,8 +44,8 @@
 			<table class="table table-hover">
 				<tr class="info">
 					<th>Nombre de Turno</th>
-					<th>Hora Inicio (HH:MM)</th>
-					<th>Hora Fin (HH:MM)</th>
+					<th>Hora Inicio</th>
+					<th>Hora Fin</th>
 					<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
 				</tr>
 				@if($turns)
