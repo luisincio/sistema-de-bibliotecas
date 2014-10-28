@@ -88,11 +88,6 @@ class StaffController extends BaseController {
 					}else{
 						$person_id = $person[0]->id;
 					}
-
-					//$codStaff=Staff::SearchStaffById($person->id)->get();
-					//Session::flash('message', $codStaff);
-					//exit();
-					//if ($codStaff->isEmpty()) {
 					$staff_exist = Staff::searchStaffByPerson($person_id)->get();
 					if($staff_exist->isEmpty()){
 						$staff = new Staff;
@@ -105,10 +100,6 @@ class StaffController extends BaseController {
 						Session::flash('error', 'El personal ya existe.');
 					}
 					return Redirect::to('staff/create_staff');
-				    /*}else {
-				    	Session::flash('message', 'El personal ya existe');
-				    	return Redirect::to('staff/create_staff');
-				    }*/
 				}
 			}else{
 				return View::make('error/error');
@@ -355,6 +346,86 @@ class StaffController extends BaseController {
 			return Response::json(array( 'success' => true ,'turns'=>$turns),200);
 		}else{
 			return Response::json(array( 'success' => false ),200);
+		}
+	}	
+
+	public function assistance()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 4){
+				return View::make('staff/assistance',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_assistance()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 4){
+
+				$num_doc = Input::get('num_doc');
+				$password = Input::get('contrasena');
+				$person = Person::searchPersonByDocument($num_doc)->first();
+				if($person){
+					if(Hash::check($password, $person->password)){
+						$staff = Staff::where('person_id','=',$person->id)->first();
+						if($staff){
+							$today = Date("Y-m-d");
+
+							$assistance = Assistance::getTodayStaffAssistance($staff->id,$today)->first();
+							if($assistance){
+								/* Check out */
+								$hour = Date("H:i:s");
+								$edit_assistance = Assistance::find($assistance->id);
+								$edit_assistance->hour_out = $hour;
+								$edit_assistance->save();
+								Session::flash('message', 'Se registró correctamente la salida.');
+								return Redirect::to('staff/assistance');
+							}else{
+								/* Check in */
+								$hour = Date("H:i:s");
+								$new_assistance = new Assistance;
+								$new_assistance->staff_id = $staff->id;
+								$new_assistance->hour_in = $hour;
+								$new_assistance->date = $today;
+								$new_assistance->save();
+								Session::flash('message', 'Se registró correctamente la entrada.');
+								return Redirect::to('staff/assistance');
+							}
+						}else{
+							Session::flash('error', 'No se encontro al personal.');
+							return Redirect::to('staff/assistance');
+						}
+					}else{
+						Session::flash('error', 'Su contraseña es incorrecta.');
+						return Redirect::to('staff/assistance');
+					}
+				}else{
+					Session::flash('error', 'No se encontro al personal.');
+					return Redirect::to('staff/assistance');
+				}
+
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
 		}
 	}
 }
