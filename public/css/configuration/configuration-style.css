@@ -1,0 +1,14 @@
+.edit_cubicle_loader_container,
+.edit_shelf_loader_container,
+.edit_physical_element_loader_container,
+.big-loader-container{
+	display: none;
+}
+
+.big-loader-container{
+	text-align: center;
+}
+
+#physical-elements-nav-tabs{
+	margin-top: 20px;
+}

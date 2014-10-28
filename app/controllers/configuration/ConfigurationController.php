@@ -791,4 +791,409 @@ class ConfigurationController extends BaseController
 			return Response::json(array( 'success' => false ),200);
 		}
 	}
+
+	public function render_create_devolution_period()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				$data["devolution_periods"] = DevolutionPeriod::all();
+				return View::make('configuration/createDevolutionPeriod',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}	
+	}
+
+	public function submit_create_devolution_period()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'nombre' => 'required|alpha_spaces|min:2|unique:devolution_periods,name,NULL,id,deleted_at,NULL',
+							'max_dias_devolucion' => 'required|numeric|integer|max:4',
+							'fecha_ini' => 'required',
+							'fecha_fin' => 'required',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('config/create_devolution_period')->withErrors($validator)->withInput(Input::all());
+				}else{
+					/*
+					$array_fecha_ini = explode("-", Input::get('fecha_ini'));
+					$array_fecha_fin = explode("-", Input::get('fecha_fin'));
+					if($array_fecha_ini[0]*10000 + $array_fecha_ini[1]*100 + $array_fecha_ini[2] < 
+				  	   $array_fecha_fin[0]*10000 + $array_fecha_fin[1]*100 + $array_fecha_fin[2]){
+				  	   	*/
+					if(strtotime(Input::get('fecha_ini')) < strtotime(Input::get('fecha_fin'))){
+						// Insert the supplier in the database
+						$devolution_period = new DevolutionPeriod;
+						$devolution_period->name = Input::get('nombre');
+						$devolution_period->date_ini = Input::get('fecha_ini');
+						$devolution_period->date_end = Input::get('fecha_fin');
+						$devolution_period->max_days_devolution = Input::get('max_dias_devolucion');
+						$devolution_period->description = Input::get('descripcion');
+						$devolution_period->save();
+
+						Session::flash('message', 'Se registró correctamente el periodo de devolución.');
+						return Redirect::to('config/create_devolution_period');
+					}
+					else{
+						Session::flash('danger', 'La fecha fin debe ser anterior a la fecha de inicio.');
+						return Redirect::to('config/create_devolution_period')->withInput(Input::all());						
+					}
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function delete_devolution_period_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$selected_ids = Input::get('selected_id');
+			foreach($selected_ids as $selected_id){
+				$devolution_period = DevolutionPeriod::find($selected_id);
+				if($devolution_period){
+					$devolution_period->delete();
+				}
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+	
+	/* Physical Elements */
+	public function list_physical_elements()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				$data["branches"] = Branch::all();
+				$data["cubicle_types"] = CubicleType::all();
+				return View::make('configuration/listPhysicalElements',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function get_physical_elements_by_branch()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$branch_id = Input::get('branch_id');
+			$branch_cubicles = Cubicle::getCubicleByBranch($branch_id)->get();
+			$cubicle_types = CubicleType::all();
+			$branch_physical_elements = PhysicalElement::getPhysicalElementsByBranch($branch_id)->get();
+			$branch_shelves = Shelf::getShelvesByBranch($branch_id)->get();
+			return Response::json(array( 'success' => true, 'branch_cubicles'=>$branch_cubicles, 'cubicle_types'=>$cubicle_types, 'branch_physical_elements'=>$branch_physical_elements, 'branch_shelves'=>$branch_shelves ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_edit_physical_elements()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$id = Input::get('id');
+			$name = Input::get('name');
+			$branch_id = Input::get('branch_id');
+			$validate_name = PhysicalElement::getPhysicalElementByNameDifferentId($id,$name,$branch_id)->first();
+			if(!$validate_name){
+				$quantity = Input::get('quantity');
+				$physical_element = PhysicalElement::find($id);
+				$physical_element->name = $name;
+				$physical_element->quantity = $quantity;
+				$physical_element->save();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'name_exists' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_edit_shelves()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$id = Input::get('id');
+			$code = Input::get('code');
+			$validate_code = Shelf::getShelfByCodeDifferentId($id,$code)->first();
+			if(!$validate_code){
+				$description = Input::get('description');
+				$shelf = Shelf::find($id);
+				$shelf->code = $code;
+				$shelf->description = $description;
+				$shelf->save();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'code_exists' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_edit_cubicles()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$id = Input::get('id');
+			$code = Input::get('code');
+			$validate_code = Cubicle::getCubicleByCodeDifferentId($id,$code)->first();
+
+			if(!$validate_code){
+				$capacity = Input::get('capacity');
+				$cubicle_type = Input::get('cubicle_type');
+				$cubicle = Cubicle::find($id);
+				$cubicle->code = $code;
+				$cubicle->capacity = $capacity;
+				$cubicle->cubicle_type_id = $cubicle_type;
+				$cubicle->save();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'code_exists' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_create_cubicles()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$code = Input::get('code');
+			$validate_code = Cubicle::getCubicleByCode($code)->first();
+
+			if(!$validate_code){
+				$capacity = Input::get('capacity');
+				$cubicle_type = Input::get('cubicle_type');
+				$branch_id = Input::get('branch_id');
+				$cubicle = new Cubicle;
+				$cubicle->code = $code;
+				$cubicle->capacity = $capacity;
+				$cubicle->cubicle_type_id = $cubicle_type;
+				$cubicle->branch_id = $branch_id;
+				$cubicle->save();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'code_exists' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_create_shelves()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$code = Input::get('code');
+			$validate_code = Shelf::getShelfByCode($code)->first();
+
+			if(!$validate_code){
+				$description = Input::get('description');
+				$branch_id = Input::get('branch_id');
+				$shelf = new Shelf;
+				$shelf->code = $code;
+				$shelf->description = $description;
+				$shelf->branch_id = $branch_id;
+				$shelf->save();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'code_exists' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function submit_create_physical_elements()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$name = Input::get('name');
+			$branch_id = Input::get('branch_id');
+			$validate_name = PhysicalElement::getPhysicalElementByName($name,$branch_id)->first();
+
+			if(!$validate_name){
+				$quantity = Input::get('quantity');
+				$physical_element = new PhysicalElement;
+				$physical_element->name = $name;
+				$physical_element->quantity = $quantity;
+				$physical_element->branch_id = $branch_id;
+				$physical_element->save();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'name_exists' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function delete_physical_elements()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$id = Input::get('id');
+			$physical_element = PhysicalElement::find($id);
+			$physical_element->delete();
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function delete_shelves()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$id = Input::get('id');
+			$exist_material = Material::where('shelve_id','=',$id)->first();
+			if(!$exist_material){
+				$shelf = Shelf::find($id);
+				$shelf->delete();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'exist_material' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	public function delete_cubicle()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$id = Input::get('id');
+			$today = Date("Y-m-d");
+			$exist_reservation = CubicleReservation::where('cubicle_id','=',$id)->where('reserved_at','=',$today)->first();
+			if(!$exist_reservation){
+				$cubicle = Cubicle::find($id);
+				$cubicle->delete();
+				return Response::json(array( 'success' => true, 'problem' => false ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'exist_reservation' ),200);
+			}
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
 }
