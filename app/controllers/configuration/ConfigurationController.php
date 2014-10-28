@@ -35,9 +35,8 @@ class ConfigurationController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|unique:suppliers,name',
-							'ruc' => 'required|numeric|min:10|max:10|unique:suppliers,ruc',
-							'representante' => 'required|alpha_spaces|min:2',
+							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:suppliers,name',
+							'representante' => 'required|alpha_spaces|min:2|max:255',
 							'direccion' => 'required',
 							'telefono' => 'numeric',
 							'celular' => 'numeric',
@@ -49,19 +48,25 @@ class ConfigurationController extends BaseController
 				if($validator->fails()){
 					return Redirect::to('config/create_supplier')->withErrors($validator)->withInput(Input::all());
 				}else{
-					// Insert the supplier in the database
-					$supplier = new Supplier;
-					$supplier->name = Input::get('nombre');
-					$supplier->ruc = Input::get('ruc');
-					$supplier->sales_representative = Input::get('representante');
-					$supplier->address = Input::get('direccion');
-					$supplier->phone = Input::get('telefono');
-					$supplier->cell = Input::get('celular');
-					$supplier->email = Input::get('email');
-					$supplier->flag_doner = Input::get('donador');
-					$supplier->save();
+					$ruc = Input::get('ruc');
 
-					Session::flash('message', 'Se registró correctamente al proveedor.');
+					if(ctype_digit($ruc) && ((strlen($ruc) == 11)||(strlen($ruc) == 8))){
+						// Insert the supplier in the database
+						$supplier = new Supplier;
+						$supplier->name = Input::get('nombre');
+						$supplier->ruc = Input::get('ruc');
+						$supplier->sales_representative = Input::get('representante');
+						$supplier->address = Input::get('direccion');
+						$supplier->phone = Input::get('telefono');
+						$supplier->cell = Input::get('celular');
+						$supplier->email = Input::get('email');
+						$supplier->flag_doner = Input::get('donador');
+						$supplier->save();
+
+						Session::flash('message', 'Se registró correctamente al proveedor.');
+					}else{
+						Session::flash('danger', 'El ruc/dni debe ser numérico de 9 u 11 dígitos');
+					}
 					return Redirect::to('config/create_supplier');
 				}
 			}else{
@@ -186,11 +191,11 @@ class ConfigurationController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'representante' => 'required|alpha_spaces|min:2',
+							'representante' => 'required|alpha_spaces|min:2|max:255',
 							'direccion' => 'required',
-							'telefono' => 'numeric',
-							'celular' => 'numeric',
-							'email' => 'required|email',
+							'telefono' => 'integer',
+							'celular' => 'integer',
+							'email' => 'required|max:128|email',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -255,12 +260,12 @@ class ConfigurationController extends BaseController
 			if($data["staff"]->role_id == 1){
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2',
-							'ruc' => 'required|numeric|min:10',
+							'nombre' => 'required|alpha_spaces|min:2|max:45',
 							'direccion' => 'required',
 							'logo' => 'image',
-							'tiempo_maximo_prestamo_cubiculo' => 'required|numeric|max:4',
-							'tiempo_suspencion' => 'required|numeric|max:90',
+							'tiempo_maximo_prestamo_cubiculo' => 'required|integer|min:1|max:4',
+							'tiempo_suspencion' => 'required|integer|min:0|max:90',
+							'descripcion' => 'alpha_spaces|max:255',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -268,22 +273,28 @@ class ConfigurationController extends BaseController
 				if($validator->fails()){
 					return Redirect::to('config/general_configuration')->withErrors($validator);
 				}else{
-					$logo = Input::file('logo');
-					// Save the edition
-					$config = GeneralConfiguration::first();
-					$config->name = Input::get('nombre');
-					$config->ruc = Input::get('ruc');
-					$config->address = Input::get('direccion');
-					if($logo){
-						$config->logo_path = $logo->getClientOriginalName();
-						$logo->move('img',$logo->getClientOriginalName());
-					}
-					$config->description = Input::get('descripcion');
-					$config->max_hours_loan_cubicle = Input::get('tiempo_maximo_prestamo_cubiculo');
-					$config->time_suspencion = Input::get('tiempo_suspencion');
-					$config->save();
 
-					Session::flash('message', 'Se modificó correctamente la configuración general.');
+					$ruc = Input::get('ruc');
+					if(ctype_digit($ruc) && (strlen($ruc) == 11)){
+						$logo = Input::file('logo');
+						// Save the edition
+						$config = GeneralConfiguration::first();
+						$config->name = Input::get('nombre');
+						$config->ruc = Input::get('ruc');
+						$config->address = Input::get('direccion');
+						if($logo){
+							$config->logo_path = $logo->getClientOriginalName();
+							$logo->move('img',$logo->getClientOriginalName());
+						}
+						$config->description = Input::get('descripcion');
+						$config->max_hours_loan_cubicle = Input::get('tiempo_maximo_prestamo_cubiculo');
+						$config->time_suspencion = Input::get('tiempo_suspencion');
+						$config->save();
+
+						Session::flash('message', 'Se modificó correctamente la configuración general.');
+					}else{
+						Session::flash('danger', 'El ruc debe ser numérico de 11 dígitos');
+					}
 					return Redirect::to('config/general_configuration');
 				}
 
@@ -333,7 +344,8 @@ class ConfigurationController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|unique:material_types,name',
+							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:material_types,name',
+							'descripcion' => 'required|max:255'
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -438,6 +450,14 @@ class ConfigurationController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
 			if($data["staff"]->role_id == 1){
+
+				//Validation
+				$rules = array(
+					'descripcion' => 'max:255',
+				);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+
 				// Edit the material_type in the database
 				Input::merge(array_map('trim', Input::all()));
 				$id = Input::get('id');
@@ -492,7 +512,8 @@ class ConfigurationController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|unique:material_types,name|unique:branches,name',
+							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:material_types,name|unique:branches,name',
+							'direccion' => 'required|max:255'
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -595,6 +616,20 @@ class ConfigurationController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
 			if($data["staff"]->role_id == 1){
+
+				//Validation
+				$rules = array(
+					'direccion' => 'max:255',
+				);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				if($validator->fails())
+				{					
+					$id = Input::get('id');
+					$url = 'config/edit_branch/'.$id;
+					return Redirect::to($url)->withErrors($validator)->withInput(Input::all());
+				}
+
 				$array_hora_ini = explode(":", Input::get('hora_ini'));
 				$array_hora_fin = explode(":", Input::get('hora_fin'));
 				if($array_hora_ini[0]*100 + $array_hora_ini[1] < $array_hora_fin[0]*100 + $array_hora_fin[1]){
@@ -666,8 +701,38 @@ class ConfigurationController extends BaseController
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
 				$branch = Branch::find($selected_id);
+
 				if($branch){
-					$branch->delete();
+					/* Check if the branch has at least one staff related */
+					$turns = Turn::where('branch_id','=',$branch->id)->get();
+					$turns_array = array();
+					foreach($turns as $turn){
+						$turns_array[] = $turn->id;
+					}
+					if(count($turns_array) > 0){
+						$exist_staff = Staff::whereIn('turn_id',$turns_array)->first();
+					}else{
+						$exist_staff = null;
+					}
+
+					/* Check if the branch has at least one material related */
+					
+					$shelves = Shelf::where('branch_id','=',$branch->id)->get();
+					$shelves_array = array();
+					foreach($shelves as $shelf){
+						$shelves_array[] = $shelf->id;
+					}
+					if(count($shelves_array) > 0){
+						$exist_material = Material::whereIn('shelve_id',$shelves_array)->first();
+					}else{
+						$exist_material = null;
+					}
+					
+					/* If the branch is related with nothing, then it can be deleted */
+					if(!$exist_staff && !$exist_material){
+						$branch->delete();
+					}
+					
 				}
 			}
 			return Response::json(array( 'success' => true ),200);
@@ -714,7 +779,7 @@ class ConfigurationController extends BaseController
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2',
+							'nombre' => 'required|alpha_spaces|min:2|max:45',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -827,7 +892,7 @@ class ConfigurationController extends BaseController
 				// Validate the info, create rules for the inputs
 				$rules = array(
 							'nombre' => 'required|alpha_spaces|min:2|unique:devolution_periods,name,NULL,id,deleted_at,NULL',
-							'max_dias_devolucion' => 'required|numeric|integer|max:4',
+							'max_dias_devolucion' => 'required|numeric|integer|min:1|max:99',
 							'fecha_ini' => 'required',
 							'fecha_fin' => 'required',
 						);
@@ -837,12 +902,6 @@ class ConfigurationController extends BaseController
 				if($validator->fails()){
 					return Redirect::to('config/create_devolution_period')->withErrors($validator)->withInput(Input::all());
 				}else{
-					/*
-					$array_fecha_ini = explode("-", Input::get('fecha_ini'));
-					$array_fecha_fin = explode("-", Input::get('fecha_fin'));
-					if($array_fecha_ini[0]*10000 + $array_fecha_ini[1]*100 + $array_fecha_ini[2] < 
-				  	   $array_fecha_fin[0]*10000 + $array_fecha_fin[1]*100 + $array_fecha_fin[2]){
-				  	   	*/
 					if(strtotime(Input::get('fecha_ini')) < strtotime(Input::get('fecha_fin'))){
 						// Insert the supplier in the database
 						$devolution_period = new DevolutionPeriod;
@@ -895,7 +954,7 @@ class ConfigurationController extends BaseController
 			return Response::json(array( 'success' => false ),200);
 		}
 	}
-	
+
 	/* Physical Elements */
 	public function list_physical_elements()
 	{

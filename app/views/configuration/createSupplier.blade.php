@@ -17,6 +17,10 @@
 	@if (Session::has('message'))
 		<div class="alert alert-success">{{ Session::get('message') }}</div>
 	@endif
+
+	@if (Session::has('danger'))
+		<div class="alert alert-danger">{{ Session::get('danger') }}</div>
+	@endif
 	
 	{{ Form::open(array('url'=>'config/submit_create_supplier', 'role'=>'form')) }}
 		<div class="col-xs-6">

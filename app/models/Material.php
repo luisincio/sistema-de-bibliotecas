@@ -116,4 +116,19 @@ class Material extends Eloquent{
 			  ->orderBy('available','asc');
 		return $query;
 	}
+
+	public function scopeSearchMaterialByCode($query,$material_code)
+	{
+		$query->where('base_cod','=',$material_code);
+		return $query;
+	}
+
+	public function scopeGetAvailableMaterialByCodeBranch($query,$material_code,$branch_id)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->where('materials.base_cod','=',$material_code)
+			  ->where('materials.available','=','1')
+			  ->where('shelves.branch_id','=',$branch_id);
+		return $query;
+	}
 }

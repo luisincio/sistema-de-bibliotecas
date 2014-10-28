@@ -4,7 +4,6 @@
 	<h1>Modificar Tipo de Material</h1>
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
-			<p><strong>{{ $errors->first('nombre') }}</strong></p>
 			<p><strong>{{ $errors->first('descripcion') }}</strong></p>
 		</div>
 	@endif

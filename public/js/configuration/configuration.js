@@ -149,7 +149,7 @@ $( document ).ready(function(){
 				selected.push($(this).val());
 			});
 			if(selected.length > 0){
-				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				var confirmation = confirm("Las sedes que contengan materiales o usuarios activos no serán inhabilitadas.\n¿Desea continuar?");
 				if(confirmation){
 					$.ajax({
 						url: inside_url+'config/delete_branch_ajax',

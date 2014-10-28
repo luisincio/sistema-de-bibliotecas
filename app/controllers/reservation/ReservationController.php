@@ -115,7 +115,7 @@ class ReservationController extends BaseController
 					$material->available = 2;
 					/* There's another reservation on the queue */
 					$expire_at = date("Y-m-d", strtotime("tomorrow"));
-					$next_reservaion = MaterialReservation::find($next_reservation->id);
+					$next_reservation = MaterialReservation::find($next_reservation->id);
 					$next_reservation->expire_at = $expire_at;
 					$next_reservation->save();
 

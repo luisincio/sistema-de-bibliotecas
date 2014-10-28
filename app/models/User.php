@@ -74,4 +74,13 @@ class User extends Eloquent{
 		$query->where('person_id','=',$person_id);
 		return $query;
 	}
+
+	public function scopeSearchUserByDocument($query,$document)
+	{
+		$query->join('persons','persons.id','=','users.person_id')
+			  ->join('profiles','profiles.id','=','users.profile_id')
+			  ->where('doc_number','=',$document)
+			  ->select('persons.name','persons.lastname','persons.mail','users.*','profiles.name as profile_name');
+		return $query;
+	}
 }

@@ -5,8 +5,7 @@
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
 			<p><strong>{{ $errors->first('nombre') }}</strong></p>
-			<p><strong>{{ $errors->first('hora_ini') }}</strong></p>
-			<p><strong>{{ $errors->first('hora_fin') }}</strong></p>
+			<p><strong>{{ $errors->first('direccion') }}</strong></p>
 		</div>
 	@endif
 

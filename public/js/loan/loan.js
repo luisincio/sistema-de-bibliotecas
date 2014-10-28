@@ -12,10 +12,11 @@ $( document ).ready(function(){
 			if(selected.length > 0){
 				var confirmation = confirm("¿Está seguro que desea registrar la devolución de los materiales seleccionados?");
 				if(confirmation){
+					var user_id = $("input[name=user_id]").val();
 					$.ajax({
 						url: inside_url+'loan/return_register_ajax',
 						type: 'POST',
-						data: { 'selected_id' : selected },
+						data: { 'selected_id' : selected ,'user_id' : user_id},
 						beforeSend: function(){
 							$("#delete-selected-loans").addClass("disabled");
 							$("#delete-selected-loans").hide();
@@ -55,4 +56,205 @@ $( document ).ready(function(){
 			$("div.search_bar").addClass("has-error");
 		}
 	});
+
+
+	var nr_num_doc_usuario = "";
+	$("input[name=nr_num_doc_usuario]").blur(function(){
+		var input_length = $(this).val().length;
+		var input_val = $(this).val();
+		if((input_length > 0) && (nr_num_doc_usuario !== input_val)){
+			nr_num_doc_usuario = input_val;
+			$.ajax({
+				url: inside_url+'loan/validate_doc_number_loans_ajax',
+				type: 'POST',
+				data: { 'document_number' : input_val },
+				beforeSend: function(){
+					$("input[name=nr_id_usuario]").val("0");
+					$(".form-group-num-doc img").show();
+				},
+				complete: function(){
+					$(".form-group-num-doc img").hide();
+				},
+				success: function(response){
+					if(response.success){
+						if(response.user.length > 0){
+							$("input[name=nr_id_usuario]").val(response.user[0].id);
+							$("input[name=nr_nombre_usuario]").val((response.user[0].name+" "+response.user[0].lastname));
+							$("input[name=nr_perfil_usuario]").val(response.user[0].profile_name);
+							$("input[name=nr_email_usuario]").val(response.user[0].mail);
+							if(response.user[0].restricted_until){
+								$("input[name=nr_id_usuario]").val("0");
+								$("input[name=nr_estado_usuario]").val("Penalizado hasta"+response.user[0].restricted_until);
+							}else{
+								$("input[name=nr_estado_usuario]").val("Activo");
+							}
+						}else{
+							alert('No se ha encontrado un usuario con el número de documento solicitado.');
+						}
+					}
+				},
+				error: function(){
+					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+				}
+			});
+		}
+	});
+
+	var nr_codigo_libro = "";
+	$("input[name=nr_codigo_libro]").blur(function(){
+		var input_length = $(this).val().length;
+		var input_val = $(this).val();
+		if((input_length > 0) && (nr_codigo_libro !== input_val)){
+			nr_codigo_libro = input_val;
+			$.ajax({
+				url: inside_url+'loan/validate_material_code_ajax',
+				type: 'POST',
+				data: { 'material_code' : input_val },
+				beforeSend: function(){
+					$("input[name=nr_id_libro]").val("0");
+					$(".form-group-material-code img").show();
+				},
+				complete: function(){
+					$(".form-group-material-code img").hide();
+				},
+				success: function(response){
+					if(response.success){
+						if(response.material.length > 0){
+							$("input[name=nr_base_cod_libro]").val(response.material[0].base_cod);
+							$("input[name=nr_titulo_libro]").val(response.material[0].title);
+							$("input[name=nr_autor_libro]").val(response.material[0].author);							
+						}else{
+							alert('No se ha encontrado un material con el código solicitado.');
+						}
+					}
+				},
+				error: function(){
+					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+				}
+			});
+		}
+	});
+
+	var nr_submit_loan_register = true;
+	$("#nr-submit-loan-register").click(function(e){
+		e.preventDefault();
+		if(nr_submit_loan_register){
+			nr_submit_loan_register = false;
+			var id_usuario = $("input[name=nr_id_usuario]").val();
+			var base_cod_libro = $("input[name=nr_base_cod_libro]").val();
+			if( (id_usuario != "0") && (base_cod_libro != "0")){
+				$.ajax({
+					url: inside_url+'loan/register_loan_ajax',
+					type: 'POST',
+					data: { 'user_id' : id_usuario, 'base_cod_libro' : base_cod_libro, 'branch_id' : current_staff_branch_id },
+					beforeSend: function(){
+					},
+					complete: function(){
+						nr_submit_loan_register = true;
+					},
+					success: function(response){
+						if(response.success){
+							if(response.problem){
+								switch(response.problem){
+									case 'no_available': alert('No hay ejemplares disponibles con este título en esta sede.');
+														 break;
+									case 'max_reservations': alert('El usuario ha alcanzado el límite de sus reservas.');
+														 	 break;
+									case 'has_loans': alert('El usuario tiene un préstamo vigente con este título.');
+													  break;
+									case 'has_reservations': alert('El usuario tiene una reserva vigente con este título.');
+														 	 break;
+								}
+							}else{
+								alert('Se registró correctamente el préstamo.');
+								location.reload();
+							}
+						}
+					},
+					error: function(){
+						alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					}
+				});
+			}else{
+				nr_submit_loan_register = true;
+			}
+		}
+	});
+
+	var search_user_loans = true;
+	$("#search-user-loans").click(function(e){
+		e.preventDefault();
+		if(search_user_loans){
+			search_user_loans = false;
+			var document_number = $("input[name=r_num_doc_usuario]").val();
+			var regexNum = /^\s*\d+\s*$/;
+			if( (document_number.length > 0) && (regexNum.test(document_number)) ){
+				$.ajax({
+					url: inside_url+'loan/get_user_reservation_ajax',
+					type: 'POST',
+					data: { 'document_number' : document_number },
+					beforeSend: function(){
+						$("table#user-active-loans").empty();
+					},
+					complete: function(){
+						search_user_loans = true;
+					},
+					success: function(response){
+						if(response.success){
+							console.log(response);
+							if(response.problem){
+								switch(response.problem){
+									case 'user_no_exist': 	alert('No se encontró un usuario con dicho número de documento.');
+															break;
+								}
+							}else{
+								render_user_reservations_table(response.material_reservations);
+							}
+						}
+					},
+					error: function(){
+						alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					}
+				});
+			}else{
+				search_user_loans = true;
+				$(".form-group-r-num-doc").addClass('has-error');
+			}
+		}
+	});
 });
+
+function render_user_reservations_table(reservations)
+{
+	var str_table = "<tr class='info'><th>Código</th><th>Título</th><th>Autor</th><th>Seleccione</th></tr>";
+	for(i=0;i<reservations.length;i++){
+		str_table += "<tr><th>"+reservations[i].auto_cod+"</th><th>"+reservations[i].title+"</th><th>"+reservations[i].author+"</th><th><a href='' class='btn btn-success' onclick='loan_register(event,"+reservations[i].id+")'>Prestar</a></th></tr>";
+	}
+	$("table#user-active-loans").append(str_table);
+}
+
+function loan_register(e,reservation_id)
+{
+	e.preventDefault();
+	console.log(reservation_id);
+	$.ajax({
+		url: inside_url+'loan/register_loan_with_reservation_ajax',
+		type: 'POST',
+		data: { 'reservation_id' : reservation_id },
+		beforeSend: function(){
+		},
+		complete: function(){
+		},
+		success: function(response){
+			if(response.success){
+				alert('Se registró correctamente el préstamo.');
+				location.reload();
+			}else{
+				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			}
+		},
+		error: function(){
+			alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+		}
+	});
+}

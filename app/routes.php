@@ -28,6 +28,10 @@ Route::group(array('prefix'=>'config', 'before'=>'auth'),function(){
 	/* General Information */
 	Route::get('/general_configuration','ConfigurationController@render_general_configuration');
 	Route::post('/submit_general_configuration','ConfigurationController@submit_general_configuration');
+	/* Politics */
+	Route::get('/create_devolution_period/','ConfigurationController@render_create_devolution_period');
+	Route::post('/submit_create_devolution_period','ConfigurationController@submit_create_devolution_period'); 
+	Route::post('/delete_devolution_period_ajax','ConfigurationController@delete_devolution_period_ajax'); 
 	/* Suppliers */
 	Route::get('/create_supplier','ConfigurationController@render_create_supplier');
 	Route::post('/submit_create_supplier','ConfigurationController@submit_create_supplier');
@@ -56,6 +60,18 @@ Route::group(array('prefix'=>'config', 'before'=>'auth'),function(){
 	Route::post('/submit_create_turn','ConfigurationController@submit_create_turn'); 
 	Route::post('/search_turn','ConfigurationController@search_turn');
 	Route::post('/delete_turn_ajax','ConfigurationController@delete_turn_ajax');
+	/* Physical Elements */
+	Route::get('/list_physical_elements','ConfigurationController@list_physical_elements');
+	Route::post('/get_physical_elements_by_branch','ConfigurationController@get_physical_elements_by_branch');
+	Route::post('/submit_edit_physical_elements','ConfigurationController@submit_edit_physical_elements');
+	Route::post('/submit_edit_shelves','ConfigurationController@submit_edit_shelves');
+	Route::post('/submit_edit_cubicles','ConfigurationController@submit_edit_cubicles');
+	Route::post('/submit_create_cubicles','ConfigurationController@submit_create_cubicles');
+	Route::post('/submit_create_shelves','ConfigurationController@submit_create_shelves');
+	Route::post('/submit_create_physical_elements','ConfigurationController@submit_create_physical_elements');
+	Route::post('/delete_physical_elements','ConfigurationController@delete_physical_elements');
+	Route::post('/delete_shelves','ConfigurationController@delete_shelves');
+	Route::post('/delete_cubicle','ConfigurationController@delete_cubicle');
 
 });
 
@@ -100,6 +116,9 @@ Route::group(array('prefix'=>'staff', 'before'=>'auth'),function(){
 	Route::get('/edit_staff/{id}','StaffController@render_edit_staff');
 	Route::post('/submit_edit_staff','StaffController@submit_edit_staff');
 	Route::post('/get_turns_by_branch_ajax','StaffController@get_turns_by_branch_ajax');
+	/* Assistance */
+	Route::get('/assistance','StaffController@assistance');
+	Route::post('/submit_assistance','StaffController@submit_assistance');
 
 });
 
@@ -129,6 +148,13 @@ Route::group(array('prefix'=>'loan', 'before'=>'auth'),function(){
 	Route::get('/return_register','LoanController@render_return_register');
 	Route::get('/search_user_loans','LoanController@search_user_loans');
 	Route::post('/return_register_ajax','LoanController@return_register_ajax');
+	Route::get('/loan_register','LoanController@render_loan_register');
+	Route::post('/validate_doc_number_loans_ajax','LoanController@validate_doc_number_loans_ajax');
+	Route::post('/validate_material_code_ajax','LoanController@validate_material_code_ajax');
+	Route::post('/register_loan_ajax','LoanController@register_loan_ajax');
+	Route::post('/get_user_reservation_ajax','LoanController@get_user_reservation_ajax');
+	Route::post('/register_loan_with_reservation_ajax','LoanController@register_loan_with_reservation_ajax');
+	Route::get('/my_loans','LoanController@render_my_loans');
 });
 
 /* Catalog */

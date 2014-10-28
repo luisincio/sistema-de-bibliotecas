@@ -14,4 +14,17 @@ class Shelf extends Eloquent{
 		return $query;
 	}
 
+	public function scopeGetShelfByCodeDifferentId($query,$id,$code)
+	{
+		$query->where('id','<>',$id)
+			  ->where('code','=',$code);
+		return $query;
+	}
+
+	public function scopeGetShelfByCode($query,$code)
+	{
+		$query->where('code','=',$code);
+		return $query;
+	}
+
 }

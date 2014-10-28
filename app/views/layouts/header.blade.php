@@ -22,8 +22,8 @@
 						<ul class="dropdown-menu" role="menu">
 							@if($staff->role_id == 1)
 								<li>{{ HTML::link('/config/general_configuration','Configuración General') }}</li>
-								<li>{{ HTML::link('#','Políticas') }}</li>
-								<li>{{ HTML::link('#','Registrar Infraestructura') }}</li>
+								<li>{{ HTML::link('/config/create_devolution_period','Políticas') }}</li>
+								<li>{{ HTML::link('/config/list_physical_elements','Registrar Infraestructura') }}</li>
 								<li class="divider"></li>
 							@endif
 								<li>{{ HTML::link('/config/list_branch','Mostrar Sedes') }}</li>
@@ -85,11 +85,11 @@
 					</a>
 					<ul class="dropdown-menu" role="menu">
 						@if($staff && $staff->role_id == 3)
-						<li>{{ HTML::link('#','Registrar Préstamo') }}</li>
+						<li>{{ HTML::link('/loan/loan_register','Registrar Préstamo') }}</li>
 						<li>{{ HTML::link('/loan/return_register','Registrar Devolución') }}</li>
 						@endif
 						@if($user)
-						<li>{{ HTML::link('#','Mis Préstamos') }}</li>
+						<li>{{ HTML::link('/loan/my_loans','Mis Préstamos') }}</li>
 						@endif
 					</ul>
 				</li>
@@ -112,6 +112,9 @@
 					</ul>
 				</li>
 				@endif
+
+				@if($staff && ($staff->role_id == 4))
+				@else
 				<li class="dropdown">
 					<a href="" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="glyphicon glyphicon-log-in"></span> Mi Cuenta <span class="caret"></span>
@@ -124,6 +127,7 @@
 						@endif
 					</ul>
 				</li>
+				@endif
 				@if($staff)
 					@if($staff->role_id == 1 || $staff->role_id == 2)
 					<li class="dropdown">
@@ -142,7 +146,11 @@
 					</li>
 					@endif
 				@endif
+				@if($staff && ($staff->role_id==4))
+				<li>{{ HTML::link('/staff/assistance','Toma de asistencia') }}</li>
+				@else
 				<li>{{ HTML::link('/catalog/catalog','Catálogo') }}</li>
+				@endif
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li>{{ HTML::link('/logout','Cerrar Sesión( '.$person->name.' )') }}</li>

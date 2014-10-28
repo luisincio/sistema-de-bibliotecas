@@ -4,8 +4,6 @@
 	<h1>Modificar Proveedor</h1>
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
-			<p><strong>{{ $errors->first('nombre') }}</strong></p>
-			<p><strong>{{ $errors->first('ruc') }}</strong></p>
 			<p><strong>{{ $errors->first('representante') }}</strong></p>
 			<p><strong>{{ $errors->first('direccion') }}</strong></p>
 			<p><strong>{{ $errors->first('telefono') }}</strong></p>

@@ -11,6 +11,7 @@
 		{{ Form::close() }}
 		<div class="search-criteria">
 			@if($search_criteria)
+				{{ Form::hidden('user_id',$user_id) }}
 				<h3>
 					@if($searched_user_name)
 						Préstamos activos de {{ $searched_user_name }} ({{ $search_criteria }})
