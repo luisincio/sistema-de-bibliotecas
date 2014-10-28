@@ -45,12 +45,12 @@ class MaterialController extends BaseController
 							'codigo' => 'required|alpha|min:4|max:4',
 							'autor' => 'required|alpha_spaces|min:2',
 							'editorial' => 'required|alpha_spaces',
-							'num_edicion' => 'required|numeric|min:1|max:10000',
+							'num_edicion' => 'required|integer|min:1|max:10000',
 							'isbn' => 'required|alpha_num|min:10|max:14',
-							'anio_publicacion' => 'numeric|min:1000|max:2014',
-							'num_paginas' => 'required|numeric|min:1|max:10000',
-							'cant_ejemplares' => 'required|numeric|min:1|max:10000',
-							'orden_compra' => 'required|numeric',
+							'anio_publicacion' => 'numeric|integer|min:1000|max:4000',
+							'num_paginas' => 'required|integer|min:1|max:10000',
+							'cant_ejemplares' => 'required|integer|min:1|max:10000',
+							'orden_compra' => 'required|integer',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -237,9 +237,9 @@ class MaterialController extends BaseController
 							'titulo' => 'required|min:2',
 							'autor' => 'required|alpha_spaces|min:2',
 							'editorial' => 'required|alpha_spaces',
-							'num_edicion' => 'required|numeric|min:1|max:10000',
-							'anio_publicacion' => 'numeric|min:1000|max:2014',
-							'num_paginas' => 'required|numeric|min:1|max:10000',
+							'num_edicion' => 'required|integer|min:1|max:10000',
+							'anio_publicacion' => 'numeric|integer|min:1000|max:4000',
+							'num_paginas' => 'required|integer|min:1|max:10000',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
