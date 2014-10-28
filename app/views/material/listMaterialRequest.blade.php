@@ -3,6 +3,13 @@
 
 	<h1>Buscar Solicitudes</h1>
 	<div class="container">
+		
+		@if (Session::has('danger'))
+			<div class="alert alert-danger">
+				<p><strong>{{ Session::get('danger') }}</strong></p>
+			</div>
+		@endif
+
 		{{ Form::open(array('url'=>'/material/search_material_request','method'=>'get' ,'role'=>'form', 'id'=>'search-form','class' => 'form-inline')) }}
 				<div class="search_bar">
 					{{ Form::text('search',$search,array('class'=>'form-control','placeholder'=>'Ingrese Búsqueda')) }}
@@ -37,6 +44,8 @@
 					<span class="col-xs"><span class="glyphicon-calendar glyphicon"></span></span>
 				</div>
 		{{ Form::close() }}
+		
+
 		<div class="search-criteria">
 			@if($search_criteria)
 				<h3>

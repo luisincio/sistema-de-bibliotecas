@@ -313,18 +313,25 @@ class MaterialController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
 				// Check if the current user is the "System Admin"
-				$data["search_criteria"] = Input::get('search');
-				$data["search_filter"] = Input::get('search_filter');
 				$data["date_ini"] = Input::get('date_ini');
 				$data["date_end"] = Input::get('date_end');
-				$data["material_request_types"] = MaterialRequestType::all();
-				if($data["search_filter"] == 0){
-					$data["materials_request"] = MaterialRequest::searchMaterialsRequest($data["search_criteria"],$data["date_ini"],$data["date_end"])->paginate(10);
-				}else{
-					$data["materials_request"] = MaterialRequest::searchMaterialsRequestByFilter($data["search_criteria"],$data["search_filter"],$data["date_ini"],$data["date_end"])->paginate(10);
+				if( strtotime($data["date_ini"])< strtotime($data["date_end"]) ){
+					$data["search_criteria"] = Input::get('search');
+					$data["search_filter"] = Input::get('search_filter');
+					
+					$data["material_request_types"] = MaterialRequestType::all();
+					if($data["search_filter"] == 0){
+						$data["materials_request"] = MaterialRequest::searchMaterialsRequest($data["search_criteria"],$data["date_ini"],$data["date_end"])->paginate(10);
+					}else{
+						$data["materials_request"] = MaterialRequest::searchMaterialsRequestByFilter($data["search_criteria"],$data["search_filter"],$data["date_ini"],$data["date_end"])->paginate(10);
+					}
+					$data["search"] = $data["search_criteria"];
+					return View::make('material/listMaterialRequest',$data);
 				}
-				$data["search"] = $data["search_criteria"];
-				return View::make('material/listMaterialRequest',$data);
+				else{
+					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					return Redirect::to('material/list_material_request');
+				}				
 			}else{
 				return View::make('error/error');
 			}
