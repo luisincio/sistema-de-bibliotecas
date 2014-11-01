@@ -512,7 +512,7 @@ class ConfigurationController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:material_types,name|unique:branches,name',
+							'nombre' => 'required|alpha_spaces|min:2|max:128|unique:material_types,name|unique:branches,name',
 							'direccion' => 'required|max:255'
 						);
 				// Run the validation rules on the inputs from the form
@@ -779,7 +779,7 @@ class ConfigurationController extends BaseController
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|max:45',
+							'nombre' => 'required|alpha_spaces|min:2|max:128',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);

@@ -32,32 +32,42 @@ class ReservationController extends BaseController
 					}
 				}
 				if( in_array($material->material_type,$material_types_available_array) ){
-					$reservation_date = date("Y-m-d");
-					
-					$material_reservation = new MaterialReservation;
-					$material_reservation->reservation_date = $reservation_date;
-					$material_reservation->user_id = $data["user"]->id;
-					$material_reservation->material_id = $material->mid;
-					if($material->available == 1){
-						$update_material = Material::find($material->mid);
-						$update_material->available = 2;
-						$update_material->save();
+					$has_reservation = MaterialReservation::getReservationByUserMaterialCode($data["user"]->id,$material->base_cod)->first();
+					if(!$has_reservation){
+						$has_loan = Loan::searchUserLoansByMaterial($data["user"]->id,$material->base_cod)->first();
+						if(!$has_loan){
+							$reservation_date = date("Y-m-d");
+							
+							$material_reservation = new MaterialReservation;
+							$material_reservation->reservation_date = $reservation_date;
+							$material_reservation->user_id = $data["user"]->id;
+							$material_reservation->material_id = $material->mid;
+							if($material->available == 1){
+								$update_material = Material::find($material->mid);
+								$update_material->available = 2;
+								$update_material->save();
 
-						$expire_at = date("Y-m-d", strtotime("tomorrow"));
-						$material_reservation->expire_at = $expire_at;
+								$expire_at = date("Y-m-d", strtotime("tomorrow"));
+								$material_reservation->expire_at = $expire_at;
+							}
+							$material_reservation->save();
+
+							/* Refresh the current_reservations number of the user */
+							$update_user = User::find($data["user"]->id);
+							$update_user->current_reservations = $update_user->current_reservations + 1;
+							$update_user->save();
+							/* Refresh the user info stored in Session */
+							$id = Auth::id();
+							$data["user"] = Person::find($id)->user;
+							Session::forget('user');
+							Session::put('user',$data["user"]);
+							return Response::json(array( 'success' => true ,'material_available'=>$material->available),200);
+						}else{
+							return Response::json(array( 'success' => false ,'problem'=>'has_loan'),200);
+						}
+					}else{
+						return Response::json(array( 'success' => false ,'problem'=>'has_reservation'),200);
 					}
-					$material_reservation->save();
-
-					/* Refresh the current_reservations number of the user */
-					$update_user = User::find($data["user"]->id);
-					$update_user->current_reservations = $update_user->current_reservations + 1;
-					$update_user->save();
-					/* Refresh the user info stored in Session */
-					$id = Auth::id();
-					$data["user"] = Person::find($id)->user;
-					Session::forget('user');
-					Session::put('user',$data["user"]);
-					return Response::json(array( 'success' => true ,'material_available'=>$material->available),200);
 				}else{
 					return Response::json(array( 'success' => false ,'problem'=>'material_type_unavailable'),200);
 				}

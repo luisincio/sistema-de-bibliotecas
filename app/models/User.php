@@ -83,4 +83,11 @@ class User extends Eloquent{
 			  ->select('persons.name','persons.lastname','persons.mail','users.*','profiles.name as profile_name');
 		return $query;
 	}
+
+	public function scopeGetRestrictedUsers($query)
+	{
+		$query->join('persons','users.person_id','=','persons.id')
+			  ->whereNotNull('restricted_until');
+		return $query;
+	}
 }

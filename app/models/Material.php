@@ -131,4 +131,16 @@ class Material extends Eloquent{
 			  ->where('shelves.branch_id','=',$branch_id);
 		return $query;
 	}
+
+	public function scopeGetLastBookEntriesByDate($query,$date_ini,$date_end)
+	{
+		$query->withTrashed()
+			  ->where('material_type','=','1')
+			  ->where('created_at','>=',$date_ini)
+			  ->where('created_at','<=',$date_end)
+			  ->orderBy('created_at','asc')
+			  ->groupBy('base_cod')
+			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+		return $query;
+	}
 }

@@ -538,18 +538,29 @@ $( document ).ready(function(){
 					submit_create_cubicle = true;
 					return alert('El código no debe tener más de 45 caracteres.');
 				}
+				var regexCode = /^[a-zA-Z]*\d*[a-zA-Z]*$/;
+				if(!regexCode.test(codigo)){
+					submit_create_cubicle = true;
+					return alert('El código debe ser alfanumérico.');
+				}
+
 				var regexNum = /^\s*\d+\s*$/;
 				if(!regexNum.test(capacidad)){
 					submit_create_cubicle = true;
 					return alert('La capacidad debe ser numérico.');
 				}
-				if(capacidad < 0){
+				if(capacidad <= 0){
 					submit_create_cubicle = true;
 					return alert('La capacidad debe ser positiva.');
 				}
 				if(capacidad > 99){
 					submit_create_cubicle = true;
 					return alert('La capacidad debe ser menor que 99.');
+				}
+
+				if(tipo_cubiculo == '0'){
+					submit_create_cubicle = true;
+					return alert('Seleccione un tipo de cubículo.');
 				}
 
 				$.ajax({
@@ -574,6 +585,10 @@ $( document ).ready(function(){
 														break;
 								}
 							}else{
+
+								$("input[name=codigo_cubiculo_crear]").val("");
+								$("input[name=capacidad_cubiculo_crear]").val("");
+								$("select[name=tipo_cubiculo_crear]").val("0");
 								alert('Se registró correctamente el cubículo.');
 								$("#submit-search-physical-elements-form").trigger('click');
 							}
@@ -603,6 +618,11 @@ $( document ).ready(function(){
 
 			if(branch_id > 0){
 
+				var regexCode = /^[a-zA-Z]*\d*[a-zA-Z]*$/;
+				if(!regexCode.test(codigo)){
+					submit_create_cubicle = true;
+					return alert('El código debe ser alfanumérico.');
+				}
 				if(codigo.length < 1 || descripcion.length < 1){
 					submit_create_shelf = true;
 					return alert('No deje campos vacíos.');
@@ -638,6 +658,9 @@ $( document ).ready(function(){
 														break;
 								}
 							}else{
+
+								$("input[name=codigo_estante_crear]").val("");
+								$("textarea[name=descripcion_estante_crear]").val("");
 								alert('Se registró correctamente el estante.');
 								$("#submit-search-physical-elements-form").trigger('click');
 							}
@@ -675,12 +698,17 @@ $( document ).ready(function(){
 					return alert('El código no debe tener más de 128 caracteres.');
 				}
 
+				var regexName = /^[a-zA-Z]*$/;
+				if(!regexName.test(nombre)){
+					submit_create_cubicle = true;
+					return alert('El nombre debe contener solamente letras.');
+				}
 				var regexNum = /^\s*\d+\s*$/;
 				if(!regexNum.test(cantidad)){
 					submit_create_physical_element = true;
 					return alert('La cantidad debe ser numérico.');
 				}
-				if(cantidad < 0){
+				if(cantidad <= 0){
 					submit_create_physical_element = true;
 					return alert('La cantidad debe ser positiva.');
 				}
@@ -711,6 +739,9 @@ $( document ).ready(function(){
 														break;
 								}
 							}else{
+
+								$("input[name=nombre_elemento_fisico_crear]").val("");
+								$("input[name=cantidad_elemento_fisico_crear]").val("");
 								alert('Se registró correctamente el elemento físico.');
 								$("#submit-search-physical-elements-form").trigger('click');
 							}
@@ -738,11 +769,10 @@ function render_physical_elements(branch_cubicles,cubicle_types,branch_physical_
 {
 	var str_physical_elements = "";
 	str_physical_elements += "<tr class='info'>";
-	str_physical_elements += "<th>ID</th><th>Nombre</th><th>Cantidad</th><th class='text-center'>Eliminar</th></tr>";
+	str_physical_elements += "<th>Nombre</th><th>Cantidad</th><th class='text-center'>Eliminar</th></tr>";
 	if(branch_physical_elements.length>0){
 		for(i=0;i<branch_physical_elements.length;i++){
-			str_physical_elements += "<tr><td>"+branch_physical_elements[i].id+"</td>";
-			str_physical_elements += "<td><a href='' onclick='edit_physical_element_modal(event,"+branch_physical_elements[i].id+",\""+branch_physical_elements[i].name+"\","+branch_physical_elements[i].quantity+")'> "+branch_physical_elements[i].name+"</a></td>";
+			str_physical_elements += "<tr><td><a href='' onclick='edit_physical_element_modal(event,"+branch_physical_elements[i].id+",\""+branch_physical_elements[i].name+"\","+branch_physical_elements[i].quantity+")'> "+branch_physical_elements[i].name+"</a></td>";
 			str_physical_elements += "<td>"+branch_physical_elements[i].quantity+"</td>";
 			str_physical_elements += "<td class='text-center'><a href='' class='btn btn-danger' onclick='delete_physical_element(event,"+branch_physical_elements[i].id+")'>Eliminar</a></td></tr>";
 		}
@@ -751,11 +781,10 @@ function render_physical_elements(branch_cubicles,cubicle_types,branch_physical_
 
 	var str_shelves = "";
 	str_shelves += "<tr class='info'>";
-	str_shelves += "<th>ID</th><th>Código</th><th>Descripción</th><th class='text-center'>Eliminar</th></tr>";
+	str_shelves += "<th>Código</th><th>Descripción</th><th class='text-center'>Eliminar</th></tr>";
 	if(branch_shelves.length>0){
 		for(i=0;i<branch_shelves.length;i++){
-			str_shelves += "<tr><td>"+branch_shelves[i].id+"</td>";
-			str_shelves += "<td><a href='' onclick='edit_shelf_modal(event,"+branch_shelves[i].id+",\""+branch_shelves[i].code+"\",\""+branch_shelves[i].description+"\")'> "+branch_shelves[i].code+"</a></td>";
+			str_shelves += "<tr><td><a href='' onclick='edit_shelf_modal(event,"+branch_shelves[i].id+",\""+branch_shelves[i].code+"\",\""+branch_shelves[i].description+"\")'> "+branch_shelves[i].code+"</a></td>";
 			str_shelves += "<td>"+branch_shelves[i].description+"</td>";
 			str_shelves += "<td class='text-center'><a href='' class='btn btn-danger' onclick='delete_shelf(event,"+branch_shelves[i].id+")'>Eliminar</a></td></tr>";
 		}
@@ -764,11 +793,10 @@ function render_physical_elements(branch_cubicles,cubicle_types,branch_physical_
 
 	var str_cubicles = "";
 	str_cubicles += "<tr class='info'>";
-	str_cubicles += "<th>ID</th><th>Código</th><th>Capacidad de personas</th><th>Tipo de cubículo</th><th class='text-center'>Eliminar</th></tr>";
+	str_cubicles += "<th>Código</th><th>Capacidad de personas</th><th>Tipo de cubículo</th><th class='text-center'>Eliminar</th></tr>";
 	if(branch_cubicles.length>0){
 		for(i=0;i<branch_cubicles.length;i++){
-			str_cubicles += "<tr><td>"+branch_cubicles[i].id+"</td>";
-			str_cubicles += "<td><a href='' onclick='edit_cubicle_modal(event,"+branch_cubicles[i].id+",\""+branch_cubicles[i].code+"\","+branch_cubicles[i].capacity+","+branch_cubicles[i].cubicle_type_id+")'> "+branch_cubicles[i].code+"</a></td>";
+			str_cubicles += "<tr><td><a href='' onclick='edit_cubicle_modal(event,"+branch_cubicles[i].id+",\""+branch_cubicles[i].code+"\","+branch_cubicles[i].capacity+","+branch_cubicles[i].cubicle_type_id+")'> "+branch_cubicles[i].code+"</a></td>";
 			str_cubicles += "<td>"+branch_cubicles[i].capacity+"</td>";
 			for(j=0;j<cubicle_types.length;j++){
 				if(cubicle_types[j].id == branch_cubicles[i].cubicle_type_id){

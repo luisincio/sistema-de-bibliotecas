@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class MaterialRequest extends Eloquent{
-	protected $primaryKey = 'mid';
+	use SoftDeletingTrait;
+	protected $softDelete = true;
 
 	public function scopeGetMaterialsRequest($query)
 	{		
@@ -52,6 +54,18 @@ class MaterialRequest extends Eloquent{
 			  		})
 			  		->orderBy('title','asc');	
 		}		
+		return $query;
+	}
+
+	public function scopeGetMostRequestedMaterialsByDate($query,$date_ini,$date_end)
+	{
+		$query->withTrashed()
+			  ->join('material_request_types','material_requests.material_request_type_id','=','material_request_types.id')
+			  ->where('date','>=',$date_ini)
+			  ->where('date','<=',$date_end)
+			  ->orderBy('date','desc')
+			  ->groupBy('title')
+			  ->select('material_requests.*','material_request_types.name',DB::raw('count(*) as total_requests'));
 		return $query;
 	}
 	

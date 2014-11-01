@@ -177,3 +177,34 @@ Route::group(array('prefix'=>'reservation', 'before'=>'auth'),function(){
 	Route::get('/my_cubicle_reservations','ReservationController@render_my_cubicle_reservations');
 	Route::post('/delete_cubicle_reservations_ajax','ReservationController@delete_cubicle_reservations_ajax');
 });
+
+/* Reports */
+Route::group(array('prefix'=>'report', 'before'=>'auth'),function(){
+	/* Top Loans */
+	Route::get('/top_loans','ReportController@render_top_loans');
+	Route::post('/submit_top_loans','ReportController@submit_top_loans');
+	Route::post('/submit_top_loans_excel','ReportController@submit_top_loans_excel');
+	/* Most Requested Materials */
+	Route::get('/most_requested_materials','ReportController@render_most_requested_materials');
+	Route::post('/submit_most_requested_materials','ReportController@submit_most_requested_materials');
+	Route::post('/submit_most_requested_materials_excel','ReportController@submit_most_requested_materials_excel');
+	/* Restricted Users */
+	Route::get('/restricted_users','ReportController@render_restricted_users');
+	Route::post('/restricted_users_excel','ReportController@render_restricted_users_excel');
+	/* Loans By User */
+	Route::get('/loans_by_user','ReportController@render_loans_by_user');
+	Route::post('/submit_loans_by_user','ReportController@submit_loans_by_user');
+	Route::post('/submit_loans_by_user_excel','ReportController@submit_loans_by_user_excel');
+	/* Last Material Entries */
+	Route::get('/last_material_entries','ReportController@render_last_material_entries');
+	Route::post('/submit_last_material_entries','ReportController@submit_last_material_entries');
+	Route::post('/submit_last_material_entries_excel','ReportController@submit_last_material_entries_excel');
+	/* Loans By Material */
+	Route::get('/loans_by_material','ReportController@render_loans_by_material');
+	Route::post('/submit_loans_by_material','ReportController@submit_loans_by_material');
+	Route::post('/submit_loans_by_material_excel','ReportController@submit_loans_by_material_excel');
+	/* Approver/Rejected Purchase Orders */
+	Route::get('/approved_rejected_purchase_orders','ReportController@render_approved_rejected_purchase_orders');
+	Route::post('/submit_approved_rejected_purchase_orders','ReportController@submit_approved_rejected_purchase_orders');
+	Route::post('/submit_approved_rejected_purchase_orders_excel','ReportController@submit_approved_rejected_purchase_orders_excel');
+});

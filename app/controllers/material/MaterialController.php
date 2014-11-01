@@ -71,6 +71,7 @@ class MaterialController extends BaseController
 							$timestamp++;
 							$material = new Material;
 							$material->title = Input::get('titulo');
+							$material->base_cod = Input::get('codigo');
 							$material->auto_cod = $auto_cod;
 							$material->author = Input::get('autor');
 							$material->editorial = Input::get('editorial');

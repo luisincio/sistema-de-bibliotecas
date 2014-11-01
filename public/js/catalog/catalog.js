@@ -106,6 +106,10 @@ $( document ).ready(function(){
 														break;
 								case 'material_type_unavailable': alert('Su usario no tiene permiso para reservar este tipo de material');
 																  break;
+								case 'has_reservation': alert('Usted tiene una reserva vigente de este material');
+														break;
+								case 'has_loan': alert('Usted tiene un préstamo vigente de este material');
+												 break;
 							}
 						}
 					},
