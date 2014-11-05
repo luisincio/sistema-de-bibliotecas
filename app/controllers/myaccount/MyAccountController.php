@@ -80,9 +80,9 @@ class MyAccountController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'titulo' => 'required|min:2',	
-							'autor' => 'required|alpha_spaces|min:2',
-							'editorial' => 'required|alpha_spaces',
+							'titulo' => 'required|min:2|max:255',	
+							'autor' => 'required|alpha_spaces|min:2|max:255',
+							'editorial' => 'required|alpha_spaces|max:128',
 							'num_edicion' => 'required|numeric|min:1|max:10000',
 						);
 				// Run the validation rules on the inputs from the form

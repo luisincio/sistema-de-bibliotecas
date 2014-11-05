@@ -41,16 +41,17 @@ class MaterialController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'titulo' => 'required|min:2',
+							'titulo' => 'required|min:2|max:255',
 							'codigo' => 'required|alpha|min:4|max:4',
-							'autor' => 'required|alpha_spaces|min:2',
-							'editorial' => 'required|alpha_spaces',
+							'autor' => 'required|alpha_spaces|min:2|max:255',
+							'editorial' => 'required|alpha_spaces|max:128',
 							'num_edicion' => 'required|integer|min:1|max:10000',
 							'isbn' => 'required|alpha_num|min:10|max:14',
 							'anio_publicacion' => 'numeric|integer|min:1000|max:4000',
 							'num_paginas' => 'required|integer|min:1|max:10000',
 							'cant_ejemplares' => 'required|integer|min:1|max:10000',
 							'orden_compra' => 'required|integer',
+							'materiales_adicionales' => 'max:255',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -239,12 +240,13 @@ class MaterialController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'titulo' => 'required|min:2',
-							'autor' => 'required|alpha_spaces|min:2',
-							'editorial' => 'required|alpha_spaces',
+							'titulo' => 'required|min:2|max:255',
+							'autor' => 'required|alpha_spaces|min:2|max:255',
+							'editorial' => 'required|alpha_spaces|max:128',
 							'num_edicion' => 'required|integer|min:1|max:10000',
 							'anio_publicacion' => 'numeric|integer|min:1000|max:4000',
 							'num_paginas' => 'required|integer|min:1|max:10000',
+							'materiales_adicionales' => 'max:255',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -385,7 +387,7 @@ class MaterialController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'descripcion' => 'required|min:2',
+							'descripcion' => 'required|min:2|max:255',
 							'femision' => 'required|min:1',
 							'fecha_vencimiento' => 'required|min:1',							
 						);
@@ -554,8 +556,6 @@ class MaterialController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
 			if($data["staff"]->role_id == 3){
-								
-				
 				// Insert the material in the database
 				$id = Input::get('id');
 				$url = 'material/edit_purchase_order/'.$id;

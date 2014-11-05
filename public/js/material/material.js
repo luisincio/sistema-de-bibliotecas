@@ -86,13 +86,22 @@ $( document ).ready(function(){
 		if(code.length < 1 || title.length < 1 || author.length < 1 || quantity.length < 1 || unit_price.length < 1){
 			return alert("No deje ningún campo del detalle vacío.");
 		}
+		if(code.length > 45){
+			return alert("El código no puede ser mayor a 45 caracteres.");
+		}
+		if(title.length > 255){
+			return alert("El título no puede ser mayor a 255 caracteres.");
+		}
+		if(author.length > 255){
+			return alert("El autor no puede ser mayor a 255 caracteres.");
+		}
 		var regex = /^[A-Za-z0-9]+$/;
 		if (!regex.test(code)) {
 			return alert("El código del detalle debe ser alfa-numérico.");
 		}
 		var regexNum = /^[0-9]+$/;
 		if(!regexNum.test(quantity)){
-			return alert("La cantidad del detalle debe ser numérico.");
+			return alert("La cantidad del detalle debe ser un número entero.");
 		}
 		var regexPattern = /^\d{1,8}(\.\d{1,2})?$/;
 		if(!regexPattern.test(unit_price)){
