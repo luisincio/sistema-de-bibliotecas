@@ -84,7 +84,7 @@ $( document ).ready(function(){
 							$("input[name=nr_email_usuario]").val(response.user[0].mail);
 							if(response.user[0].restricted_until){
 								$("input[name=nr_id_usuario]").val("0");
-								$("input[name=nr_estado_usuario]").val("Penalizado hasta"+response.user[0].restricted_until);
+								$("input[name=nr_estado_usuario]").val("Penalizado hasta "+response.user[0].restricted_until);
 							}else{
 								$("input[name=nr_estado_usuario]").val("Activo");
 							}
@@ -176,6 +176,7 @@ $( document ).ready(function(){
 					}
 				});
 			}else{
+				alert('No se puede realizar la reserva, verifique que el usuario no esté penalizado.');
 				nr_submit_loan_register = true;
 			}
 		}
@@ -222,6 +223,55 @@ $( document ).ready(function(){
 			}
 		}
 	});
+
+
+	var damage_register = true;
+	$("#delete-damage-loans").click(function(e){
+		e.preventDefault();
+		if(damage_register){
+			damage_register = false;
+			var selected = [];
+			$("input[type=checkbox][name=loans]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea registrar el daño o pérdida de los materiales seleccionados?");
+				if(confirmation){
+					var user_id = $("input[name=user_id]").val();
+					$.ajax({
+						url: inside_url+'loan/damage_register_ajax',
+						type: 'POST',
+						data: { 'selected_id' : selected ,'user_id' : user_id},
+						beforeSend: function(){
+							$("#delete-damage-loans").addClass("disabled");
+							$("#delete-damage-loans").hide();
+							$(".loader_container").show();
+						},
+						complete: function(){
+							$(".loader_container").hide();
+							$("#delete-damage-loans").removeClass("disabled");
+							$("#delete-damage-loans").show();
+							damage_register = true;
+						},
+						success: function(response){
+							if(response.success){
+								location.reload();
+							}else{
+								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							}
+						},
+						error: function(){
+							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						}
+					});
+				}
+			}else{
+				damage_register = true;
+				alert('Seleccione alguna casilla.');
+			}
+		}
+	});
+
 });
 
 function render_user_reservations_table(reservations)

@@ -343,4 +343,118 @@ class LoanController extends BaseController
 			return View::make('error/error');
 		}
 	}
+
+
+	public function render_damage_register()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "Bibliotecario"
+				$data["loans"] = null;
+				$data["search_criteria"] = null;
+				$data["search"] = null;
+				return View::make('loan/damageRegister',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function search_user_loans_damage()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3){
+				// Check if the current user is the "Bibliotecario"
+				Input::merge(array_map('trim', Input::all()));
+				$data["search_criteria"] = Input::get('search');
+				$data["search"] = $data["search_criteria"];
+				$person = Person::searchPersonByDocument($data["search_criteria"])->first();
+				$data["loans"] = null;
+				$data["user_id"] = null;
+				$data["searched_user_name"] = null;
+				if($person){
+					$user = User::searchUserByPerson($person->id)->first();
+					if($user){
+						$data["searched_user_name"] = $person->name." ".$person->lastname;
+						$data["loans"] = Loan::searchUserLoans($user->id)->paginate(10);
+						$data["user_id"] = $user->id;
+					}
+				}
+				return View::make('loan/damageRegister',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+
+	public function damage_register_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 3){
+			// Check if the current user is the "Bibliotecario"
+			$selected_ids = Input::get('selected_id');
+			$user_id = Input::get('user_id');
+			$edit_user = User::find($user_id);
+			$days_penalty_count = 0; 
+			foreach($selected_ids as $selected_id){
+				$loan = Loan::find($selected_id);
+				if($loan){
+					$loan->delete();
+					$edit_user->current_reservations = $edit_user->current_reservations - 1;
+					$material = Material::find($loan->material_id);
+
+					$reservations = MaterialReservation::getReservationByMaterial($material->mid)->get();
+
+					foreach($reservations as $reservation){
+						$delete_reservation = MaterialReservation::find($reservation->id);
+						$delete_reservation->delete();
+					}
+
+					$material_type = MaterialType::find($material->material_type);
+					$days_penalty_count += $material_type->day_penalty;
+
+
+					$material->delete();
+				}
+			}
+			if($edit_user->restricted_until){
+				$today = $edit_user->restricted_until;
+			}else{
+				$today = Date("Y-m-d");
+			}
+			$restricted_until = date('Y-m-d', strtotime($today."+ ".$days_penalty_count." days"));
+			$edit_user->restricted_until = $restricted_until;
+			$edit_user->save();
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+
 }
