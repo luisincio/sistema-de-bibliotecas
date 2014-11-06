@@ -64,12 +64,6 @@
 					{{ Form::text('tiempo_maximo_prestamo_cubiculo',$general_configuration->max_hours_loan_cubicle,array('class'=>'form-control')) }}
 				</div>
 			</div>
-			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('tiempo_suspencion')) has-error has-feedback @endif">
-					{{ Form::label('tiempo_suspencion','Tiempo de suspención a usuarios (días)') }}
-					{{ Form::text('tiempo_suspencion',$general_configuration->time_suspencion,array('class'=>'form-control')) }}
-				</div>
-			</div>
 		</div>
 	{{ Form::close() }}
 	

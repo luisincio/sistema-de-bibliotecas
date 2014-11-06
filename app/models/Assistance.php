@@ -13,4 +13,11 @@ class Assistance extends Eloquent{
 			  ->where('date','=',$today);
 		return $query;
 	}
+
+	public function scopeGetStaffAssistance($query,$staff_id)
+	{
+		$query->where('staff_id','=',$staff_id)
+			  ->orderBy('date','desc');
+		return $query;
+	}
 }

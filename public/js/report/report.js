@@ -25,6 +25,16 @@ $( document ).ready(function(){
 		$("input[name=num_doc_excel]").val(num_doc);
 	});
 
+	$("select[name=branch]").change(function(){
+		var branch = $(this).val();
+		$("input[name=branch_excel]").val(branch);
+	});
+
+	$("select[name=thematic_area]").change(function(){
+		var thematic_area = $(this).val();
+		$("input[name=thematic_area_excel]").val(thematic_area);
+	});
+
 	$("#toggle-button").click(function(e){
 		e.preventDefault();
 		if($("form#toggle-form").is(':hidden')){

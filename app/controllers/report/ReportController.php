@@ -13,10 +13,14 @@ class ReportController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
 				// Check if the current user is the "System Admin"
+				$data["branches"] = Branch::all();
+				$data["thematic_areas"] = ThematicArea::all();
 				$data["date_ini"] = Date('Y-m-d');
 				$data["date_end"] = Date('Y-m-d');
 				$data["report_rows"] = null;
 				$data["total"] = null;
+				$data["selected_branch"] = null;
+				$data["selected_thematic_area"] = null;
 				return View::make('report/topLoans',$data);
 			}else{
 				return View::make('error/error');
@@ -37,10 +41,24 @@ class ReportController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
 				// Check if the current user is the "System Admin"
+				$data["branches"] = Branch::get();
+				$data["thematic_areas"] = ThematicArea::get();
+
 				$data["date_ini"] = Input::get('date_ini');
 				$data["date_end"] = Input::get('date_end');
+				$data["selected_branch"] = Input::get('branch');
+				$data["selected_thematic_area"] = Input::get('thematic_area');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$data["report_rows"] = Loan::getTopLoansByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
+						$data["report_rows"] = Loan::getTopLoansByDate($data["date_ini"],$date_end)->get();
+					}elseif(($data["selected_branch"] != 0) && ($data["selected_thematic_area"] == 0)){
+						$data["report_rows"] = Loan::getTopLoansByDateBranch($data["date_ini"],$date_end,$data["selected_branch"])->get();
+					}elseif(($data["selected_branch"] == 0) && ($data["selected_thematic_area"] != 0)){
+						$data["report_rows"] = Loan::getTopLoansByDateThematicArea($data["date_ini"],$date_end,$data["selected_thematic_area"])->get();
+					}else{
+						$data["report_rows"] = Loan::getTopLoansByDateBranchThematicArea($data["date_ini"],$date_end,$data["selected_branch"],$data["selected_thematic_area"])->get();
+					}
 					$total = 0;
 					if($data["report_rows"]->count()>0){
 						foreach($data["report_rows"] as $report_row){
@@ -75,11 +93,39 @@ class ReportController extends BaseController
 				// Check if the current user is the "System Admin"
 				$data["date_ini"] = Input::get('date_ini_excel');
 				$data["date_end"] = Input::get('date_end_excel');
+				$data["selected_branch"] = Input::get('branch_excel');
+				$data["selected_thematic_area"] = Input::get('thematic_area_excel');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$data["report_rows"] = Loan::getTopLoansByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
+						$data["report_rows"] = Loan::getTopLoansByDate($data["date_ini"],$date_end)->get();
+					}elseif(($data["selected_branch"] != 0) && ($data["selected_thematic_area"] == 0)){
+						$data["report_rows"] = Loan::getTopLoansByDateBranch($data["date_ini"],$date_end,$data["selected_branch"])->get();
+					}elseif(($data["selected_branch"] == 0) && ($data["selected_thematic_area"] != 0)){
+						$data["report_rows"] = Loan::getTopLoansByDateThematicArea($data["date_ini"],$date_end,$data["selected_thematic_area"])->get();
+					}else{
+						$data["report_rows"] = Loan::getTopLoansByDateBranchThematicArea($data["date_ini"],$date_end,$data["selected_branch"],$data["selected_thematic_area"])->get();
+					}
 					// Generate the string to be rendered on excel
 					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
+					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>Todas las sedes</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>Todas las areas tematicas</td></tr>";
+					}elseif(($data["selected_branch"] != 0) && ($data["selected_thematic_area"] == 0)){
+						$branch_name = Branch::find($data["selected_branch"]);
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>".$branch_name->name."</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>Todas las areas tematicas</td></tr>";
+					}elseif(($data["selected_branch"] == 0) && ($data["selected_thematic_area"] != 0)){
+						$thematic_area_name = ThematicArea::find($data["selected_thematic_area"]);
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>Todas las sedes</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>".$thematic_area_name->name."</td></tr>";
+					}else{
+						$branch_name = Branch::find($data["selected_branch"]);
+						$thematic_area_name = ThematicArea::find($data["selected_thematic_area"]);
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>".$branch_name->name."</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>".$thematic_area_name->name."</td></tr>";
+					}
 					$total = 0;
 					if($data["report_rows"]->count()>0){
 						foreach($data["report_rows"] as $report_row){
@@ -155,7 +201,8 @@ class ReportController extends BaseController
 				$data["date_ini"] = Input::get('date_ini');
 				$data["date_end"] = Input::get('date_end');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$data["report_rows"] = MaterialRequest::getMostRequestedMaterialsByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					$data["report_rows"] = MaterialRequest::getMostRequestedMaterialsByDate($data["date_ini"],$date_end)->get();
 					$total = 0;
 					if($data["report_rows"]->count()>0){
 						foreach($data["report_rows"] as $report_row){
@@ -191,7 +238,8 @@ class ReportController extends BaseController
 				$data["date_ini"] = Input::get('date_ini_excel');
 				$data["date_end"] = Input::get('date_end_excel');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$report_rows = MaterialRequest::getMostRequestedMaterialsByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					$report_rows = MaterialRequest::getMostRequestedMaterialsByDate($data["date_ini"],$date_end)->get();
 					// Generate the string to be rendered on excel
 					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
@@ -352,8 +400,9 @@ class ReportController extends BaseController
 							$data["date_ini"] = Input::get('date_ini');
 							$data["date_end"] = Input::get('date_end');
 							if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-								$data["report_rows"] = Loan::getLoansByUserDate($user->id,$data["date_ini"],$data["date_end"])->get();
-								$data["report_rows_detailed"] = Loan::getLoansByUserDateDetailed($user->id,$data["date_ini"],$data["date_end"])->get();
+								$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+								$data["report_rows"] = Loan::getLoansByUserDate($user->id,$data["date_ini"],$date_end)->get();
+								$data["report_rows_detailed"] = Loan::getLoansByUserDateDetailed($user->id,$data["date_ini"],$date_end)->get();
 								$data["total"] = $data["report_rows_detailed"]->count();
 								return View::make('report/loansByUser',$data);
 							}
@@ -407,8 +456,9 @@ class ReportController extends BaseController
 							$data["date_ini"] = Input::get('date_ini_excel');
 							$data["date_end"] = Input::get('date_end_excel');
 							if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-								$data["report_rows"] = Loan::getLoansByUserDate($user->id,$data["date_ini"],$data["date_end"])->get();
-								$data["report_rows_detailed"] = Loan::getLoansByUserDateDetailed($user->id,$data["date_ini"],$data["date_end"])->get();
+								$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+								$data["report_rows"] = Loan::getLoansByUserDate($user->id,$data["date_ini"],$date_end)->get();
+								$data["report_rows_detailed"] = Loan::getLoansByUserDateDetailed($user->id,$data["date_ini"],$date_end)->get();
 								$data["total"] = $data["report_rows_detailed"]->count();
 
 								// Generate the string to be rendered on excel
@@ -477,10 +527,14 @@ class ReportController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
 				// Check if the current user is the "System Admin"
+				$data["branches"] = Branch::all();
+				$data["thematic_areas"] = ThematicArea::all();
 				$data["date_ini"] = Date('Y-m-d');
 				$data["date_end"] = Date('Y-m-d');
 				$data["report_rows"] = null;
 				$data["total"] = null;
+				$data["selected_branch"] = null;
+				$data["selected_thematic_area"] = null;
 				return View::make('report/lastMaterialEntries',$data);
 			}else{
 				return View::make('error/error');
@@ -501,10 +555,25 @@ class ReportController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
 				// Check if the current user is the "System Admin"
+				$data["branches"] = Branch::get();
+				$data["thematic_areas"] = ThematicArea::get();
+
 				$data["date_ini"] = Input::get('date_ini');
 				$data["date_end"] = Input::get('date_end');
+				$data["selected_branch"] = Input::get('branch');
+				$data["selected_thematic_area"] = Input::get('thematic_area');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$data["report_rows"] = Material::getLastBookEntriesByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
+						$data["report_rows"] = Material::getLastBookEntriesByDate($data["date_ini"],$date_end)->get();
+					}elseif(($data["selected_branch"] != 0) && ($data["selected_thematic_area"] == 0)){
+						$data["report_rows"] = Material::getLastBookEntriesByDateBranch($data["date_ini"],$date_end,$data["selected_branch"])->get();
+					}elseif(($data["selected_branch"] == 0) && ($data["selected_thematic_area"] != 0)){
+						$data["report_rows"] = Material::getLastBookEntriesByDateThematicArea($data["date_ini"],$date_end,$data["selected_thematic_area"])->get();
+					}else{
+						$data["report_rows"] = Material::getLastBookEntriesByDateBranchThematicArea($data["date_ini"],$date_end,$data["selected_branch"],$data["selected_thematic_area"])->get();
+					}
+
 					$total = 0;
 					if($data["report_rows"]->count()>0){
 						foreach($data["report_rows"] as $report_row){
@@ -539,11 +608,39 @@ class ReportController extends BaseController
 				// Check if the current user is the "System Admin"
 				$data["date_ini"] = Input::get('date_ini_excel');
 				$data["date_end"] = Input::get('date_end_excel');
+				$data["selected_branch"] = Input::get('branch_excel');
+				$data["selected_thematic_area"] = Input::get('thematic_area_excel');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$report_rows = Material::getLastBookEntriesByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
+						$report_rows = Material::getLastBookEntriesByDate($data["date_ini"],$date_end)->get();
+					}elseif(($data["selected_branch"] != 0) && ($data["selected_thematic_area"] == 0)){
+						$report_rows = Material::getLastBookEntriesByDateBranch($data["date_ini"],$date_end,$data["selected_branch"])->get();
+					}elseif(($data["selected_branch"] == 0) && ($data["selected_thematic_area"] != 0)){
+						$report_rows = Material::getLastBookEntriesByDateThematicArea($data["date_ini"],$date_end,$data["selected_thematic_area"])->get();
+					}else{
+						$report_rows = Material::getLastBookEntriesByDateBranchThematicArea($data["date_ini"],$date_end,$data["selected_branch"],$data["selected_thematic_area"])->get();
+					}
 					// Generate the string to be rendered on excel
 					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
+					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>Todas las sedes</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>Todas las areas tematicas</td></tr>";
+					}elseif(($data["selected_branch"] != 0) && ($data["selected_thematic_area"] == 0)){
+						$branch_name = Branch::find($data["selected_branch"]);
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>".$branch_name->name."</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>Todas las areas tematicas</td></tr>";
+					}elseif(($data["selected_branch"] == 0) && ($data["selected_thematic_area"] != 0)){
+						$thematic_area_name = ThematicArea::find($data["selected_thematic_area"]);
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>Todas las sedes</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>".$thematic_area_name->name."</td></tr>";
+					}else{
+						$branch_name = Branch::find($data["selected_branch"]);
+						$thematic_area_name = ThematicArea::find($data["selected_thematic_area"]);
+						$str_table .= "<tr><td><strong>Sede</strong></td><td>".$branch_name->name."</td></tr>";
+						$str_table .= "<tr><td><strong>Area Tematica</strong></td><td>".$thematic_area_name->name."</td></tr>";
+					}
 					$total = 0;
 					if($report_rows->count()>0){
 						foreach($report_rows as $report_row){
@@ -636,8 +733,9 @@ class ReportController extends BaseController
 						$data["date_ini"] = Input::get('date_ini');
 						$data["date_end"] = Input::get('date_end');
 						if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-							$data["report_rows"] = Loan::getLoansByMaterialDate($data["code"],$data["date_ini"],$data["date_end"])->get();
-							$data["report_rows_detailed"] = Loan::getLoansByMaterialDateDetailed($data["code"],$data["date_ini"],$data["date_end"])->get();
+							$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+							$data["report_rows"] = Loan::getLoansByMaterialDate($data["code"],$data["date_ini"],$date_end)->get();
+							$data["report_rows_detailed"] = Loan::getLoansByMaterialDateDetailed($data["code"],$data["date_ini"],$date_end)->get();
 							$data["total"] = $data["report_rows_detailed"]->count();
 							$data["material_title"] = $material->title;
 							$data["total_users"] = $data["report_rows"]->count();
@@ -687,8 +785,9 @@ class ReportController extends BaseController
 						$data["date_ini"] = Input::get('date_ini_excel');
 						$data["date_end"] = Input::get('date_end_excel');
 						if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-							$data["report_rows"] = Loan::getLoansByMaterialDate($data["code"],$data["date_ini"],$data["date_end"])->get();
-							$data["report_rows_detailed"] = Loan::getLoansByMaterialDateDetailed($data["code"],$data["date_ini"],$data["date_end"])->get();
+							$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+							$data["report_rows"] = Loan::getLoansByMaterialDate($data["code"],$data["date_ini"],$date_end)->get();
+							$data["report_rows_detailed"] = Loan::getLoansByMaterialDateDetailed($data["code"],$data["date_ini"],$date_end)->get();
 							$data["total"] = $data["report_rows_detailed"]->count();
 							$data["total_users"] = $data["report_rows"]->count();
 							
@@ -789,7 +888,8 @@ class ReportController extends BaseController
 				$data["date_ini"] = Input::get('date_ini');
 				$data["date_end"] = Input::get('date_end');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
 					$data["total_approved"] = 0;
 					$data["total_amount_approved"] = 0;
 					if($data["report_rows_approved"]->count()>0){
@@ -798,7 +898,7 @@ class ReportController extends BaseController
 							$data["total_amount_approved"] += $report_row_approved->total_amount;
 						}
 					}
-					$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$data["date_end"])->get();
+					$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
 					$data["total_rejected"] = 0;
 					$data["total_amount_rejected"] = 0;
 					if($data["report_rows_rejected"]->count()>0){
@@ -836,7 +936,8 @@ class ReportController extends BaseController
 				$data["date_ini"] = Input::get('date_ini_excel');
 				$data["date_end"] = Input::get('date_end_excel');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
-					$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$data["date_end"])->get();
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
 					$data["total_approved"] = 0;
 					$data["total_amount_approved"] = 0;
 					if($data["report_rows_approved"]->count()>0){
@@ -845,7 +946,7 @@ class ReportController extends BaseController
 							$data["total_amount_approved"] += $report_row_approved->total_amount;
 						}
 					}
-					$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$data["date_end"])->get();
+					$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
 					$data["total_rejected"] = 0;
 					$data["total_amount_rejected"] = 0;
 					if($data["report_rows_rejected"]->count()>0){

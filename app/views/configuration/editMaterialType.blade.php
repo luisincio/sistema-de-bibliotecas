@@ -5,6 +5,7 @@
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
 			<p><strong>{{ $errors->first('descripcion') }}</strong></p>
+			<p><strong>{{ $errors->first('penalidad') }}</strong></p>
 		</div>
 	@endif
 
@@ -31,6 +32,13 @@
 			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
 		</div>
 		<div class="col-xs-6">
+			<div class="row">
+				<div class="form-group col-xs-8 @if($errors->first('penalidad')) has-error has-feedback @endif">
+					{{ Form::label('penalidad','Días de penalidad*') }}
+					{{ Form::text('penalidad',$material_type->day_penalty,array('class'=>'form-control')) }}
+					<h5>*La cantidad de días que estará restringido el usuario si se demora en devolver un material de este tipo.</h5>
+				</div>
+			</div>
 			<div class="row">
 				<div class="form-group col-xs-8">
 					{{ Form::label('phys_dig','¿Físico o Digital?') }}

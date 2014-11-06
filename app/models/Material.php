@@ -143,4 +143,46 @@ class Material extends Eloquent{
 			  ->select('materials.*',DB::raw('count(*) as total_entries'));
 		return $query;
 	}
+
+	public function scopeGetLastBookEntriesByDateBranch($query,$date_ini,$date_end,$branch_id)
+	{
+		$query->withTrashed()
+			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->where('material_type','=','1')
+			  ->where('materials.created_at','>=',$date_ini)
+			  ->where('materials.created_at','<=',$date_end)
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->orderBy('created_at','asc')
+			  ->groupBy('base_cod')
+			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+		return $query;
+	}
+
+	public function scopeGetLastBookEntriesByDateThematicArea($query,$date_ini,$date_end,$thematic_area_id)
+	{
+		$query->withTrashed()
+			  ->where('material_type','=','1')
+			  ->where('created_at','>=',$date_ini)
+			  ->where('created_at','<=',$date_end)
+			  ->where('thematic_area','=',$thematic_area_id)
+			  ->orderBy('created_at','asc')
+			  ->groupBy('base_cod')
+			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+		return $query;
+	}
+
+	public function scopeGetLastBookEntriesByDateBranchThematicArea($query,$date_ini,$date_end,$branch_id,$thematic_area_id)
+	{
+		$query->withTrashed()
+			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->where('material_type','=','1')
+			  ->where('materials.created_at','>=',$date_ini)
+			  ->where('materials.created_at','<=',$date_end)
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->where('thematic_area','=',$thematic_area_id)
+			  ->orderBy('created_at','asc')
+			  ->groupBy('base_cod')
+			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+		return $query;
+	}
 }

@@ -19,10 +19,11 @@
 
 		<table class="table table-hover">
 			<tr class="info">
-				<th>Número de documento</th>
+				<th>Num. de documento</th>
 				<th>Nombre</th>
 				<th>Hora de entrada</th>
 				<th>Hora de salida</th>
+				<th>Asistencia</th>
 				<th>Sede</th>
 				<th>E-mail</th>
 				<th class="text-center">Seleccione @if($search_filter!=2) {{ Form::checkbox('select_all') }} @endif</th>
@@ -44,6 +45,13 @@
 				</td>
 				<td>
 					{{$staff_data->hour_end}}
+				</td>
+				<td class="text-center">
+					@if($staff_data->deleted_at)
+						-
+					@else
+						<a href="{{URL::to('/staff/staff_assistance/')}}/{{$staff_data->id}}">Asistencia</a>
+					@endif
 				</td>
 				<td>
 					{{$staff_data->branch_name}}

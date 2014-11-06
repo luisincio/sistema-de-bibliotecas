@@ -34,6 +34,48 @@ class Loan extends Eloquent{
 		return $query;
 	}
 
+	public function scopeGetTopLoansByDateBranch($query,$date_ini,$date_end,$branch_id)
+	{
+		$query->withTrashed()
+			  ->join('materials','loans.material_id','=','materials.mid')
+			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->where('loans.created_at','>=',$date_ini)
+			  ->where('loans.created_at','<=',$date_end)
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->orderBy('loans_by_material','desc')
+			  ->groupBy('materials.base_cod')
+			  ->select('materials.base_cod','materials.title','materials.author','materials.editorial','loans.*',DB::raw('count(*) as loans_by_material'));
+		return $query;
+	}
+
+	public function scopeGetTopLoansByDateThematicArea($query,$date_ini,$date_end,$thematic_area_id)
+	{
+		$query->withTrashed()
+			  ->join('materials','loans.material_id','=','materials.mid')
+			  ->where('loans.created_at','>=',$date_ini)
+			  ->where('loans.created_at','<=',$date_end)
+			  ->where('materials.thematic_area','=',$thematic_area_id)
+			  ->orderBy('loans_by_material','desc')
+			  ->groupBy('materials.base_cod')
+			  ->select('materials.base_cod','materials.title','materials.author','materials.editorial','loans.*',DB::raw('count(*) as loans_by_material'));
+		return $query;
+	}
+
+	public function scopeGetTopLoansByDateBranchThematicArea($query,$date_ini,$date_end,$branch_id,$thematic_area_id)
+	{
+		$query->withTrashed()
+			  ->join('materials','loans.material_id','=','materials.mid')
+			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->where('loans.created_at','>=',$date_ini)
+			  ->where('loans.created_at','<=',$date_end)
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->where('materials.thematic_area','=',$thematic_area_id)
+			  ->orderBy('loans_by_material','desc')
+			  ->groupBy('materials.base_cod')
+			  ->select('materials.base_cod','materials.title','materials.author','materials.editorial','loans.*',DB::raw('count(*) as loans_by_material'));
+		return $query;
+	}
+
 	public function scopeGetLoansByUserDate($query,$user_id,$date_ini,$date_end)
 	{
 		$query->withTrashed()

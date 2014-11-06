@@ -72,7 +72,13 @@ Route::group(array('prefix'=>'config', 'before'=>'auth'),function(){
 	Route::post('/delete_physical_elements','ConfigurationController@delete_physical_elements');
 	Route::post('/delete_shelves','ConfigurationController@delete_shelves');
 	Route::post('/delete_cubicle','ConfigurationController@delete_cubicle');
-
+	/* Cubicle Types */
+	Route::get('/create_cubicle_type','ConfigurationController@render_create_cubicle_type');
+	Route::post('/submit_create_cubicle_type','ConfigurationController@submit_create_cubicle_type');
+	Route::get('/list_cubicle_type','ConfigurationController@list_cubicle_type'); 
+	Route::get('/edit_cubicle_type/{id}','ConfigurationController@render_edit_cubicle_type');
+	Route::post('/submit_edit_cubicle_type','ConfigurationController@submit_edit_cubicle_type');
+	Route::post('/delete_cubicle_type_ajax','ConfigurationController@delete_cubicle_type_ajax');
 });
 
 /* My Account */
@@ -119,6 +125,7 @@ Route::group(array('prefix'=>'staff', 'before'=>'auth'),function(){
 	/* Assistance */
 	Route::get('/assistance','StaffController@assistance');
 	Route::post('/submit_assistance','StaffController@submit_assistance');
+	Route::get('/staff_assistance/{id}','StaffController@staff_assistance');
 
 });
 
@@ -155,6 +162,10 @@ Route::group(array('prefix'=>'loan', 'before'=>'auth'),function(){
 	Route::post('/get_user_reservation_ajax','LoanController@get_user_reservation_ajax');
 	Route::post('/register_loan_with_reservation_ajax','LoanController@register_loan_with_reservation_ajax');
 	Route::get('/my_loans','LoanController@render_my_loans');
+	/* Register Material Damaged */
+	Route::get('/damage_register','LoanController@render_damage_register');
+	Route::get('/search_user_loans_damage','LoanController@search_user_loans_damage');
+	Route::post('/damage_register_ajax','LoanController@damage_register_ajax');
 });
 
 /* Catalog */

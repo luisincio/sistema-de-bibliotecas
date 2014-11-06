@@ -16,6 +16,21 @@
 						<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
 					</div>
 				</div>
+				<div class="row">
+					<div class="form-group col-xs-8">
+						{{ Form::label('branch','Sede') }}
+						<select name="branch" class="form-control">
+							<option value="0">Todas las sedes</option>
+							@foreach($branches as $branch)
+								@if($branch->id == $selected_branch)
+									<option value="{{ $branch->id }}" selected>{{ $branch->name }}</option>
+								@else
+									<option value="{{ $branch->id }}">{{ $branch->name }}</option>
+								@endif
+							@endforeach
+						</select>
+					</div>
+				</div>
 				{{ Form::submit('Generar reporte',array('id'=>'submit-report', 'class'=>'btn btn-primary')) }}
 				<a href="" id="submit_top_loans_excel_button" class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span> Exportar a Excel</a>
 				{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
@@ -28,12 +43,29 @@
 						<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
 					</div>
 				</div>
+				<div class="row">
+					<div class="form-group col-xs-8">
+						{{ Form::label('thematic_area','Área temática') }}
+						<select name="thematic_area" class="form-control">
+							<option value="0">Todas las áreas temáticas</option>
+							@foreach($thematic_areas as $thematic_area)
+								@if($thematic_area->id == $selected_thematic_area)
+									<option value="{{ $thematic_area->id }}" selected>{{ $thematic_area->name }}</option>
+								@else
+									<option value="{{ $thematic_area->id }}">{{ $thematic_area->name }}</option>
+								@endif
+							@endforeach
+						</select>
+					</div>
+				</div>
 			</div>
 		{{ Form::close() }}
 	</div>
 	{{ Form::open(array('url'=>'report/submit_top_loans_excel', 'id' => 'submit_top_loans_excel' ,'role'=>'form')) }}
 		{{ Form::hidden('date_ini_excel',$date_ini) }}
 		{{ Form::hidden('date_end_excel',$date_end) }}
+		{{ Form::hidden('branch_excel',$selected_branch) }}
+		{{ Form::hidden('thematic_area_excel',$selected_thematic_area) }}
 	{{ Form::close() }}
 
 	@if($total)

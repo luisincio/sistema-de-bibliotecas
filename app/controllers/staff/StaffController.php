@@ -428,4 +428,24 @@ class StaffController extends BaseController {
 			return View::make('error/error');
 		}
 	}
+
+	public function staff_assistance($id=null)
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if(($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 ) && $id){
+				$data["staff_info"] = Staff::searchStaffById($id)->first();
+				$data["staff_assistances"] = Assistance::getStaffAssistance($id)->paginate(20);
+				return View::make('staff/staffAssistance',$data);
+			}else{
+				return View::make('error/error');
+			}
+		}else{
+			return View::make('error/error');
+		}
+	}
 }

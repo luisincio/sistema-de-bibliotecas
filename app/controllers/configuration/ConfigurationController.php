@@ -2,6 +2,181 @@
 
 class ConfigurationController extends BaseController
 {
+	/**/
+
+	public function render_create_cubicle_type()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				return View::make('configuration/createCubicleType',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_create_cubicle_type()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:cubicle_types,name,NULL,id,deleted_at,NULL',
+							'descripcion' => 'alpha_spaces|min:2|max:255',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('config/create_cubicle_type')->withErrors($validator)->withInput(Input::all());
+				}else{
+					// Insert the cubicle type in the database
+					$cubicle_type = new CubicleType;
+					$cubicle_type->name = Input::get('nombre');
+					$cubicle_type->description = Input::get('descripcion');
+					$cubicle_type->save();
+
+					Session::flash('message', 'Se registró correctamente el tipo de cubículo.');
+					return Redirect::to('config/create_cubicle_type');
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function list_cubicle_type()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				$data["cubicle_types"] = CubicleType::paginate(10);
+				return View::make('configuration/listCubicleType',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function render_edit_cubicle_type($id=null)
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1 && $id){
+				// Check if the current user is the "System Admin"
+				$data["cubicle_type"] = CubicleType::find($id);
+				return View::make('configuration/editCubicleType',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_edit_cubicle_type()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'descripcion' => 'alpha_spaces|min:2|max:255'
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					$url = 'config/edit_cubicle_type/'.Input::get('id');
+					return Redirect::to($url)->withErrors($validator)->withInput(Input::all());
+				}else{
+					// Insert the supplier in the database
+					$id = Input::get('id');
+					$url = 'config/edit_cubicle_type/'.$id;
+					$cubicle_type = CubicleType::find($id);
+					$cubicle_type->description = Input::get('descripcion');
+					$cubicle_type->save();
+
+					Session::flash('message', 'Se editó correctamente el tipo de cubículo.');
+					return Redirect::to($url);
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function delete_cubicle_type_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$selected_ids = Input::get('selected_id');
+			foreach($selected_ids as $selected_id){
+				$cubicle_type = CubicleType::find($selected_id);
+				if($cubicle_type){
+					$cubicle = Cubicle::where('cubicle_type_id','=',$cubicle_type->id)->first();
+					if(!$cubicle){
+						$cubicle_type->delete();
+					}
+				}
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+	/**/
 	public function render_create_supplier()
 	{
 		if(Auth::check()){
@@ -261,10 +436,9 @@ class ConfigurationController extends BaseController
 				// Validate the info, create rules for the inputs
 				$rules = array(
 							'nombre' => 'required|alpha_spaces|min:2|max:45',
-							'direccion' => 'required',
+							'direccion' => 'required|max:255',
 							'logo' => 'image',
-							'tiempo_maximo_prestamo_cubiculo' => 'required|integer|min:1|max:4',
-							'tiempo_suspencion' => 'required|integer|min:0|max:90',
+							'tiempo_maximo_prestamo_cubiculo' => 'required|integer|min:1|max:24',
 							'descripcion' => 'alpha_spaces|max:255',
 						);
 				// Run the validation rules on the inputs from the form
@@ -288,7 +462,6 @@ class ConfigurationController extends BaseController
 						}
 						$config->description = Input::get('descripcion');
 						$config->max_hours_loan_cubicle = Input::get('tiempo_maximo_prestamo_cubiculo');
-						$config->time_suspencion = Input::get('tiempo_suspencion');
 						$config->save();
 
 						Session::flash('message', 'Se modificó correctamente la configuración general.');
@@ -345,7 +518,8 @@ class ConfigurationController extends BaseController
 				// Validate the info, create rules for the inputs
 				$rules = array(
 							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:material_types,name',
-							'descripcion' => 'required|max:255'
+							'descripcion' => 'required|max:255',
+							'penalidad' => 'required|numeric|min:1|max:365'
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -357,6 +531,7 @@ class ConfigurationController extends BaseController
 					$material_type = new MaterialType;
 					$material_type->name = Input::get('nombre');
 					$material_type->description = Input::get('descripcion');
+					$material_type->day_penalty = Input::get('penalidad');
 					$material_type->flag_phys_dig = Input::get('phys_dig');
 					$material_type->save();
 
@@ -454,6 +629,7 @@ class ConfigurationController extends BaseController
 				//Validation
 				$rules = array(
 					'descripcion' => 'max:255',
+					'penalidad' => 'numeric|min:1|max:365'
 				);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -464,6 +640,7 @@ class ConfigurationController extends BaseController
 				$url = 'config/edit_material_type/'.$id;
 				$material_type = MaterialType::find($id);
 				$material_type->description = Input::get('descripcion');
+				$material_type->day_penalty = Input::get('penalidad');
 				$material_type->flag_phys_dig = Input::get('phys_dig');
 				$material_type->save();
 

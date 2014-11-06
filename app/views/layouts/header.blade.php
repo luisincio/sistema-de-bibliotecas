@@ -35,6 +35,9 @@
 								<li class="divider"></li>
 								<li>{{ HTML::link('/config/list_material_type','Mostrar Tipos de Materiales') }}</li>
 								<li>{{ HTML::link('/config/create_material_type','Registrar Tipo de Material') }}</li>
+								<li class="divider"></li>
+								<li>{{ HTML::link('/config/list_cubicle_type','Mostrar Tipos de Cubículos') }}</li>
+								<li>{{ HTML::link('/config/create_cubicle_type','Registrar Tipo de Cubículo') }}</li>
 							@endif
 						</ul>
 					</li>
@@ -87,8 +90,11 @@
 						@if($staff && $staff->role_id == 3)
 						<li>{{ HTML::link('/loan/loan_register','Registrar Préstamo') }}</li>
 						<li>{{ HTML::link('/loan/return_register','Registrar Devolución') }}</li>
+						<li class="divider"></li>
+						<li>{{ HTML::link('/loan/damage_register','Registrar Daño o Perdida') }}</li>
 						@endif
 						@if($user)
+						<li class="divider"></li>
 						<li>{{ HTML::link('/loan/my_loans','Mis Préstamos') }}</li>
 						@endif
 					</ul>

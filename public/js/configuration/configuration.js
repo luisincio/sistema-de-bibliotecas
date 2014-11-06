@@ -44,6 +44,50 @@ $( document ).ready(function(){
 				alert('Seleccione alguna casilla.');
 			}
 		}
+	});var delete_selected_cubicle_types = true;
+	$("#delete-selected-cubicle-types").click(function(e){
+		e.preventDefault();
+		if(delete_selected_cubicle_types){
+			delete_selected_cubicle_types = false;
+			var selected = [];
+			$("input[type=checkbox][name=cubicle_types]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?\nSolo se eliminaran los tipos de cubículos que no tengan cubículos asociados");
+				if(confirmation){
+					$.ajax({
+						url: inside_url+'config/delete_cubicle_type_ajax',
+						type: 'POST',
+						data: { 'selected_id' : selected },
+						beforeSend: function(){
+							$("#delete-selected-cubicle-types").addClass("disabled");
+							$("#delete-selected-cubicle-types").hide();
+							$(".loader_container").show();
+						},
+						complete: function(){
+							$(".loader_container").hide();
+							$("#delete-selected-cubicle-types").removeClass("disabled");
+							$("#delete-selected-cubicle-types").show();
+							delete_selected_cubicle_types = true;
+						},
+						success: function(response){
+							if(response.success){
+								location.reload();
+							}else{
+								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							}
+						},
+						error: function(){
+							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						}
+					});
+				}
+			}else{
+				delete_selected_cubicle_types = true;
+				alert('Seleccione alguna casilla.');
+			}
+		}
 	});
 
 	var delete_selected_material_types = true;
