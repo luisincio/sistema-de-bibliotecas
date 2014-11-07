@@ -1,6 +1,6 @@
 @extends('templates/reportTemplate')
 @section('content')
-	<h1>Reporte de materiales más solicitados</h1>
+	<h1>Reporte de solicitudes de materiales para compra</h1>
 
 	@if (Session::has('danger'))
 		<div class="alert alert-danger">{{ Session::get('danger') }}</div>

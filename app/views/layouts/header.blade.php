@@ -141,8 +141,8 @@
 							<span class="glyphicon glyphicon-stats"></span> Reportes <span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
-							<li>{{ HTML::link('/report/top_loans','Materiales más Prestados') }}</li>
-							<li>{{ HTML::link('/report/most_requested_materials','Materiales más Solicitados') }}</li>
+							<li>{{ HTML::link('/report/top_loans','Materiales más Solicitados') }}</li>
+							<li>{{ HTML::link('/report/most_requested_materials','Solicitudes de Materiales para Compra') }}</li>
 							<li class="divider"></li>
 							<li>{{ HTML::link('/report/restricted_users','Usuarios con Multa') }}</li>
 							<li>{{ HTML::link('/report/loans_by_user','Préstamos por Usuario') }}</li>

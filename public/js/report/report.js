@@ -2,12 +2,12 @@ $( document ).ready(function(){
 
 	$("input[name=date_ini]").datepicker({
 		format:'yyyy-mm-dd',
-		endDate: '+0d'
+		endDate: '+0d',
 	});
 
 	$("input[name=date_end]").datepicker({
 		format:'yyyy-mm-dd',
-		endDate: '+0d'
+		endDate: '+0d',
 	});
 
 	$("input[name=date_ini]").change(function(){
@@ -33,6 +33,11 @@ $( document ).ready(function(){
 	$("select[name=thematic_area]").change(function(){
 		var thematic_area = $(this).val();
 		$("input[name=thematic_area_excel]").val(thematic_area);
+	});
+
+	$("select[name=approved_rejected_filter]").change(function(){
+		var approved_rejected_filter = $(this).val();
+		$("input[name=approved_rejected_filter_excel]").val(approved_rejected_filter);
 	});
 
 	$("#toggle-button").click(function(e){

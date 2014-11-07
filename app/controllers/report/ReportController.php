@@ -107,7 +107,9 @@ class ReportController extends BaseController
 						$data["report_rows"] = Loan::getTopLoansByDateBranchThematicArea($data["date_ini"],$date_end,$data["selected_branch"],$data["selected_thematic_area"])->get();
 					}
 					// Generate the string to be rendered on excel
-					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
+					$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+					$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de materiales mas solicitados</strong></td></tr></table>";
+					$str_table .= "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
 					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
 						$str_table .= "<tr><td><strong>Sede</strong></td><td>Todas las sedes</td></tr>";
@@ -241,7 +243,9 @@ class ReportController extends BaseController
 					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
 					$report_rows = MaterialRequest::getMostRequestedMaterialsByDate($data["date_ini"],$date_end)->get();
 					// Generate the string to be rendered on excel
-					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
+					$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+					$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de solicitudes de materiales para compra</strong></td></tr></table>";
+					$str_table .= "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
 					$total = 0;
 					if($report_rows->count()>0){
@@ -317,7 +321,9 @@ class ReportController extends BaseController
 				$restricted_users = User::getRestrictedUsers()->get();
 				$total_restricted_users = $restricted_users->count();
 				
-				$str_table = "<table><tr><td><strong>Total de usuarios con multa</strong></td><td>".$total_restricted_users."</td></tr><tr></tr></table>";
+				$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+				$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de usuarios con multa</strong></td></tr></table>";
+				$str_table .= "<table><tr><td><strong>Total de usuarios con multa</strong></td><td>".$total_restricted_users."</td></tr><tr></tr></table>";
 				$str_table .= "<table border=1><tr><th>Num. Documento</th><th>Nombres</th><th>Apellidos</th><th>E-mail</th><th>Direccion</th><th>Telefono</th><th>Genero</th><th>Fecha de re-incorporacion</th></tr>";
 				if($total_restricted_users > 0){
 					foreach($restricted_users as $restricted_user){
@@ -462,7 +468,10 @@ class ReportController extends BaseController
 								$data["total"] = $data["report_rows_detailed"]->count();
 
 								// Generate the string to be rendered on excel
-								$str_table = "<table><tr><td><strong>Usuario</strong></td><td>".$person->name." ".$person->lastname."(".$person->doc_number.")"."</td></tr>";
+
+								$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+								$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de prestamos por usuario</strong></td></tr></table>";
+								$str_table .= "<table><tr><td><strong>Usuario</strong></td><td>".$person->name." ".$person->lastname."(".$person->doc_number.")"."</td></tr>";
 								$str_table .= "<tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td><tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
 								$str_table .= "<tr><td><strong>Total de prestamos en el periodo</strong></td><td>".$data["total"]."</td></tr><tr></tr></table>";
 
@@ -622,7 +631,9 @@ class ReportController extends BaseController
 						$report_rows = Material::getLastBookEntriesByDateBranchThematicArea($data["date_ini"],$date_end,$data["selected_branch"],$data["selected_thematic_area"])->get();
 					}
 					// Generate the string to be rendered on excel
-					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
+					$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+					$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de libros ingresados</strong></td></tr></table>";
+					$str_table .= "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
 					if( ($data["selected_branch"] == 0) && ($data["selected_thematic_area"] == 0) ){
 						$str_table .= "<tr><td><strong>Sede</strong></td><td>Todas las sedes</td></tr>";
@@ -793,7 +804,9 @@ class ReportController extends BaseController
 							
 
 							// Generate the string to be rendered on excel
-							$str_table = "<table><tr><td><strong>Titulo del material</strong></td><td>".htmlentities($material->title)."(".htmlentities($material->base_cod).")"."</td></tr>";
+							$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+							$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de prestamos por material</strong></td></tr></table>";
+							$str_table .= "<table><tr><td><strong>Titulo del material</strong></td><td>".htmlentities($material->title)."(".htmlentities($material->base_cod).")"."</td></tr>";
 							$str_table .= "<tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td><tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
 							$str_table .= "<tr><td><strong>Total de usuarios a los que se le presto el material</strong></td><td>".$data["total_users"]."</td></tr><tr></tr>";
 							$str_table .= "<tr><td><strong>Total de prestamos en el periodo</strong></td><td>".$data["total"]."</td></tr><tr></tr></table>";
@@ -865,6 +878,7 @@ class ReportController extends BaseController
 				$data["total_amount_approved"] = null;
 				$data["total_amount_rejected"] = null;
 				$data["total"] = null;
+				$data["approved_rejected_filter"] = null;
 				return View::make('report/approvedRejectedPurchaseOrders',$data);
 			}else{
 				return View::make('error/error');
@@ -887,24 +901,33 @@ class ReportController extends BaseController
 				// Check if the current user is the "System Admin"
 				$data["date_ini"] = Input::get('date_ini');
 				$data["date_end"] = Input::get('date_end');
+				$data["approved_rejected_filter"] = Input::get('approved_rejected_filter');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
 					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
-					$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
+					$data["report_rows_approved"] = null;
+					$data["report_rows_rejected"] = null;
+					$data["total_amount_approved"] = null;
+					$data["total_amount_rejected"] = null;
 					$data["total_approved"] = 0;
-					$data["total_amount_approved"] = 0;
-					if($data["report_rows_approved"]->count()>0){
-						foreach($data["report_rows_approved"] as $report_row_approved){
-							$data["total_approved"] += 1;
-							$data["total_amount_approved"] += $report_row_approved->total_amount;
+					$data["total_rejected"] = 0;
+					if( ($data["approved_rejected_filter"] == 0) || ($data["approved_rejected_filter"] == 1) ){
+						$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
+						$data["total_amount_approved"] = 0;
+						if($data["report_rows_approved"]->count()>0){
+							foreach($data["report_rows_approved"] as $report_row_approved){
+								$data["total_approved"] += 1;
+								$data["total_amount_approved"] += $report_row_approved->total_amount;
+							}
 						}
 					}
-					$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
-					$data["total_rejected"] = 0;
-					$data["total_amount_rejected"] = 0;
-					if($data["report_rows_rejected"]->count()>0){
-						foreach($data["report_rows_rejected"] as $report_row_rejected){
-							$data["total_rejected"] += 1;
-							$data["total_amount_rejected"] += $report_row_rejected->total_amount;
+					if( ($data["approved_rejected_filter"] == 0) || ($data["approved_rejected_filter"] == 2) ){
+						$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
+						$data["total_amount_rejected"] = 0;
+						if($data["report_rows_rejected"]->count()>0){
+							foreach($data["report_rows_rejected"] as $report_row_rejected){
+								$data["total_rejected"] += 1;
+								$data["total_amount_rejected"] += $report_row_rejected->total_amount;
+							}
 						}
 					}
 					$data["total"] = $data["total_approved"] + $data["total_rejected"];
@@ -935,42 +958,67 @@ class ReportController extends BaseController
 				// Check if the current user is the "System Admin"
 				$data["date_ini"] = Input::get('date_ini_excel');
 				$data["date_end"] = Input::get('date_end_excel');
+				$data["approved_rejected_filter"] = Input::get('approved_rejected_filter_excel');
 				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
 					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
-					$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
+					$data["report_rows_approved"] = null;
+					$data["report_rows_rejected"] = null;
+					$data["total_amount_approved"] = null;
+					$data["total_amount_rejected"] = null;
 					$data["total_approved"] = 0;
-					$data["total_amount_approved"] = 0;
-					if($data["report_rows_approved"]->count()>0){
-						foreach($data["report_rows_approved"] as $report_row_approved){
-							$data["total_approved"] += 1;
-							$data["total_amount_approved"] += $report_row_approved->total_amount;
+					$data["total_rejected"] = 0;
+
+					if( ($data["approved_rejected_filter"] == 0) || ($data["approved_rejected_filter"] == 1) ){
+						$data["report_rows_approved"] = PurchaseOrder::getApprovedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
+						$data["total_amount_approved"] = 0;
+						if($data["report_rows_approved"]->count()>0){
+							foreach($data["report_rows_approved"] as $report_row_approved){
+								$data["total_approved"] += 1;
+								$data["total_amount_approved"] += $report_row_approved->total_amount;
+							}
 						}
 					}
-					$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
-					$data["total_rejected"] = 0;
-					$data["total_amount_rejected"] = 0;
-					if($data["report_rows_rejected"]->count()>0){
-						foreach($data["report_rows_rejected"] as $report_row_rejected){
-							$data["total_rejected"] += 1;
-							$data["total_amount_rejected"] += $report_row_rejected->total_amount;
+					if( ($data["approved_rejected_filter"] == 0) || ($data["approved_rejected_filter"] == 2) ){
+						$data["report_rows_rejected"] = PurchaseOrder::getRejectedPurchaseOrdersByDate($data["date_ini"],$date_end)->get();
+						$data["total_amount_rejected"] = 0;
+						if($data["report_rows_rejected"]->count()>0){
+							foreach($data["report_rows_rejected"] as $report_row_rejected){
+								$data["total_rejected"] += 1;
+								$data["total_amount_rejected"] += $report_row_rejected->total_amount;
+							}
 						}
 					}
 					$data["total"] = $data["total_approved"] + $data["total_rejected"];
 
 					// Generate the string to be rendered on excel
-					$str_table = "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
+					$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+					$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de solicitudes de compra</strong></td></tr></table>";
+					$str_table .= "<table><tr><td><strong>Fecha de inicio</strong></td><td>".$data["date_ini"]."</td></tr>";
 					$str_table .= "<tr><td><strong>Fecha fin</strong></td><td>".$data["date_end"]."</td></tr>";
-					$str_table .= "<tr><td><strong>Total de solicitudes aprobadas</strong></td><td>".$data["total_approved"]."</td><td><strong>Total de solicitudes rechazadas</strong></td><td>".$data["total_rejected"]."</td></tr>";
-					$str_table .= "<tr><td><strong>Costo total de solicitudes aprobadas (S/.)</strong></td><td>".$data["total_amount_approved"]."</td><td><strong>Costo total de solicitudes rechazadas (S/.)</strong></td><td>".$data["total_amount_rejected"]."</td></tr>";
+					$str_table .= "<tr>";
+					if($data["report_rows_approved"]){
+						$str_table .= "<td><strong>Total de solicitudes aprobadas</strong></td><td>".$data["total_approved"]."</td>";
+					}
+					if($data["report_rows_rejected"]){
+						$str_table .= "<td><strong>Total de solicitudes rechazadas</strong></td><td>".$data["total_rejected"]."</td>";
+					}
+					$str_table .= "</tr><tr>";
+					if($data["report_rows_approved"]){
+						$str_table .= "<td><strong>Costo total de solicitudes aprobadas (S/.)</strong></td><td>".$data["total_amount_approved"]."</td>";
+					}
+					if($data["report_rows_rejected"]){
+						$str_table .= "<td><strong>Costo total de solicitudes rechazadas (S/.)</strong></td><td>".$data["total_amount_rejected"]."</td>";
+					}
+					$str_table .= "</tr>";
 					$str_table .= "<tr><td><strong>Total de solicitudes</strong></td><td>".$data["total"]."</td></tr><tr></tr>";
 
 					$str_table .= "<table border=1><tr><th>ID</th><th>Fecha de emision</th><th>Fecha de expiracion</th><th>Descripcion</th><th>Proveedor</th><th>Costo total</th><th>Estado</th></tr>";
-					if($data["report_rows_approved"]->count()>0){
+					if($data["report_rows_approved"] && ($data["report_rows_approved"]->count()>0) ){
 						foreach($data["report_rows_approved"] as $report_row){
 							$str_table .= "<tr><td>".htmlentities($report_row->id)."</td><td>".htmlentities($report_row->date_issue)."</td><td>".htmlentities($report_row->expire_at)."</td><td>".htmlentities($report_row->description)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->total_amount)."</td><td>Aprobado</td></tr>";
 						}
 					}
-					if($data["report_rows_rejected"]->count()>0){
+					if($data["report_rows_rejected"] && ($data["report_rows_rejected"]->count()>0) ){
 						foreach($data["report_rows_rejected"] as $report_row){
 							$str_table .= "<tr><td>".htmlentities($report_row->id)."</td><td>".htmlentities($report_row->date_issue)."</td><td>".htmlentities($report_row->expire_at)."</td><td>".htmlentities($report_row->description)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->total_amount)."</td><td>Rechazado</td></tr>";
 						}
