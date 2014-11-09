@@ -124,9 +124,19 @@
 				<div class="form-group col-xs-8">
 					{{ Form::label('suscripcion','Suscripción') }}
 					@if($material->subscription)
-						{{ Form::checkbox('suscripcion',true) }}
+						{{ Form::checkbox('suscripcion',$material->subscription,true) }}
 					@else
 						{{ Form::checkbox('suscripcion') }}
+					@endif
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-xs-8">
+					{{ Form::label('to_home','Solo préstamo a casa') }}					
+					@if($material->to_home == 1)
+						{{ Form::checkbox('to_home',$material->to_home,true) }}
+					@else
+						{{ Form::checkbox('to_home') }}
 					@endif
 				</div>
 			</div>

@@ -1437,4 +1437,87 @@ class ConfigurationController extends BaseController
 			return Response::json(array( 'success' => false ),200);
 		}
 	}
+
+
+	public function render_create_holiday(){
+
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				$data["holidays"] = Holiday::all();
+				return View::make('configuration/createHoliday',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}	
+
+	}
+
+
+	public function delete_holiday_ajax(){
+
+
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$selected_ids = Input::get('selected_id');
+			foreach ($selected_ids as $selected_id) {
+				$holiday = Holiday::find($selected_id);	
+				if($holiday){
+					$holiday->delete();
+				}
+			}			
+			
+			return Response::json(array( 'success' => true, 'problem' => false ),200);
+			
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+
+
+	public function register_holiday_ajax(){
+
+
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$date_holiday = Input::get('date_holiday');
+			$exist_holiday = Holiday::where('date','=', $date_holiday)->first();		
+			if(!$exist_holiday){
+				$holiday = new Holiday; 
+				$holiday->date = $date_holiday;
+				$holiday->save();
+			}else{
+				return Response::json(array( 'success' => true, 'problem' => 'exist_holiday' ),200);
+			}
+			
+			return Response::json(array( 'success' => true, 'problem' => false ),200);
+			
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+
+
+
 }

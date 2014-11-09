@@ -132,6 +132,12 @@
 				</div>
 			</div>
 			<div class="row">
+				<div class="form-group col-xs-8">
+					{{ Form::label('to_home','Solo préstamo a casa') }}
+					{{ Form::checkbox('to_home') }}
+				</div>
+			</div>
+			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('materiales_adicionales')) has-error has-feedback @endif">
 					{{ Form::label('materiales_adicionales','Materiales adicionales') }}
 					{{ Form::text('materiales_adicionales',Input::old('materiales_adicionales'),array('class'=>'form-control')) }}

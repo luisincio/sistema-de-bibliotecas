@@ -278,8 +278,8 @@ $( document ).ready(function(){
 		
 	});
 
-	$("input[name=hora_ini]").timepicker({
-		showMeridian: false,
+	$("input[name=hora_ini]").timepicker({			
+		showMeridian: false,		
 	});
 
 
@@ -807,8 +807,143 @@ $( document ).ready(function(){
 	$("select[name=branch_filter]").change(function(){
 		$("#submit-search-physical-elements-form").trigger('click');
 	});
+
+	$("input[name=date_holiday]").datepicker({
+		format:'yyyy-mm-dd',
+		startDate:'yyyy-01-01',
+		endDate:'yyyy-12-31'		
+	});
+
+	var register_holiday = true;
+	$("#register-holiday").click(function(e){
+		e.preventDefault();
+
+		if(register_holiday){
+			register_holiday = false;
+			var date_holiday = $("input[name=date_holiday]").val();			
+		}
+		
+
+		$.ajax({
+			url: inside_url+'config/register_holiday_ajax',
+			type: 'POST',
+			data: { 'date_holiday' : date_holiday },
+			beforeSend: function(){
+				$("#register-holiday").addClass("disabled");
+				$("#register-holiday").hide();
+				$(".loader_container").show();
+			},
+			complete: function(){
+				$(".loader_container").hide();
+				$("#register-holiday").removeClass("disabled");
+				$("#register-holiday").show();
+				register_holiday = true;
+			},
+			success: function(response){
+				if(response.success){
+					if(response.problem){
+						switch(response.problem){
+							case 'exist_holiday': alert('Ya existe el feriado que esta tratando de ingresar.');
+												break;
+						}
+					}else{						
+						$("input[name=date_holiday]").val("");
+						alert('Se registró correctamente el feriado.');						
+					}							
+					location.reload();
+				}else{
+					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				}
+			},
+			error: function(){
+				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			}
+		});
+	
+			
+		
+	});		
+
+	
+	var delete_selected_holidays = true;
+	$("#delete-selected-holiday").click(function(e){
+		e.preventDefault();
+		
+		if(delete_selected_holidays){
+			delete_selected_holidays = false;
+			var selected = [];
+			$("input[type=checkbox][name=holidays]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				if(confirmation){
+					$.ajax({
+						url: inside_url+'config/delete_holiday_ajax',
+						type: 'POST',
+						data: { 'selected_id' : selected },
+						beforeSend: function(){
+							$("#delete-selected-holiday").addClass("disabled");
+							$("#delete-selected-holiday").hide();
+							$(".loader_container").show();
+						},
+						complete: function(){
+							$(".loader_container").hide();
+							$("#delete-selected-holiday").removeClass("disabled");
+							$("#delete-selected-holiday").show();
+							delete_selected_holidays = true;
+						},
+						success: function(response){
+							if(response.success){								
+								location.reload();
+							}else{
+								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							}
+						},
+						error: function(){
+							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						}
+					});
+				}
+			}else{
+				delete_selected_holidays = true;
+				alert('Seleccione alguna casilla.');
+			}
+		}
+		
+	});
+
+
 });
 
+/*
+function delete_holiday(e,id)
+{
+
+	e.preventDefault();
+	console.log("12141");
+	$.ajax({
+		url: inside_url+'config/delete_holiday',
+		type: 'POST',
+		data: { 'id' : id },
+		beforeSend: function(){
+		},
+		complete: function(){
+		},
+		success: function(response){
+			if(response.success){				
+				alert('Se eliminó correctamente el elemento físico.');
+			}else{
+				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			}
+		},
+		error: function(){
+			alert('¡Ocurrió un error! Inténtelo de nuevo.');
+		}
+	});
+
+}
+*/
 function render_physical_elements(branch_cubicles,cubicle_types,branch_physical_elements,branch_shelves)
 {
 	var str_physical_elements = "";

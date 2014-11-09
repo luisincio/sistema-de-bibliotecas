@@ -38,6 +38,8 @@
 								<li class="divider"></li>
 								<li>{{ HTML::link('/config/list_cubicle_type','Mostrar Tipos de Cubículos') }}</li>
 								<li>{{ HTML::link('/config/create_cubicle_type','Registrar Tipo de Cubículo') }}</li>
+								<li class="divider"></li>
+								<li>{{ HTML::link('/config/create_holiday','Feriados') }}</li>
 							@endif
 						</ul>
 					</li>
@@ -146,6 +148,7 @@
 							<li class="divider"></li>
 							<li>{{ HTML::link('/report/restricted_users','Usuarios con Multa') }}</li>
 							<li>{{ HTML::link('/report/loans_by_user','Préstamos por Usuario') }}</li>
+							<li>{{ HTML::link('/report/loans_by_teachers','Préstamos solicitados por Profesores') }}</li>
 							<li class="divider"></li>
 							<li>{{ HTML::link('/report/last_material_entries','Libros Ingresados') }}</li>
 							<li>{{ HTML::link('/report/loans_by_material','Préstamos por Material') }}</li>

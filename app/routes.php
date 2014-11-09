@@ -79,6 +79,10 @@ Route::group(array('prefix'=>'config', 'before'=>'auth'),function(){
 	Route::get('/edit_cubicle_type/{id}','ConfigurationController@render_edit_cubicle_type');
 	Route::post('/submit_edit_cubicle_type','ConfigurationController@submit_edit_cubicle_type');
 	Route::post('/delete_cubicle_type_ajax','ConfigurationController@delete_cubicle_type_ajax');
+	/*Holidays*/
+	Route::get('/create_holiday','ConfigurationController@render_create_holiday'); 
+	Route::post('/delete_holiday_ajax','ConfigurationController@delete_holiday_ajax');
+	Route::post('/register_holiday_ajax','ConfigurationController@register_holiday_ajax');
 });
 
 /* My Account */
@@ -218,4 +222,8 @@ Route::group(array('prefix'=>'report', 'before'=>'auth'),function(){
 	Route::get('/approved_rejected_purchase_orders','ReportController@render_approved_rejected_purchase_orders');
 	Route::post('/submit_approved_rejected_purchase_orders','ReportController@submit_approved_rejected_purchase_orders');
 	Route::post('/submit_approved_rejected_purchase_orders_excel','ReportController@submit_approved_rejected_purchase_orders_excel');
+	/* Loans By Teachers */
+	Route::get('/loans_by_teachers','ReportController@render_loans_by_teachers');
+	Route::post('/submit_loans_by_teachers','ReportController@submit_loans_by_teachers');
+	Route::post('/submit_loans_by_teachers_excel','ReportController@submit_loans_by_teachers_excel');
 });

@@ -86,6 +86,7 @@ class MaterialController extends BaseController
 							$material->thematic_area = Input::get('area_tematica');
 							$material->shelve_id = Input::get('estante');
 							$material->purchase_order_id = Input::get('orden_compra');
+							$material->to_home = Input::get('to_home');
 							$material->save();
 						}
 						Session::flash('message', 'Se registró correctamente el material.');
@@ -269,6 +270,7 @@ class MaterialController extends BaseController
 					$material->subscription = Input::get('suscripcion');
 					$material->thematic_area = Input::get('area_tematica');
 					$material->shelve_id = Input::get('estante');
+					$material->to_home = Input::get('to_home');
 					$material->save();
 
 					Session::flash('message', 'Se editó correctamente el material.');
