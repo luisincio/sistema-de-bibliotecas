@@ -7,6 +7,8 @@
 			<tr class="info">
 				<th>Nombre</th>
 				<th>Dirección</th>
+				<th>Horario de Atención</th>
+				<th>Días de Atención</th>
 				<th>Turnos</th>
 				<th>Estado</th>
 				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
@@ -23,6 +25,61 @@
 				<td>
 					{{ $branch->address }}
 				</td>
+				<td>
+					{{ $branch->hour_ini }} - {{ $branch->hour_end }}
+				</td>
+				<td>
+					<?php
+						switch ($branch->day_ini) {
+					    	case 0:
+					        	$dia_inicio = "Domingo";
+					        	break;
+					    	case 1:
+					        	$dia_inicio = "Lunes";
+					        	break;
+					    	case 2:
+					        	$dia_inicio = "Martes";
+					        	break;
+					    	case 3:
+					        	$dia_inicio = "Miércoles";
+					        	break;
+					    	case 4:
+					        	$dia_inicio = "Jueves";
+					        	break;
+					    	case 5:
+					        	$dia_inicio = "Viernes";
+					        	break;					        					        					        
+					    	case 6:
+					        	$dia_inicio = "Sabado";
+					        	break;						    				       
+						}
+						switch ($branch->day_end) {
+					    	case 0:
+					        	$dia_final = "Domingo";
+					        	break;
+					    	case 1:
+					        	$dia_final = "Lunes";
+					        	break;
+					    	case 2:
+					        	$dia_final = "Martes";
+					        	break;
+					    	case 3:
+					        	$dia_final = "Miércoles";
+					        	break;
+					    	case 4:
+					        	$dia_final = "Jueves";
+					        	break;
+					    	case 5:
+					        	$dia_final = "Viernes";
+					        	break;					        					        					        
+					    	case 6:
+					        	$dia_final = "Sabado";
+					        	break;	
+					    }
+					?>
+					
+					{{ $dia_inicio }} - {{ $dia_final }}
+				</td>								
 				<td>
 					@if($branch->deleted_at)
 						-

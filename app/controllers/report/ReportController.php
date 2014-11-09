@@ -525,6 +525,132 @@ class ReportController extends BaseController
 		}
 	}
 
+/* Loans By Teachers */
+	public function render_loans_by_teachers()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				$data["date_ini"] = Date('Y-m-d');
+				$data["date_end"] = Date('Y-m-d');
+				$data["report_rows"] = null;
+				$data["report_rows_detailed"] = null;
+				$data["total"] = null;
+				return View::make('report/loansByTeachers',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_loans_by_teachers()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"				
+				$data["date_ini"] = Input::get('date_ini');
+				$data["date_end"] = Input::get('date_end');
+				if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
+					$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+					$data["report_rows"] = Loan::getLoansByTeacherDate($data["date_ini"],$date_end)->get();
+					$data["report_rows_detailed"] = Loan::getLoansByTeacherDateDetailed($data["date_ini"],$date_end)->get();
+					$data["total"] = $data["report_rows_detailed"]->count();
+					return View::make('report/loansByTeachers',$data);
+				}
+				else{
+					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					return Redirect::to('report/loans_by_Teacher');
+				}				
+				
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function submit_loans_by_teachers_excel()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+					$data["date_ini"] = Input::get('date_ini_excel');
+					$data["date_end"] = Input::get('date_end_excel');
+					if( strtotime($data["date_ini"]) <= strtotime($data["date_end"]) ){
+						$date_end = date('Y-m-d', strtotime($data["date_end"]. ' + 1 days'));
+						$data["report_rows"] = Loan::getLoansByTeacherDate($data["date_ini"],$date_end)->get();
+						$data["report_rows_detailed"] = Loan::getLoansByTeacherDateDetailed($data["date_ini"],$date_end)->get();
+						$data["total"] = $data["report_rows_detailed"]->count();
+
+						// Generate the string to be rendered on excel
+
+						$str_table = "<table><tr><td></td><td></td><td></td><td><strong>".$data["config"]->name."</strong></td></tr>";
+						$str_table .= "<tr><td></td><td></td><td></td><td><strong>Reporte de prestamos solicitados por profesores</strong></td></tr></table>";
+						$str_table .= "<tr><td><strong>Fecha de inicio </strong></td><td>".$data["date_ini"]."</td><tr><td><strong>Fecha fin </strong></td><td>".$data["date_end"]."</td></tr>";
+						$str_table .= "<tr><td><strong> Total de prestamos en el periodo </strong></td><td>".$data["total"]."</td></tr><tr></tr></table>";
+
+						$str_table .= "<table border=1><tr><td><strong>Resumen de prestamos</strong></td></tr><tr><th>Codigo(4 letras)</th><th>Titulo</th><th>Autor</th><th>Editorial</th><th>Veces prestadas</th></tr>";
+						if($data["report_rows"]->count()>0){
+							foreach($data["report_rows"] as $report_row){
+								$str_table .= "<tr><td>".htmlentities($report_row->base_cod)."</td><td>".htmlentities($report_row->title)."</td><td>".htmlentities($report_row->author)."</td><td>".htmlentities($report_row->editorial)."</td><td>".htmlentities($report_row->loans_by_material)."</td></tr>";
+							}
+						}
+						$str_table .= "</table>";
+
+						$str_table .= "<table><tr></tr><tr></tr><tr></tr></table>";
+
+						$str_table .= "<table border=1><tr><td><strong>Detalle de prestamos</strong></td></tr><tr><th>Codigo(4 letras)</th><th>Codigo completo</th><th>Titulo</th><th>Autor</th><th>Editorial</th><th>Fecha y hora de prestamo</th></tr>";
+						if($data["report_rows_detailed"]->count()>0){
+							foreach($data["report_rows_detailed"] as $report_row){
+								$str_table .= "<tr><td>".htmlentities($report_row->base_cod)."</td><td>".htmlentities($report_row->auto_cod)."</td><td>".htmlentities($report_row->title)."</td><td>".htmlentities($report_row->author)."</td><td>".htmlentities($report_row->editorial)."</td><td>".htmlentities($report_row->created_at)."</td></tr>";
+							}
+						}
+						$str_table .= "</table>";
+						$filename = "prestamos_solicitados_por_profesores"."_".date('Y-m-d').".xls";
+						// Show the download dialog
+						header("Content-type: application/vnd.ms-excel; charset=utf-8");
+						// Let's indicate to the browser we are giving it the file
+						header("Content-Disposition: attachment; filename=\"$filename\"");
+						// Avoid the browser to save the file into it's cache
+						header("Pragma: no-cache");
+						header("Expires: 0");
+						// Render the table
+						echo $str_table;
+					}
+					else{
+						Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+						return Redirect::to('report/loans_by_teachers');
+					}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}	
+
 	/* Last Material Entries */
 	public function render_last_material_entries()
 	{

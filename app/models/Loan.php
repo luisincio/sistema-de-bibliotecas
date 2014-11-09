@@ -130,4 +130,33 @@ class Loan extends Eloquent{
 		return $query;
 	}
 
+	public function scopeGetLoansByTeacherDate($query,$date_ini,$date_end)
+	{
+		$query->withTrashed()
+
+			  ->join('materials','loans.material_id','=','materials.mid')
+
+			  ->join('users','loans.user_id','=','users.id')
+			  ->where('loans.created_at','>=',$date_ini)
+			  ->where('loans.created_at','<=',$date_end)
+			  ->where('users.profile_id','=','2')
+			  ->orderBy('loans_by_material','desc')
+			  ->groupBy('materials.base_cod')
+			  ->select('materials.base_cod','materials.title','materials.author','materials.editorial','loans.*',DB::raw('count(*) as loans_by_material'));
+		return $query;
+	}
+
+	public function scopeGetLoansByTeacherDateDetailed($query,$date_ini,$date_end)
+	{
+		$query->withTrashed()
+			  ->join('materials','loans.material_id','=','materials.mid')
+			  ->join('users','loans.user_id','=','users.id')
+			  ->where('loans.created_at','>=',$date_ini)
+			  ->where('loans.created_at','<=',$date_end)
+			  ->where('users.profile_id','=','2')
+			  ->orderBy('created_at','desc')
+			  ->select('materials.base_cod','materials.auto_cod','materials.title','materials.author','materials.editorial','loans.*');
+		return $query;
+	}
+
 }
