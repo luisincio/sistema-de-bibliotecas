@@ -707,6 +707,8 @@ class ConfigurationController extends BaseController
 						$branch->address = Input::get('direccion');
 						$branch->hour_ini = Input::get('hora_ini');
 						$branch->hour_end = Input::get('hora_fin');
+						$branch->day_ini = Input::get('dia_ini');
+						$branch->day_end = Input::get('dia_fin');
 						$branch->save();
 
 						$branch_id = Branch::orderBy('id','desc')->first();
