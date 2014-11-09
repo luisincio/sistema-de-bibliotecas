@@ -241,7 +241,7 @@ $( document ).ready(function(){
 				selected.push($(this).val());
 			});
 			if(selected.length > 0){
-				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?\nLos turnos que tienen asociados algún personal no serán eliminados");
 				if(confirmation){
 					$.ajax({
 						url: inside_url+'config/delete_turn_ajax',

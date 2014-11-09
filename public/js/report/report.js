@@ -85,4 +85,9 @@ $( document ).ready(function(){
 		$("form#submit_approved_rejected_purchase_orders_excel").submit();
 	});
 
+	$("#submit_loans_by_teachers_excel_button").click(function(e){
+		e.preventDefault();
+		$("form#submit_loans_by_teachers_excel").submit();
+	});
+
 });

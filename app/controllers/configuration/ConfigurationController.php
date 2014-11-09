@@ -1027,7 +1027,10 @@ class ConfigurationController extends BaseController
 			foreach($selected_ids as $selected_id){
 				$turn = Turn::find($selected_id);
 				if($turn){
-					$turn->delete();
+					$exist_staff = Staff::where('turn_id','=',$turn->id)->first();
+					if(!$exist_staff){
+						$turn->delete();
+					}
 				}
 			}
 			return Response::json(array( 'success' => true ),200);
