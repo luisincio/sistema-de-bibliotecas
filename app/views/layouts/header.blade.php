@@ -106,8 +106,10 @@
 						<span class="glyphicon glyphicon-tags"></span> Reservas <span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu" role="menu">
-						@if($staff && $staff->role_id == 3)
+						@if($user)
 						<li>{{ HTML::link('/reservation/my_material_reservations','Materiales Reservados') }}</li>
+						@endif
+						@if($staff && $staff->role_id == 3)
 						<li>{{ HTML::link('/reservation/search_cubicle_reservations','Ver Reserva de Cubículos') }}</li>
 						@endif
 						@if($user && $staff)
