@@ -28,10 +28,14 @@ Route::group(array('prefix'=>'config', 'before'=>'auth'),function(){
 	/* General Information */
 	Route::get('/general_configuration','ConfigurationController@render_general_configuration');
 	Route::post('/submit_general_configuration','ConfigurationController@submit_general_configuration');
-	/* Politics */
+	/* Devolution Period */
 	Route::get('/create_devolution_period/','ConfigurationController@render_create_devolution_period');
 	Route::post('/submit_create_devolution_period','ConfigurationController@submit_create_devolution_period'); 
 	Route::post('/delete_devolution_period_ajax','ConfigurationController@delete_devolution_period_ajax'); 
+	/* Penalty Period */
+	Route::get('/create_penalty_period/','ConfigurationController@render_create_penalty_period');
+	Route::post('/submit_create_penalty_period','ConfigurationController@submit_create_penalty_period'); 
+	Route::post('/delete_penalty_period_ajax','ConfigurationController@delete_penalty_period_ajax'); 
 	/* Suppliers */
 	Route::get('/create_supplier','ConfigurationController@render_create_supplier');
 	Route::post('/submit_create_supplier','ConfigurationController@submit_create_supplier');

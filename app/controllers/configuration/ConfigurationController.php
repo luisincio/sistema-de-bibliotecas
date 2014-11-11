@@ -1038,7 +1038,104 @@ class ConfigurationController extends BaseController
 			return Response::json(array( 'success' => false ),200);
 		}
 	}
+	/* Penalty Periods */
+	public function render_create_penalty_period()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				$data["penalty_periods"] = PenaltyPeriod::all();
+				return View::make('configuration/createPenaltyPeriod',$data);
+			}else{
+				return View::make('error/error');
+			}
 
+		}else{
+			return View::make('error/error');
+		}	
+	}
+
+	public function submit_create_penalty_period()
+	{
+		if(Auth::check()){
+			$data["person"] = Session::get('person');
+			$data["user"] = Session::get('user');
+			$data["staff"] = Session::get('staff');
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 1){
+				
+				// Validate the info, create rules for the inputs
+				$rules = array(
+							'nombre' => 'required|alpha_spaces|min:2|unique:penalty_periods,name,NULL,id,deleted_at,NULL',
+							'dias_penalidad' => 'required|numeric|integer|min:1|max:99',
+							'fecha_ini' => 'required',
+							'fecha_fin' => 'required',
+						);
+				// Run the validation rules on the inputs from the form
+				$validator = Validator::make(Input::all(), $rules);
+				// If the validator fails, redirect back to the form
+				if($validator->fails()){
+					return Redirect::to('config/create_penalty_period')->withErrors($validator)->withInput(Input::all());
+				}else{
+					if(strtotime(Input::get('fecha_ini')) < strtotime(Input::get('fecha_fin'))){
+						// Insert the penalty period in the database
+						$penalty_period = new PenaltyPeriod;
+						$penalty_period->name = Input::get('nombre');
+						$penalty_period->date_ini = Input::get('fecha_ini');
+						$penalty_period->date_end = Input::get('fecha_fin');
+						$penalty_period->penalty_days = Input::get('dias_penalidad');
+						$penalty_period->save();
+
+						Session::flash('message', 'Se registró correctamente el periodo de penalidad.');
+						return Redirect::to('config/create_penalty_period');
+					}
+					else{
+						Session::flash('danger', 'La fecha fin debe ser anterior a la fecha de inicio.');
+						return Redirect::to('config/create_penalty_period')->withInput(Input::all());						
+					}
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function delete_penalty_period_ajax()
+	{
+		// If there was an error, respond with 404 status
+		if(!Request::ajax() || !Auth::check()){
+			return Response::json(array( 'success' => false ),200);
+		}
+		$data["person"] = Session::get('person');
+		$data["user"] = Session::get('user');
+		$data["staff"] = Session::get('staff');
+		$data["inside_url"] = Config::get('app.inside_url');
+		$data["config"] = GeneralConfiguration::first();
+		if($data["staff"]->role_id == 1){
+			// Check if the current user is the "System Admin"
+			$selected_ids = Input::get('selected_id');
+			foreach($selected_ids as $selected_id){
+				$penalty_period = PenaltyPeriod::find($selected_id);
+				if($penalty_period){
+					$penalty_period->delete();
+				}
+			}
+			return Response::json(array( 'success' => true ),200);
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+	}
+	/* Devolution Periods */
 	public function render_create_devolution_period()
 	{
 		if(Auth::check()){
@@ -1085,7 +1182,7 @@ class ConfigurationController extends BaseController
 					return Redirect::to('config/create_devolution_period')->withErrors($validator)->withInput(Input::all());
 				}else{
 					if(strtotime(Input::get('fecha_ini')) < strtotime(Input::get('fecha_fin'))){
-						// Insert the supplier in the database
+						// Insert the devolution period in the database
 						$devolution_period = new DevolutionPeriod;
 						$devolution_period->name = Input::get('nombre');
 						$devolution_period->date_ini = Input::get('fecha_ini');

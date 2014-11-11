@@ -295,6 +295,7 @@ $( document ).ready(function(){
 		format:'yyyy-mm-dd'
 	}); 
 
+	/* Devolution Periods */
 	var delete_selected_devolution_periods = true;
 	$("#delete-selected-devolution_periods").click(function(e){
 		e.preventDefault();
@@ -337,6 +338,54 @@ $( document ).ready(function(){
 				}
 			}else{
 				delete_selected_devolution_periods = true;
+				alert('Seleccione alguna casilla.');
+			}
+		}
+	});
+
+	/* Penalty Periods */
+	var delete_selected_penalty_periods = true;
+	$("#delete-selected-penalty_periods").click(function(e){
+		e.preventDefault();
+  
+		if(delete_selected_penalty_periods){
+			delete_selected_penalty_periods = false;
+			var selected = [];
+			$("input[type=checkbox][name=penalty_periods]:checked").each(function(){
+				selected.push($(this).val());
+			});
+			if(selected.length > 0){
+				var confirmation = confirm("¿Está seguro que desea eliminar los registros seleccionados?");
+				if(confirmation){
+					$.ajax({
+						url: inside_url+'config/delete_penalty_period_ajax',
+						type: 'POST',
+						data: { 'selected_id' : selected },
+						beforeSend: function(){
+							$("#delete-selected-penalty_periods").addClass("disabled");
+							$("#delete-selected-penalty_periods").hide();
+							$(".loader_container").show();
+						},
+						complete: function(){
+							$(".loader_container").hide();
+							$("#delete-selected-penalty_periods").removeClass("disabled");
+							$("#delete-selected-penalty_periods").show();
+							delete_selected_penalty_periods = true;
+						},
+						success: function(response){
+							if(response.success){
+								location.reload();
+							}else{
+								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							}
+						},
+						error: function(){
+							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						}
+					});
+				}
+			}else{
+				delete_selected_penalty_periods = true;
 				alert('Seleccione alguna casilla.');
 			}
 		}

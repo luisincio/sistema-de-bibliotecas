@@ -22,8 +22,9 @@
 						<ul class="dropdown-menu" role="menu">
 							@if($staff->role_id == 1)
 								<li>{{ HTML::link('/config/general_configuration','Configuración General') }}</li>
-								<li>{{ HTML::link('/config/create_devolution_period','Políticas') }}</li>
-								<li>{{ HTML::link('/config/list_physical_elements','Registrar Infraestructura') }}</li>
+								<li>{{ HTML::link('/config/create_devolution_period','Periodos de Devolución') }}</li>
+								<li>{{ HTML::link('/config/create_penalty_period','Periodos de Penalidad') }}</li>
+								<li>{{ HTML::link('/config/list_physical_elements','Infraestructura') }}</li>
 								<li class="divider"></li>
 							@endif
 								<li>{{ HTML::link('/config/list_branch','Mostrar Sedes') }}</li>
