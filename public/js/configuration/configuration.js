@@ -893,7 +893,9 @@ $( document ).ready(function(){
 					if(response.problem){
 						switch(response.problem){
 							case 'exist_holiday': alert('Ya existe el feriado que esta tratando de ingresar.');
-												break;
+								break;
+							case 'put_date': alert('Ingrese una fecha.');
+								break;
 						}
 					}else{						
 						$("input[name=date_holiday]").val("");

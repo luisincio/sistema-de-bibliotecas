@@ -1599,15 +1599,18 @@ class ConfigurationController extends BaseController
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$date_holiday = Input::get('date_holiday');
-			$exist_holiday = Holiday::where('date','=', $date_holiday)->first();		
-			if(!$exist_holiday){
-				$holiday = new Holiday; 
-				$holiday->date = $date_holiday;
-				$holiday->save();
+			if($date_holiday){
+				$exist_holiday = Holiday::where('date','=', $date_holiday)->first();		
+				if(!$exist_holiday){
+					$holiday = new Holiday; 
+					$holiday->date = $date_holiday;
+					$holiday->save();
+				}else{
+					return Response::json(array( 'success' => true, 'problem' => 'exist_holiday' ),200);
+				}
 			}else{
-				return Response::json(array( 'success' => true, 'problem' => 'exist_holiday' ),200);
+				return Response::json(array( 'success' => true, 'problem' => 'put_date' ),200);
 			}
-			
 			return Response::json(array( 'success' => true, 'problem' => false ),200);
 			
 		}else{
