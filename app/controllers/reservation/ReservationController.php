@@ -150,6 +150,30 @@ class ReservationController extends BaseController
 					$material->available = 2;
 					/* There's another reservation on the queue */
 					$expire_at = date("Y-m-d", strtotime("tomorrow"));
+
+					$branch_labor_days = Material::getBranchLaborDaysByMaterial($material->mid)->first();
+					
+					$invalid_date = true;
+					
+					while($invalid_date){
+						$is_holiday = Holiday::searchHoliday($expire_at)->first();
+						$expire_at_timestamp = strtotime($expire_at);
+						$expire_at_day = date('w', $expire_at_timestamp);
+
+						if( ($expire_at_day >= $branch_labor_days->day_ini) && ($expire_at_day <= $branch_labor_days->day_end)){
+							$is_labor_day = true;
+						}else{
+							$is_labor_day = false;
+						}
+						
+						if($is_holiday || !$is_labor_day){
+							$expire_at = date('Y-m-d', strtotime($expire_at. ' + 1 days'));
+						}else{
+							$invalid_date = false;
+						}
+						
+					}
+
 					$next_reservation = MaterialReservation::find($next_reservation->id);
 					$next_reservation->expire_at = $expire_at;
 					$next_reservation->save();
