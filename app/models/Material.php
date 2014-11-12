@@ -185,4 +185,13 @@ class Material extends Eloquent{
 			  ->select('materials.*',DB::raw('count(*) as total_entries'));
 		return $query;
 	}
+
+	public function scopeGetBranchLaborDaysByMaterial($query,$material_id)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->join('branches','shelves.branch_id','=','branches.id')
+			  ->where('materials.mid','=',$material_id)
+			  ->select('branches.day_ini','branches.day_end');
+		return $query;
+	}
 }

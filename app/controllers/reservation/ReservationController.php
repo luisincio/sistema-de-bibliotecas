@@ -21,7 +21,7 @@ class ReservationController extends BaseController
 				$material_branch = Input::get('material_branch');
 				$material_shelf = Input::get('material_shelf');
 
-				$material = Material::getMaterialForReservation($material_code,$material_shelf)->get()->first();
+				$material = Material::getMaterialForReservation($material_code,$material_shelf)->first();
 
 				// Check if the current user can reserve the material by its material type permission
 				$material_types_available = MaterialTypexprofile::getMaterialTypesXProfile($data["user"]->profile_id)->get();
@@ -48,6 +48,31 @@ class ReservationController extends BaseController
 								$update_material->save();
 
 								$expire_at = date("Y-m-d", strtotime("tomorrow"));
+
+								$branch_labor_days = Material::getBranchLaborDaysByMaterial($material->mid)->first();
+								
+								$invalid_date = true;
+								
+								while($invalid_date){
+									$is_holiday = Holiday::searchHoliday($expire_at)->first();
+									$expire_at_timestamp = strtotime($expire_at);
+									$expire_at_day = date('w', $expire_at_timestamp);
+
+									if( ($expire_at_day >= $branch_labor_days->day_ini) && ($expire_at_day <= $branch_labor_days->day_end)){
+										$is_labor_day = true;
+									}else{
+										$is_labor_day = false;
+									}
+									
+									if($is_holiday || !$is_labor_day){
+										$expire_at = date('Y-m-d', strtotime($expire_at. ' + 1 days'));
+									}else{
+										$invalid_date = false;
+									}
+									
+								}
+								
+
 								$material_reservation->expire_at = $expire_at;
 							}
 							$material_reservation->save();

@@ -224,6 +224,27 @@ class LoanController extends BaseController
 							$str_date = "+".$max_days_devolution." days";
 							$devolution_date = date('Y-m-d', strtotime($str_date));
 
+							$branch_labor_days = Material::getBranchLaborDaysByMaterial($material->mid)->first();
+							$invalid_date = true;
+							while($invalid_date){
+								$is_holiday = Holiday::searchHoliday($devolution_date)->first();
+								$devolution_date_timestamp = strtotime($devolution_date);
+								$devolution_date_day = date('w', $devolution_date_timestamp);
+
+								if( ($devolution_date_day >= $branch_labor_days->day_ini) && ($devolution_date_day <= $branch_labor_days->day_end)){
+									$is_labor_day = true;
+								}else{
+									$is_labor_day = false;
+								}
+								
+								if($is_holiday || !$is_labor_day){
+									$devolution_date = date('Y-m-d', strtotime($devolution_date. ' + 1 days'));
+								}else{
+									$invalid_date = false;
+								}
+								
+							}
+
 							$loan = new Loan;
 							$loan->expire_at = $devolution_date;
 							$loan->material_id = $material->mid;
