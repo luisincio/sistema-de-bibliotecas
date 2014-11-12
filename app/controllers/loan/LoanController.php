@@ -214,36 +214,45 @@ class LoanController extends BaseController
 
 							$today = Date("Y-m-d");
 
-							$devolution_period = DevolutionPeriod::getDevolutionPeriodByDate($today)->first();
+							if($material->to_home == 1){
 
-							if($devolution_period){
-								$max_days_devolution = $devolution_period->max_days_devolution;
+								$devolution_period = DevolutionPeriod::getDevolutionPeriodByDate($today)->first();
+
+								if($devolution_period){
+									$max_days_devolution = $devolution_period->max_days_devolution;
+								}else{
+									$max_days_devolution = $profile->max_days_loan;
+								}
+								$str_date = "+".$max_days_devolution." days";
+
+
+								$devolution_date = date('Y-m-d', strtotime($str_date));
+
+								$branch_labor_days = Material::getBranchLaborDaysByMaterial($material->mid)->first();
+								$invalid_date = true;
+								while($invalid_date){
+									$is_holiday = Holiday::searchHoliday($devolution_date)->first();
+									$devolution_date_timestamp = strtotime($devolution_date);
+									$devolution_date_day = date('w', $devolution_date_timestamp);
+
+									if( ($devolution_date_day >= $branch_labor_days->day_ini) && ($devolution_date_day <= $branch_labor_days->day_end)){
+										$is_labor_day = true;
+									}else{
+										$is_labor_day = false;
+									}
+									
+									if($is_holiday || !$is_labor_day){
+										$devolution_date = date('Y-m-d', strtotime($devolution_date. ' + 1 days'));
+									}else{
+										$invalid_date = false;
+									}
+									
+								}
 							}else{
-								$max_days_devolution = $profile->max_days_loan;
+								$devolution_date = $today;
 							}
-							$str_date = "+".$max_days_devolution." days";
-							$devolution_date = date('Y-m-d', strtotime($str_date));
 
-							$branch_labor_days = Material::getBranchLaborDaysByMaterial($material->mid)->first();
-							$invalid_date = true;
-							while($invalid_date){
-								$is_holiday = Holiday::searchHoliday($devolution_date)->first();
-								$devolution_date_timestamp = strtotime($devolution_date);
-								$devolution_date_day = date('w', $devolution_date_timestamp);
 
-								if( ($devolution_date_day >= $branch_labor_days->day_ini) && ($devolution_date_day <= $branch_labor_days->day_end)){
-									$is_labor_day = true;
-								}else{
-									$is_labor_day = false;
-								}
-								
-								if($is_holiday || !$is_labor_day){
-									$devolution_date = date('Y-m-d', strtotime($devolution_date. ' + 1 days'));
-								}else{
-									$invalid_date = false;
-								}
-								
-							}
 
 							$loan = new Loan;
 							$loan->expire_at = $devolution_date;
@@ -442,23 +451,31 @@ class LoanController extends BaseController
 			$user_id = Input::get('user_id');
 			$edit_user = User::find($user_id);
 			$days_penalty_count = 0; 
+
+			$today = Date("Y-m-d");
+
+			$penalty_period = PenaltyPeriod::getPenaltyPeriodByDate($today)->first();
+
 			foreach($selected_ids as $selected_id){
 				$loan = Loan::find($selected_id);
 				if($loan){
 					$loan->delete();
 					$edit_user->current_reservations = $edit_user->current_reservations - 1;
 					$material = Material::find($loan->material_id);
-
+					/* Get all the reservations of the material to be deleted */
 					$reservations = MaterialReservation::getReservationByMaterial($material->mid)->get();
-
+					/* And delete them */
 					foreach($reservations as $reservation){
 						$delete_reservation = MaterialReservation::find($reservation->id);
 						$delete_reservation->delete();
 					}
 
 					$material_type = MaterialType::find($material->material_type);
-					$days_penalty_count += $material_type->day_penalty;
-
+					if($penalty_period){
+						$days_penalty_count = $penalty_period->penalty_days;
+					}else{
+						$days_penalty_count += $material_type->day_penalty;
+					}
 
 					$material->delete();
 				}
