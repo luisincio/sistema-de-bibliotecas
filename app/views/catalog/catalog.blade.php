@@ -68,6 +68,7 @@
 				<th>Área temática</th>
 				<th>Ejem. disponibles</th>
 				<th>Sede</th>
+				<th>Prestamo a casa</th>
 				<th>Seleccione</th>
 			</tr>
 			@if($materials)
@@ -98,6 +99,13 @@
 								{{ $branch->name }}
 							@endif
 						@endforeach
+					</td>
+					<td>
+						@if($material->to_home == 0)
+							Si
+						@else
+							No
+						@endif
 					</td>
 					<td class="reservation">
 						@if($user && !$user->restricted_until)

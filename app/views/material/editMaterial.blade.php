@@ -132,7 +132,7 @@
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8">
-					{{ Form::label('to_home','Solo préstamo a casa') }}					
+					{{ Form::label('to_home','Se puede prestar a casa') }}					
 					@if($material->to_home == 1)
 						{{ Form::checkbox('to_home',$material->to_home,true) }}
 					@else

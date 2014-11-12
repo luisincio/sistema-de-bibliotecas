@@ -133,7 +133,7 @@
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8">
-					{{ Form::label('to_home','Solo préstamo a casa') }}
+					{{ Form::label('to_home','Se puede prestar a casa') }}
 					{{ Form::checkbox('to_home') }}
 				</div>
 			</div>

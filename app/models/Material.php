@@ -55,7 +55,7 @@ class Material extends Eloquent{
 			  			  ->orWhere('isbn','LIKE',"%$search_criteria%");
 			  })
 			  ->orderBy('title','asc')
-			  ->groupBy('base_cod','branch_id')
+			  ->groupBy('base_cod','branch_id','to_home')
 			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
 		return $query;
 	}
@@ -71,7 +71,7 @@ class Material extends Eloquent{
 			  })
 			  ->where('shelves.branch_id','=',$branch_id)
 			  ->orderBy('title','asc')
-			  ->groupBy('base_cod','branch_id')
+			  ->groupBy('base_cod','branch_id','to_home')
 			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
 		return $query;
 	}
@@ -87,7 +87,7 @@ class Material extends Eloquent{
 			  })
 			  ->where('thematic_area','=',$thematic_area_id)
 			  ->orderBy('title','asc')
-			  ->groupBy('base_cod','branch_id')
+			  ->groupBy('base_cod','branch_id','to_home')
 			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
 		return $query;
 	}
@@ -104,7 +104,7 @@ class Material extends Eloquent{
 			  ->where('shelves.branch_id','=',$branch_id)
 			  ->where('thematic_area','=',$thematic_area_id)
 			  ->orderBy('title','asc')
-			  ->groupBy('base_cod','branch_id')
+			  ->groupBy('base_cod','branch_id','to_home')
 			  ->select('materials.*','shelves.*',DB::raw('sum(case when available = 1 then 1 else 0 end) as total_materials'));
 		return $query;
 	}
