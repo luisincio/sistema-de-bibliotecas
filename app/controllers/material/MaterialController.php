@@ -338,7 +338,7 @@ class MaterialController extends BaseController
 					return View::make('material/listMaterialRequest',$data);
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('material/list_material_request');
 				}				
 			}else{

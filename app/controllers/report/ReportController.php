@@ -69,7 +69,7 @@ class ReportController extends BaseController
 					return View::make('report/topLoans',$data);
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/top_loans');
 				}
 			}else{
@@ -154,7 +154,7 @@ class ReportController extends BaseController
 					echo $str_table;
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/top_loans');
 				}
 			}else{
@@ -215,7 +215,7 @@ class ReportController extends BaseController
 					return View::make('report/mostRequestedMaterials',$data);
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/most_requested_materials');
 				}
 			}else{
@@ -273,7 +273,7 @@ class ReportController extends BaseController
 					echo $str_table;
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/most_requested_materials');
 				}
 			}else{
@@ -413,7 +413,7 @@ class ReportController extends BaseController
 								return View::make('report/loansByUser',$data);
 							}
 							else{
-								Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+								Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 								return Redirect::to('report/loans_by_user');
 							}
 						}else{
@@ -504,7 +504,7 @@ class ReportController extends BaseController
 								echo $str_table;
 							}
 							else{
-								Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+								Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 								return Redirect::to('report/loans_by_user');
 							}
 						}else{
@@ -572,8 +572,8 @@ class ReportController extends BaseController
 					return View::make('report/loansByTeachers',$data);
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
-					return Redirect::to('report/loans_by_Teacher');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
+					return Redirect::to('report/loans_by_teachers');
 				}				
 				
 			}else{
@@ -639,7 +639,7 @@ class ReportController extends BaseController
 						echo $str_table;
 					}
 					else{
-						Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+						Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 						return Redirect::to('report/loans_by_teachers');
 					}
 			}else{
@@ -719,7 +719,7 @@ class ReportController extends BaseController
 					return View::make('report/lastMaterialEntries',$data);
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/last_material_entries');
 				}
 			}else{
@@ -804,7 +804,7 @@ class ReportController extends BaseController
 					echo $str_table;
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/last_material_entries');
 				}
 			}else{
@@ -879,7 +879,7 @@ class ReportController extends BaseController
 							return View::make('report/loansByMaterial',$data);
 						}
 						else{
-							Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+							Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 							return Redirect::to('report/loans_by_user');
 						}
 					}else{
@@ -968,7 +968,7 @@ class ReportController extends BaseController
 
 						}
 						else{
-							Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+							Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 							return Redirect::to('report/loans_by_user');
 						}
 					}else{
@@ -1060,7 +1060,7 @@ class ReportController extends BaseController
 					return View::make('report/approvedRejectedPurchaseOrders',$data);
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/approved_rejected_purchase_orders');
 				}
 			}else{
@@ -1162,7 +1162,7 @@ class ReportController extends BaseController
 					echo $str_table;
 				}
 				else{
-					Session::flash('danger','La fecha de inicio es mayor a la fecha final.');
+					Session::flash('danger','La fecha fin debe ser anterior a la fecha inicio.');
 					return Redirect::to('report/approved_rejected_purchase_orders');
 				}
 			}else{
