@@ -13,3 +13,4 @@
 
 Artisan::add(new CleanReservationsCommand);
 Artisan::add(new CleanUsersCommand);
+Artisan::add(new PenalizeUsersCommand);
