@@ -746,7 +746,7 @@ class ConfigurationController extends BaseController
 						return Redirect::to('config/create_branch');
 					}
 					else{
-						Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
+						Session::flash('danger', 'La hora fin debe ser mayor a la hora de inicio.');
 						return Redirect::to('config/create_branch')->withInput(Input::all());						
 					}
 				}
@@ -854,7 +854,7 @@ class ConfigurationController extends BaseController
 				else{
 					$id = Input::get('id');
 					$url = 'config/edit_branch/'.$id;
-					Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
+					Session::flash('danger', 'La hora fin debe ser mayor a la hora de inicio.');
 					return Redirect::to($url)->withInput(Input::all());						
 				}	
 			}else{
@@ -1026,7 +1026,7 @@ class ConfigurationController extends BaseController
 						}
 					}
 					else{
-						Session::flash('danger', 'La hora fin debe ser menor a la hora de inicio.');
+						Session::flash('danger', 'La hora fin debe ser mayor a la hora de inicio.');
 						$url = 'config/create_turn/'.$branch_id;
 						return Redirect::to($url)->withInput(Input::all());
 					}	

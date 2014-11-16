@@ -76,7 +76,7 @@
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('isbn')) has-error has-feedback @endif">
-					{{ Form::label('isbn','ISBN') }}
+					{{ Form::label('isbn','ISBN / ISCN') }}
 					{{ Form::text('isbn',Input::old('isbn'),array('class'=>'form-control')) }}
 				</div>
 			</div>
