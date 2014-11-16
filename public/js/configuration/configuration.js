@@ -859,8 +859,7 @@ $( document ).ready(function(){
 
 	$("input[name=date_holiday]").datepicker({
 		format:'yyyy-mm-dd',
-		startDate:'yyyy-01-01',
-		endDate:'yyyy-12-31'		
+		startDate:'+0 days'	
 	});
 
 	var register_holiday = true;
