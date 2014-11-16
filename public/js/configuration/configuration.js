@@ -713,7 +713,7 @@ $( document ).ready(function(){
 
 				var regexCode = /^[a-zA-Z]*\d*[a-zA-Z]*$/;
 				if(!regexCode.test(codigo)){
-					submit_create_cubicle = true;
+					submit_create_shelf = true;
 					return alert('El código debe ser alfanumérico.');
 				}
 				if(codigo.length < 1 || descripcion.length < 1){
@@ -793,7 +793,7 @@ $( document ).ready(function(){
 
 				var regexName = /^[a-zA-Z]*$/;
 				if(!regexName.test(nombre)){
-					submit_create_cubicle = true;
+					submit_create_physical_element = true;
 					return alert('El nombre debe contener solamente letras.');
 				}
 				var regexNum = /^\s*\d+\s*$/;
@@ -966,34 +966,6 @@ $( document ).ready(function(){
 
 });
 
-/*
-function delete_holiday(e,id)
-{
-
-	e.preventDefault();
-	console.log("12141");
-	$.ajax({
-		url: inside_url+'config/delete_holiday',
-		type: 'POST',
-		data: { 'id' : id },
-		beforeSend: function(){
-		},
-		complete: function(){
-		},
-		success: function(response){
-			if(response.success){				
-				alert('Se eliminó correctamente el elemento físico.');
-			}else{
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
-			}
-		},
-		error: function(){
-			alert('¡Ocurrió un error! Inténtelo de nuevo.');
-		}
-	});
-
-}
-*/
 function render_physical_elements(branch_cubicles,cubicle_types,branch_physical_elements,branch_shelves)
 {
 	var str_physical_elements = "";
