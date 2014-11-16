@@ -8,9 +8,10 @@ class ReservationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ,'problem'=>'not_ajax' ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if( !$data["user"]->restricted_until ){
 			$user_profile = Profile::find($data["user"]->profile_id);
 			if($data["user"]->current_reservations >= $user_profile->max_material){
@@ -106,9 +107,10 @@ class ReservationController extends BaseController
 	public function my_material_reservations()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["user"]){
@@ -129,9 +131,10 @@ class ReservationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["user"]){
 			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');
@@ -206,9 +209,10 @@ class ReservationController extends BaseController
 	public function render_cubicle_reservations()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["user"]){
@@ -231,9 +235,10 @@ class ReservationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["config"] = GeneralConfiguration::first();
 		if($data["user"]){
 			$branch_id = Input::get('branch_id');
@@ -262,9 +267,10 @@ class ReservationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["user"]){
 			$reservation_id = Input::get('reservation_id');
 			$reservation = CubicleReservation::find($reservation_id);
@@ -290,9 +296,10 @@ class ReservationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["user"]){
 			/* Validate if the user has no reservation */
 			$today = Date("Y-m-d");
@@ -325,9 +332,10 @@ class ReservationController extends BaseController
 	public function render_search_cubicle_reservations()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -345,9 +353,10 @@ class ReservationController extends BaseController
 	public function submit_search_cubicle_reservations()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -388,9 +397,10 @@ class ReservationController extends BaseController
 	public function render_my_cubicle_reservations()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["user"]){
@@ -412,9 +422,10 @@ class ReservationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 3){
 			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');

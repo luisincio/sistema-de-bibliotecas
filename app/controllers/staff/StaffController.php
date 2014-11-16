@@ -5,9 +5,10 @@ class StaffController extends BaseController {
 	public function render_create_staff()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
@@ -30,9 +31,10 @@ class StaffController extends BaseController {
 	public function submit_create_staff()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -113,9 +115,10 @@ class StaffController extends BaseController {
 	public function list_staff()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
@@ -148,9 +151,10 @@ class StaffController extends BaseController {
 	public function search_staff()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 
@@ -197,9 +201,10 @@ class StaffController extends BaseController {
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');
@@ -221,9 +226,10 @@ class StaffController extends BaseController {
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 ){
 			// Check if the current user is the "Bibliotecario"
 			$staff_id = Input::get('staff_id');
@@ -238,9 +244,10 @@ class StaffController extends BaseController {
 	public function render_edit_staff($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if(($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 ) && $id){
@@ -269,9 +276,10 @@ class StaffController extends BaseController {
 	public function submit_edit_staff()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -336,9 +344,10 @@ class StaffController extends BaseController {
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 			// Check if the current user is "Superadmin" or "Administrador de sede"
 			$branch_id = Input::get('branch_id');
@@ -352,9 +361,10 @@ class StaffController extends BaseController {
 	public function assistance()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 4){
@@ -371,9 +381,10 @@ class StaffController extends BaseController {
 	public function submit_assistance()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 4){
@@ -432,9 +443,10 @@ class StaffController extends BaseController {
 	public function staff_assistance($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if(($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 ) && $id){

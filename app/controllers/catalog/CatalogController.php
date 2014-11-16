@@ -5,14 +5,15 @@ class CatalogController extends BaseController
 	public function render_catalog()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 
 			$data["branches"] = Branch::all();
-			$data["thematic_areas"] = ThematicArea::all();
+			$data["thematic_areas"] = ThematicArea::orderBy('name','asc')->get();
 			$data["search"] = null;
 			$data["search_criteria"] = null;
 			$data["branch_filter"] = null;
@@ -27,15 +28,16 @@ class CatalogController extends BaseController
 	public function submit_catalog()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 
 
 			$data["branches"] = Branch::all();
-			$data["thematic_areas"] = ThematicArea::all();
+			$data["thematic_areas"] = ThematicArea::orderBy('name','asc')->get();
 			$data["search"] = Input::get('search');
 			$data["search_criteria"] = $data["search"];
 			$data["branch_filter"] = Input::get('branch_filter');

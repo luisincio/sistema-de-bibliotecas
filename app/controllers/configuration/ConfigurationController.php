@@ -7,9 +7,10 @@ class ConfigurationController extends BaseController
 	public function render_create_cubicle_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -27,9 +28,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_cubicle_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -67,9 +69,10 @@ class ConfigurationController extends BaseController
 	public function list_cubicle_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -88,9 +91,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_cubicle_type($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -109,9 +113,10 @@ class ConfigurationController extends BaseController
 	public function submit_edit_cubicle_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -153,9 +158,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -180,9 +186,10 @@ class ConfigurationController extends BaseController
 	public function render_create_supplier()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -200,9 +207,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_supplier()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -256,9 +264,10 @@ class ConfigurationController extends BaseController
 	public function list_supplier()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -279,9 +288,10 @@ class ConfigurationController extends BaseController
 	public function search_supplier()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -312,9 +322,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -335,9 +346,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_supplier($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -356,9 +368,10 @@ class ConfigurationController extends BaseController
 	public function submit_edit_supplier()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -405,9 +418,10 @@ class ConfigurationController extends BaseController
 	public function render_general_configuration()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -426,9 +440,10 @@ class ConfigurationController extends BaseController
 	public function submit_general_configuration()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -486,9 +501,10 @@ class ConfigurationController extends BaseController
 	public function render_create_material_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -507,9 +523,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_material_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -550,9 +567,10 @@ class ConfigurationController extends BaseController
 	public function list_material_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -574,9 +592,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -597,9 +616,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_material_type($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -618,9 +638,10 @@ class ConfigurationController extends BaseController
 	public function submit_edit_material_type()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -658,9 +679,10 @@ class ConfigurationController extends BaseController
 	public function render_create_branch()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -679,9 +701,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_branch()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -739,9 +762,10 @@ class ConfigurationController extends BaseController
 	public function list_branch()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
@@ -767,9 +791,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_branch($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -788,9 +813,10 @@ class ConfigurationController extends BaseController
 	public function submit_edit_branch()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -846,9 +872,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -870,9 +897,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -923,9 +951,10 @@ class ConfigurationController extends BaseController
 	public function render_create_turn($branch_id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
@@ -949,9 +978,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_turn()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -1016,9 +1046,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
@@ -1042,9 +1073,10 @@ class ConfigurationController extends BaseController
 	public function render_create_penalty_period()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -1063,9 +1095,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_penalty_period()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -1116,9 +1149,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -1139,9 +1173,10 @@ class ConfigurationController extends BaseController
 	public function render_create_devolution_period()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -1160,9 +1195,10 @@ class ConfigurationController extends BaseController
 	public function submit_create_devolution_period()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -1214,9 +1250,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 1){
@@ -1238,9 +1275,10 @@ class ConfigurationController extends BaseController
 	public function list_physical_elements()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -1262,9 +1300,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$branch_id = Input::get('branch_id');
@@ -1284,9 +1323,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$id = Input::get('id');
@@ -1314,9 +1354,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$id = Input::get('id');
@@ -1343,9 +1384,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$id = Input::get('id');
@@ -1375,9 +1417,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$code = Input::get('code');
@@ -1408,9 +1451,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$code = Input::get('code');
@@ -1439,9 +1483,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$name = Input::get('name');
@@ -1470,9 +1515,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$id = Input::get('id');
@@ -1490,9 +1536,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$id = Input::get('id');
@@ -1515,9 +1562,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$id = Input::get('id');
@@ -1539,9 +1587,10 @@ class ConfigurationController extends BaseController
 	public function render_create_holiday(){
 
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1){
@@ -1565,9 +1614,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$selected_ids = Input::get('selected_id');
@@ -1593,9 +1643,10 @@ class ConfigurationController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$date_holiday = Input::get('date_holiday');
@@ -1617,7 +1668,5 @@ class ConfigurationController extends BaseController
 			return Response::json(array( 'success' => false ),200);
 		}
 	}
-
-
 
 }

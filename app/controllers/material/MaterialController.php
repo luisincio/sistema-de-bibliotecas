@@ -5,9 +5,10 @@ class MaterialController extends BaseController
 	public function render_create_material()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -31,9 +32,10 @@ class MaterialController extends BaseController
 	public function submit_create_material()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -86,7 +88,11 @@ class MaterialController extends BaseController
 							$material->thematic_area = Input::get('area_tematica');
 							$material->shelve_id = Input::get('estante');
 							$material->purchase_order_id = Input::get('orden_compra');
-							$material->to_home = Input::get('to_home');
+							if(Input::get('to_home') == 0){
+								$material->to_home = 0;
+							}else{
+								$material->to_home = 1;
+							}
 							$material->save();
 						}
 						Session::flash('message', 'Se registró correctamente el material.');
@@ -108,9 +114,10 @@ class MaterialController extends BaseController
 	public function list_material()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -138,9 +145,10 @@ class MaterialController extends BaseController
 	public function search_material()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -173,9 +181,10 @@ class MaterialController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 3){
@@ -200,9 +209,10 @@ class MaterialController extends BaseController
 	public function render_edit_material($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3 && $id){
@@ -231,9 +241,10 @@ class MaterialController extends BaseController
 	public function submit_edit_material()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -288,9 +299,10 @@ class MaterialController extends BaseController
 	public function list_material_request()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -315,9 +327,10 @@ class MaterialController extends BaseController
 	public function search_material_request()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -354,9 +367,10 @@ class MaterialController extends BaseController
 	public function render_create_purchase_order()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -379,9 +393,10 @@ class MaterialController extends BaseController
 	public function submit_create_purchase_order()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -469,9 +484,10 @@ class MaterialController extends BaseController
 	public function list_purchase_order()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -494,9 +510,10 @@ class MaterialController extends BaseController
 	public function search_purchase_order()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
@@ -521,9 +538,10 @@ class MaterialController extends BaseController
 	public function render_edit_purchase_order($id=null)
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3 && $id){
@@ -551,9 +569,10 @@ class MaterialController extends BaseController
 	public function submit_edit_purchase_order()
 	{
 		if(Auth::check()){
-			$data["person"] = Session::get('person');
-			$data["user"] = Session::get('user');
-			$data["staff"] = Session::get('staff');
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
@@ -584,9 +603,10 @@ class MaterialController extends BaseController
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}
-		$data["person"] = Session::get('person');
-		$data["user"] = Session::get('user');
-		$data["staff"] = Session::get('staff');
+		$id = Auth::id();
+		$data["person"] = Auth::user();
+		$data["user"]= Person::find($id)->user;
+		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
 		if($data["staff"]->role_id == 3){

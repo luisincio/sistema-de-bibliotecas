@@ -34,7 +34,7 @@ class HomeController extends BaseController {
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			$data["branches"] = Branch::all();
-			$data["thematic_areas"] = ThematicArea::all();
+			$data["thematic_areas"] = ThematicArea::orderBy('name','asc')->get();
 			$data["search"] = null;
 			$data["search_criteria"] = null;
 			$data["branch_filter"] = null;
@@ -52,7 +52,7 @@ class HomeController extends BaseController {
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			$data["branches"] = Branch::all();
-			$data["thematic_areas"] = ThematicArea::all();
+			$data["thematic_areas"] = ThematicArea::orderBy('name','asc')->get();
 			$data["search"] = Input::get('search');
 			$data["search_criteria"] = $data["search"];
 			$data["branch_filter"] = Input::get('branch_filter');
