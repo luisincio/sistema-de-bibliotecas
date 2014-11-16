@@ -226,7 +226,7 @@ function render_cubicle_reservation_table(data)
 				}
 				if(available && ( (i+parseInt(hour_ini[0])) > current_hour)){
 					str_table += "<td class='bg-success x-"+j+" y-"+i+"' onclick='selecting_cells("+(i+parseInt(hour_ini[0]))+","+j+","+i+","+data.cubicles[j].id+","+data.cubicles[j].capacity+")' onmouseover='paint_cells("+(i+parseInt(hour_ini[0]))+","+j+","+i+")' onmouseout='unpaint_cells("+(i+parseInt(hour_ini[0]))+","+j+","+i+")'></td>";
-				}else{
+				}else if( (i+parseInt(hour_ini[0])) <= current_hour ){
 					str_table += "<td class='bg-warning x-"+j+" y-"+i+"'></td>";
 				}
 			}
