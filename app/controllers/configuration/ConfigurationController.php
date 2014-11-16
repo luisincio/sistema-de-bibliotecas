@@ -224,6 +224,7 @@ class ConfigurationController extends BaseController
 							'telefono' => 'numeric',
 							'celular' => 'numeric',
 							'email' => 'required|email',
+							'ruc' => 'required',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -384,6 +385,7 @@ class ConfigurationController extends BaseController
 							'telefono' => 'integer',
 							'celular' => 'integer',
 							'email' => 'required|max:128|email',
+							'ruc' => 'required',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -1130,7 +1132,7 @@ class ConfigurationController extends BaseController
 						return Redirect::to('config/create_penalty_period');
 					}
 					else{
-						Session::flash('danger', 'La fecha fin debe ser anterior a la fecha de inicio.');
+						Session::flash('danger', 'La fecha fin debe ser posterior a la fecha de inicio.');
 						return Redirect::to('config/create_penalty_period')->withInput(Input::all());						
 					}
 				}
@@ -1231,7 +1233,7 @@ class ConfigurationController extends BaseController
 						return Redirect::to('config/create_devolution_period');
 					}
 					else{
-						Session::flash('danger', 'La fecha fin debe ser anterior a la fecha de inicio.');
+						Session::flash('danger', 'La fecha fin debe ser posterior a la fecha de inicio.');
 						return Redirect::to('config/create_devolution_period')->withInput(Input::all());						
 					}
 				}
