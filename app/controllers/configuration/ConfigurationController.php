@@ -91,10 +91,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_cubicle_type($id=null)
 	{
 		if(Auth::check()){
-			$id = Auth::id();
+			$uid = Auth::id();
 			$data["person"] = Auth::user();
-			$data["user"]= Person::find($id)->user;
-			$data["staff"] = Person::find($id)->staff;
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -347,10 +347,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_supplier($id=null)
 	{
 		if(Auth::check()){
-			$id = Auth::id();
+			$uid = Auth::id();
 			$data["person"] = Auth::user();
-			$data["user"]= Person::find($id)->user;
-			$data["staff"] = Person::find($id)->staff;
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -618,10 +618,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_material_type($id=null)
 	{
 		if(Auth::check()){
-			$id = Auth::id();
+			$uid = Auth::id();
 			$data["person"] = Auth::user();
-			$data["user"]= Person::find($id)->user;
-			$data["staff"] = Person::find($id)->staff;
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){
@@ -793,10 +793,10 @@ class ConfigurationController extends BaseController
 	public function render_edit_branch($id=null)
 	{
 		if(Auth::check()){
-			$id = Auth::id();
+			$uid = Auth::id();
 			$data["person"] = Auth::user();
-			$data["user"]= Person::find($id)->user;
-			$data["staff"] = Person::find($id)->staff;
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 1 && $id){

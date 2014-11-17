@@ -173,8 +173,60 @@ $( document ).ready(function(){
 		
 	});
 
+	$("input[type=checkbox][name=suscripcion]").change(function(){
+		if($(this).is(":checked")){
+			$("#toggle-suscripcion").show();
+		}else{
+			$("#toggle-suscripcion").hide();
+		}
+	});
 
+	$("input[name=fecha_ini]").datepicker({
+		format:'yyyy-mm-dd',
+	});
 
+	$("input[name=fecha_fin]").datepicker({
+		format:'yyyy-mm-dd',
+	});
+
+	var codigo = "";
+	$("input[name=codigo]").blur(function(){
+		var input_length = $(this).val().length;
+		var input_val = $(this).val();
+		if((input_length > 0) && (codigo !== input_val)){
+			codigo = input_val;
+			$.ajax({
+				url: inside_url+'loan/validate_material_code_ajax',
+				type: 'POST',
+				data: { 'material_code' : input_val },
+				beforeSend: function(){
+					$(".form-group-material-code img").show();
+				},
+				complete: function(){
+					$(".form-group-material-code img").hide();
+				},
+				success: function(response){
+					if(response.success){
+						if(response.material.length > 0){
+							$("select[name=tipo_material]").val(response.material[0].material_type);
+							$("select[name=area_tematica]").val(response.material[0].thematic_area);
+							$("input[name=titulo]").val(response.material[0].title);
+							$("input[name=autor]").val(response.material[0].author);
+							$("input[name=editorial]").val(response.material[0].editorial);
+							$("input[name=isbn]").val(response.material[0].isbn);
+							$("input[name=anio_publicacion]").val(response.material[0].publication_year);
+							$("input[name=num_edicion]").val(response.material[0].edition);
+							$("input[name=num_paginas]").val(response.material[0].num_pages);
+							$("input[name=materiales_adicionales]").val(response.material[0].additional_materials);
+						}
+					}
+				},
+				error: function(){
+					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+				}
+			});
+		}
+	});
 	
 });
 

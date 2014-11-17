@@ -244,10 +244,10 @@ class StaffController extends BaseController {
 	public function render_edit_staff($id=null)
 	{
 		if(Auth::check()){
-			$id = Auth::id();
+			$uid = Auth::id();
 			$data["person"] = Auth::user();
-			$data["user"]= Person::find($id)->user;
-			$data["staff"] = Person::find($id)->staff;
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if(($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 ) && $id){
@@ -443,10 +443,10 @@ class StaffController extends BaseController {
 	public function staff_assistance($id=null)
 	{
 		if(Auth::check()){
-			$id = Auth::id();
+			$uid = Auth::id();
 			$data["person"] = Auth::user();
-			$data["user"]= Person::find($id)->user;
-			$data["staff"] = Person::find($id)->staff;
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if(($data["staff"]->role_id == 1 || $data["staff"]->role_id == 2 ) && $id){
