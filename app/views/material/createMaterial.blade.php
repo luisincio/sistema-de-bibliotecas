@@ -14,6 +14,15 @@
 			<p><strong>{{ $errors->first('num_paginas') }}</strong></p>
 			<p><strong>{{ $errors->first('cant_ejemplares') }}</strong></p>
 			<p><strong>{{ $errors->first('orden_compra') }}</strong></p>
+			@if($errors->first('fecha_ini'))
+				<p><strong>Si el material es una suscripción, la fecha inicial es requerida y debe ser menor a la final</strong></p>
+			@endif
+			@if($errors->first('fecha_fin'))
+				<p><strong>Si el material es una suscripción, la fecha final es requerida y debe ser mayor a la inicial</strong></p>
+			@endif
+			@if($errors->first('periodicidad'))
+				<p><strong>Si el material es una suscripción, debe especificar la periodicidad y debe ser numérico</strong></p>
+			@endif
 		</div>
 	@endif
 
@@ -47,9 +56,10 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('codigo')) has-error has-feedback @endif">
+				<div class="form-group form-group-material-code col-xs-8 @if($errors->first('codigo')) has-error has-feedback @endif">
 					{{ Form::label('codigo','Código(4 letras)') }}
 					{{ Form::text('codigo',Input::old('codigo'),array('class'=>'form-control')) }}
+					{{ HTML::image('img/loader.gif') }}
 				</div>
 			</div>
 			<div class="row">
@@ -86,17 +96,17 @@
 					{{ Form::text('anio_publicacion',Input::old('anio_publicacion'),array('class'=>'form-control')) }}
 				</div>
 			</div>
-			{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
-			{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
-			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
-		</div>
-		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('num_edicion')) has-error has-feedback @endif">
 					{{ Form::label('num_edicion','Número de edicion') }}
 					{{ Form::text('num_edicion',Input::old('num_edicion'),array('class'=>'form-control')) }}
 				</div>
 			</div>
+			{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
+			{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
+		</div>
+		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('num_paginas')) has-error has-feedback @endif">
 					{{ Form::label('num_paginas','Número de páginas') }}
@@ -127,12 +137,6 @@
 			</div>
 			<div class="row">
 				<div class="form-group col-xs-8">
-					{{ Form::label('suscripcion','Suscripción') }}
-					{{ Form::checkbox('suscripcion') }}
-				</div>
-			</div>
-			<div class="row">
-				<div class="form-group col-xs-8">
 					{{ Form::label('to_home','Se puede prestar a casa') }}
 					{{ Form::checkbox('to_home') }}
 				</div>
@@ -142,6 +146,38 @@
 					{{ Form::label('materiales_adicionales','Materiales adicionales') }}
 					{{ Form::text('materiales_adicionales',Input::old('materiales_adicionales'),array('class'=>'form-control')) }}
 				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-xs-8">
+					{{ Form::label('suscripcion','Suscripción') }}
+					{{ Form::checkbox('suscripcion') }}
+				</div>
+			</div>
+			<div id="toggle-suscripcion" style="@if(!Input::old('suscripcion'))display:none;@endif">
+
+				<div class="row">
+					<div class="form-group col-xs-8 @if($errors->first('periodicidad')) has-error has-feedback @endif">
+						{{ Form::label('periodicidad','Periodicidad') }}
+						{{ Form::text('periodicidad',Input::old('periodicidad'),array('class'=>'form-control')) }}
+					</div>
+				</div>
+
+				<div class="row">
+					{{ Form::label('fecha_ini','Inicio de suscripción') }}
+					<div class="form-group input-group col-xs-8 @if($errors->first('fecha_ini')) has-error has-feedback @endif">
+						{{ Form::text('fecha_ini',Input::old('fecha_ini'),array('class'=>'form-control','readonly'=>'')) }}
+						<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+					</div>
+				</div>
+
+				<div class="row">
+					{{ Form::label('fecha_fin','Fin de suscripción') }}
+					<div class="form-group input-group col-xs-8 @if($errors->first('fecha_fin')) has-error has-feedback @endif">
+						{{ Form::text('fecha_fin',Input::old('fecha_fin'),array('class'=>'form-control','readonly'=>'')) }}
+						<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	{{ Form::close() }}
