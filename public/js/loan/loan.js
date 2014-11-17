@@ -202,7 +202,6 @@ $( document ).ready(function(){
 					},
 					success: function(response){
 						if(response.success){
-							console.log(response);
 							if(response.problem){
 								switch(response.problem){
 									case 'user_no_exist': 	alert('No se encontró un usuario con dicho número de documento.');
@@ -298,7 +297,7 @@ function loan_register(e,reservation_id)
 		success: function(response){
 			if(response.success){
 				alert('Se registró correctamente el préstamo.');
-				location.reload();
+				$("input#search-user-loans").trigger("click");
 			}else{
 				alert('¡Ocurrió un error! Inténtelo de nuevo.');
 			}
