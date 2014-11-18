@@ -249,7 +249,8 @@ class ConfigurationController extends BaseController
 
 						Session::flash('message', 'Se registró correctamente al proveedor.');
 					}else{
-						Session::flash('danger', 'El ruc/dni debe ser numérico de 9 u 11 dígitos');
+						Session::flash('danger', 'El ruc/dni debe ser numérico de 8 u 11 dígitos');
+						return Redirect::to('config/create_supplier')->withInput(Input::all());
 					}
 					return Redirect::to('config/create_supplier');
 				}
