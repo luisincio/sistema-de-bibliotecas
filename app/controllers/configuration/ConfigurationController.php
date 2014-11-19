@@ -1209,7 +1209,8 @@ class ConfigurationController extends BaseController
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
-							'nombre' => 'required|alpha_spaces|min:2|unique:devolution_periods,name,NULL,id,deleted_at,NULL',
+							'nombre' => 'required|alpha_spaces|min:2|max:45|unique:devolution_periods,name,NULL,id,deleted_at,NULL',
+							'description' => 'min:2|max:128'
 							'max_dias_devolucion' => 'required|numeric|integer|min:1|max:99',
 							'fecha_ini' => 'required',
 							'fecha_fin' => 'required',
