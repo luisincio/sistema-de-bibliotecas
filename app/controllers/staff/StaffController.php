@@ -72,7 +72,7 @@ class StaffController extends BaseController {
 						$person->name = Input::get('nombres');
 						$person->lastname = Input::get('apellidos');
 						$person->birth_date = Input::get('fecha_nacimiento');
-						$person->mail = Input::get('email');
+						$person->email = Input::get('email');
 						$person->address = Input::get('direccion');
 						$person->gender = Input::get('genero');
 						$person->phone = Input::get('telefono');
@@ -82,7 +82,7 @@ class StaffController extends BaseController {
 
 						Mail::send('emails.user_registration',array('person'=> $person,'password'=>$password),function($message) use ($person)
 						{
-							$message->to($person->mail, $person->name)
+							$message->to($person->email, $person->name)
 									->subject('Registro de nuevo Personal');
 						});
 						$person_id = Person::orderBy('id','desc')->first();
@@ -312,7 +312,7 @@ class StaffController extends BaseController {
 					$person->name = Input::get('nombres');
 					$person->lastname = Input::get('apellidos');
 					$person->birth_date = Input::get('fecha_nacimiento');
-					$person->mail = Input::get('email');
+					$person->email = Input::get('email');
 					$person->address = Input::get('direccion');
 					$person->gender = Input::get('genero');
 					$person->phone = Input::get('telefono');

@@ -16,7 +16,7 @@ class User extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','users.person_id')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*');
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*');
 		return $query;
 	}
 
@@ -29,7 +29,7 @@ class User extends Eloquent{
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -42,7 +42,7 @@ class User extends Eloquent{
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -56,7 +56,7 @@ class User extends Eloquent{
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -64,7 +64,7 @@ class User extends Eloquent{
 	public function scopeSearchUserById($query,$search_criteria)
 	{
 		$query->join('persons','persons.id','=','users.person_id')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->where('users.id','=',$search_criteria);
 		return $query;
 	}
@@ -80,7 +80,7 @@ class User extends Eloquent{
 		$query->join('persons','persons.id','=','users.person_id')
 			  ->join('profiles','profiles.id','=','users.profile_id')
 			  ->where('doc_number','=',$document)
-			  ->select('persons.name','persons.lastname','persons.mail','users.*','profiles.name as profile_name');
+			  ->select('persons.name','persons.lastname','persons.email','users.*','profiles.name as profile_name');
 		return $query;
 	}
 

@@ -32,7 +32,7 @@
 				{{$restricted_user->lastname}}
 			</td>
 			<td>
-				{{$restricted_user->mail}}
+				{{$restricted_user->email}}
 			</td>
 			<td>
 				{{$restricted_user->address}}

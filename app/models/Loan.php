@@ -112,7 +112,7 @@ class Loan extends Eloquent{
 			  ->where('materials.base_cod','=',$material_code)
 			  ->orderBy('loans_by_user','desc')
 			  ->groupBy('users.id')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.mail','loans.*',DB::raw('count(*) as loans_by_user'));
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.email','loans.*',DB::raw('count(*) as loans_by_user'));
 		return $query;
 	}
 
@@ -126,7 +126,7 @@ class Loan extends Eloquent{
 			  ->where('loans.created_at','<=',$date_end)
 			  ->where('materials.base_cod','=',$material_code)
 			  ->orderBy('created_at','desc')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.mail','loans.*');
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.email','loans.*');
 		return $query;
 	}
 

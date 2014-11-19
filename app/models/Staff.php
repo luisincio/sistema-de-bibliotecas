@@ -24,7 +24,7 @@ class Staff extends Eloquent{
 			  ->join('turns','turns.id','=','staff.turn_id')
 			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->where('role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name');
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name');
 		return $query;
 	}
 
@@ -39,7 +39,7 @@ class Staff extends Eloquent{
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
+			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -52,7 +52,7 @@ class Staff extends Eloquent{
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -66,7 +66,7 @@ class Staff extends Eloquent{
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -74,7 +74,7 @@ class Staff extends Eloquent{
 	public function scopeSearchStaffById($query,$search_criteria)
 	{
 		$query->join('persons','persons.id','=','staff.person_id')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
 			  ->where('staff.id','=',$search_criteria);
 		return $query;
 	}
@@ -85,7 +85,7 @@ class Staff extends Eloquent{
 			  ->join('persons','persons.id','=','staff.person_id')
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('role_id','<>',1)
-			  ->select('staff.*','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality');
+			  ->select('staff.*','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality');
 		return $query;
 	}
 
@@ -102,7 +102,7 @@ class Staff extends Eloquent{
 			  })
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('staff.role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -117,7 +117,7 @@ class Staff extends Eloquent{
 			  })
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('staff.role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -133,7 +133,7 @@ class Staff extends Eloquent{
 			  })
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('staff.role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.mail','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}

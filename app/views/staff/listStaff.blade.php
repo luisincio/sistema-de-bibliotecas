@@ -57,7 +57,7 @@
 					{{$staff_data->branch_name}}
 				</td>
 				<td>
-					{{$staff_data->mail}}
+					{{$staff_data->email}}
 				</td>
 				<td class="text-center">
 					@if($staff_data->deleted_at)

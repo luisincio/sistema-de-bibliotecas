@@ -131,7 +131,7 @@
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('email')) has-error has-feedback @endif">
 					{{ Form::label('email','E-mail') }}
-					{{ Form::text('email',$staff_info->mail,array('class'=>'form-control')) }}
+					{{ Form::text('email',$staff_info->email,array('class'=>'form-control')) }}
 				</div>
 			</div>
 			<div class="row">

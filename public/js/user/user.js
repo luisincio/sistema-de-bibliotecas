@@ -86,7 +86,7 @@ $( document ).ready(function(){
 							$("input[name=apellidos]").val(response.person[0].lastname);
 							$("input[name=nacionalidad]").val(response.person[0].nacionality);
 							$("input[name=telefono]").val(response.person[0].phone);
-							$("input[name=email]").val(response.person[0].mail);
+							$("input[name=email]").val(response.person[0].email);
 							$("input[name=direccion]").val(response.person[0].address);
 							$("input[name=fecha_nacimiento]").val(response.person[0].birth_date);
 							response.person[0].gender == "M" ? $("input[name=genero][value=M]").prop('checked',true) : $("input[name=genero][value=F]").prop('checked',true)

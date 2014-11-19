@@ -81,7 +81,7 @@ $( document ).ready(function(){
 							$("input[name=nr_id_usuario]").val(response.user[0].id);
 							$("input[name=nr_nombre_usuario]").val((response.user[0].name+" "+response.user[0].lastname));
 							$("input[name=nr_perfil_usuario]").val(response.user[0].profile_name);
-							$("input[name=nr_email_usuario]").val(response.user[0].mail);
+							$("input[name=nr_email_usuario]").val(response.user[0].email);
 							if(response.user[0].restricted_until){
 								$("input[name=nr_id_usuario]").val("0");
 								$("input[name=nr_estado_usuario]").val("Penalizado hasta "+response.user[0].restricted_until);

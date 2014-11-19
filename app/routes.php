@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'HomeController@home');
+Route::controller('password', 'RemindersController');
 Route::get('/catalog', 'HomeController@render_catalog');
 Route::get('/submit_catalog', 'HomeController@submit_catalog');
 Route::post('/material_detail_ajax', 'HomeController@material_detail_ajax');

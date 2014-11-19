@@ -335,7 +335,7 @@ class ReportController extends BaseController
 				$str_table .= "<table border=1><tr><th>Num. Documento</th><th>Nombres</th><th>Apellidos</th><th>E-mail</th><th>Direccion</th><th>Telefono</th><th>Genero</th><th>Fecha de re-incorporacion</th></tr>";
 				if($total_restricted_users > 0){
 					foreach($restricted_users as $restricted_user){
-						$str_table .= "<tr><td>".htmlentities($restricted_user->doc_number)."</td><td>".htmlentities($restricted_user->name)."</td><td>".htmlentities($restricted_user->lastname)."</td><td>".htmlentities($restricted_user->mail)."</td><td>".htmlentities($restricted_user->address)."</td><td>".htmlentities($restricted_user->phone)."</td><td>".htmlentities($restricted_user->gender)."</td><td>".htmlentities($restricted_user->restricted_until)."</td></tr>";
+						$str_table .= "<tr><td>".htmlentities($restricted_user->doc_number)."</td><td>".htmlentities($restricted_user->ename)."</td><td>".htmlentities($restricted_user->lastname)."</td><td>".htmlentities($restricted_user->mail)."</td><td>".htmlentities($restricted_user->address)."</td><td>".htmlentities($restricted_user->phone)."</td><td>".htmlentities($restricted_user->gender)."</td><td>".htmlentities($restricted_user->restricted_until)."</td></tr>";
 					}
 				}
 				$str_table .= "</table>";
@@ -960,7 +960,7 @@ class ReportController extends BaseController
 							$str_table .= "<table border=1><tr><td><strong>Resumen de prestamos</strong></td></tr><tr><th>Numero de Documento</th><th>Nombres</th><th>Apellidos</th><th>E-mail</th><th>Veces prestadas</th></tr>";
 							if($data["report_rows"]->count()>0){
 								foreach($data["report_rows"] as $report_row){
-									$str_table .= "<tr><td>".htmlentities($report_row->doc_number)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->lastname)."</td><td>".htmlentities($report_row->mail)."</td><td>".htmlentities($report_row->loans_by_user)."</td></tr>";
+									$str_table .= "<tr><td>".htmlentities($report_row->doc_number)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->lastname)."</td><td>".htmlentities($report_row->email)."</td><td>".htmlentities($report_row->loans_by_user)."</td></tr>";
 								}
 							}
 							$str_table .= "</table>";
@@ -970,7 +970,7 @@ class ReportController extends BaseController
 							$str_table .= "<table border=1><tr><td><strong>Detalle de prestamos</strong></td></tr><tr><th>Numero de Documento</th><th>Nombres</th><th>Apellidos</th><th>E-mail</th><th>Fecha y hora de prestamo</th></tr>";
 							if($data["report_rows_detailed"]->count()>0){
 								foreach($data["report_rows_detailed"] as $report_row){
-									$str_table .= "<tr><td>".htmlentities($report_row->doc_number)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->lastname)."</td><td>".htmlentities($report_row->mail)."</td><td>".htmlentities($report_row->created_at)."</td></tr>";
+									$str_table .= "<tr><td>".htmlentities($report_row->doc_number)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->lastname)."</td><td>".htmlentities($report_row->email)."</td><td>".htmlentities($report_row->created_at)."</td></tr>";
 								}
 							}
 							$str_table .= "</table>";

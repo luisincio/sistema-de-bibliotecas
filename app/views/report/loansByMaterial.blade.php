@@ -76,7 +76,7 @@
 					{{$report_row->lastname}}
 				</td>
 				<td>
-					{{$report_row->mail}}
+					{{$report_row->email}}
 				</td>
 				<td>
 					{{$report_row->loans_by_user}}
@@ -107,7 +107,7 @@
 					{{$report_row_detailed->lastname}}
 				</td>
 				<td>
-					{{$report_row_detailed->mail}}
+					{{$report_row_detailed->email}}
 				</td>
 				<td>
 					{{$report_row_detailed->created_at}}

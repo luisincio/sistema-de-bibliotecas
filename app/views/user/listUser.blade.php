@@ -41,7 +41,7 @@
 					{{$user_data->lastname}}
 				</td>
 				<td>
-					{{$user_data->mail}}
+					{{$user_data->email}}
 				</td>
 				<td class="text-center">
 					@if($user_data->deleted_at)

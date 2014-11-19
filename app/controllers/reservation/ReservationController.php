@@ -185,7 +185,7 @@ class ReservationController extends BaseController
 					$next_person = Person::find($next_user->person_id);
 					Mail::send('emails.available_material', array('title'=>$material->title), function($message) use ($next_person)
 					{
-						$message->to($next_person->mail, $next_person->name)
+						$message->to($next_person->email, $next_person->name)
 								->subject('Libro disponible para préstamo');
 					});
 				}else{
