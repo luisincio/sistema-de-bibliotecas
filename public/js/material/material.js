@@ -92,6 +92,9 @@ $( document ).ready(function(){
 		if(title.length > 255){
 			return alert("El título no puede ser mayor a 255 caracteres.");
 		}
+		if(author.length < 2){
+			return alert("El autor no puede ser menor a 2 caracteres.");
+		}
 		if(author.length > 255){
 			return alert("El autor no puede ser mayor a 255 caracteres.");
 		}
