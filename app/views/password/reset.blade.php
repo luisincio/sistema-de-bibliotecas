@@ -15,13 +15,6 @@
 			{{ Form::label('password_confirmation','Confirme su Contraseña') }}
 			{{ Form::password('password_confirmation',array('class'=>'form-control')) }}
 			{{ Form::submit('Cambiar',array('class'=>'btn btn-lg btn-primary')) }}
-				<!--
-			<input type="hidden" name="token" value="{{ $token }}">
-			<input type="email" name="email">
-			<input type="password" name="password">
-			<input type="password" name="password_confirmation">
-			<input type="submit" value="Reset Password">
-		-->
 		</form>
 	</div>
 @stop
