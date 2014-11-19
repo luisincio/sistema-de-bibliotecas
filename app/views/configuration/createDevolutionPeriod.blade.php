@@ -67,6 +67,7 @@
 			<table class="table table-hover">
 				<tr class="info">
 					<th>Nombre de periodo</th>
+					<th>Descripción</th>
 					<th>Fecha Inicio</th>
 					<th>Fecha Fin</th>
 					<th>Máximo días de devolución</th>
@@ -76,6 +77,9 @@
 				<tr>
 					<td>
 						{{$devolution_period->name}}
+					</td>
+					<td>
+						{{$devolution_period->description}}
 					</td>
 					<td>
 						{{ $devolution_period->date_ini }}
