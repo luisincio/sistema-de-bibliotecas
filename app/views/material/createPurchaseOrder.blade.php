@@ -113,8 +113,37 @@
 			<th>Cantidad</th>
 			<th>Precio Unitario</th>
 			<th>Eliminar</th>
+		</tr>		
+		<?php 
+			$details_code = Input::old('details_code');		
+			$details_title = Input::old('details_title');	
+			$details_author = Input::old('details_author');	
+			$details_quantity = Input::old('details_quantity');			
+			$details_unit_price = Input::old('details_unit_price');
+			$count = count($details_code);	
+		?>	
+		<?php for($i=0;$i<$count;$i++){ ?>
+		<tr>
+			<td>
+				<input name='details_code[]' value='{{ $details_code[$i] }}' readonly/>
+			</td>
+			<td>
+				<input name='details_title[]' value='{{ $details_title[$i] }}' readonly/>
+			</td>
+			<td>
+				<input name='details_author[]' value='{{ $details_author[$i] }}' readonly/>
+			</td>
+			<td>
+				<input name='details_quantity[]' value='{{ $details_quantity[$i] }}' readonly/>
+			</td>
+			<td>
+				<input name='details_unit_price[]' value='{{ $details_unit_price[$i] }}' readonly/>
+			</td>
+			<td>
+				<a href='' class='btn btn-default delete-detail' onclick='deleteRow(event,this)'>X</a>
+			</td>						
 		</tr>
-
+		<?php } ?>
 	</table>
 	<br>
 	{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
