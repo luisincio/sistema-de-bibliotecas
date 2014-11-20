@@ -11,6 +11,7 @@
 				<th>Autor</th>
 				<th>Editorial</th>
 				<th>Fecha de vencimiento</th>
+				<th>Seleccione</th>
 			</tr>
 			@if($loans)
 				@foreach( $loans as $loan )
@@ -32,6 +33,11 @@
 					</td>
 					<td>
 						{{ $loan->expire_at }}
+					</td>
+					<td>
+						@if(!$user->restricted_until && ($loan->expire_at == $today))
+							{{ HTML::link('','Renovar',array('class'=>'btn btn-success renew-button','data-user'=>$user->id,'data-material'=>$loan->material_id,'data-loan'=>$loan->id)) }}
+						@endif
 					</td>
 				</tr>
 				@endforeach

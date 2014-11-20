@@ -263,10 +263,62 @@ $( document ).ready(function(){
 							alert('¡Ocurrió un error! Inténtelo de nuevo.');
 						}
 					});
+				}else{
+					damage_register = true;
 				}
 			}else{
 				damage_register = true;
 				alert('Seleccione alguna casilla.');
+			}
+		}
+	});
+
+	var renew_button = true;
+	$(".renew-button").click(function(e){
+		e.preventDefault();
+		if(renew_button){
+			renew_button = false;
+			var confirmation = confirm("¿Está seguro que desea renovar el préstamo?");
+			if(confirmation){
+				var loan_id = $(this).data('loan');
+				var material_id = $(this).data('material');
+				var user_id = $(this).data('user');
+				console.log(loan_id);
+				console.log(material_id);
+				console.log(user_id);
+				$.ajax({
+					url: inside_url+'loan/renew_ajax',
+					type: 'POST',
+					data: { 'loan_id' : loan_id ,'material_id' : material_id, 'user_id' : user_id},
+					beforeSend: function(){
+						$(this).addClass("disabled");
+					},
+					complete: function(){
+						$(this).removeClass("disabled");
+						renew_button = true;
+					},
+					success: function(response){
+						console.log(response);
+						if(response.success){
+							if(response.error){
+								switch(response.error){
+									case 'is_reserved': 	alert('Ya existe una reserva pendiente sobre este ejemplar.');
+															break;
+									case 'not_home': 	alert('Este material es sólo para casa, no se puede renovar préstamo.');
+															break;
+								}
+							}
+							location.reload();
+						}else{
+							alert('¡Ocurrió un error! Inténtelo de nuevo2.');
+						}
+					},
+					error: function(){
+						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					}
+				});
+			}else{
+				renew_button = true;
 			}
 		}
 	});

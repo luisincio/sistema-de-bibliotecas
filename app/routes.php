@@ -175,6 +175,8 @@ Route::group(array('prefix'=>'loan', 'before'=>'auth'),function(){
 	Route::get('/damage_register','LoanController@render_damage_register');
 	Route::get('/search_user_loans_damage','LoanController@search_user_loans_damage');
 	Route::post('/damage_register_ajax','LoanController@damage_register_ajax');
+	/* Renew */
+	Route::post('/renew_ajax','LoanController@renew_ajax');
 });
 
 /* Catalog */

@@ -378,6 +378,7 @@ class LoanController extends BaseController
 			$data["config"] = GeneralConfiguration::first();
 			if($data["user"]){
 				// Check if the current user is the "Bibliotecario"
+				$data["today"] = Date("Y-m-d");
 				$data["loans"] = Loan::searchUserLoans($data["user"]->id)->paginate(10);
 				return View::make('loan/myLoans',$data);
 			}else{
@@ -512,5 +513,69 @@ class LoanController extends BaseController
 		}
 	}
 
+	public function renew_ajax()
+	{
+		$user_id = Input::get('user_id');
+		$data["user"] = User::find($user_id);
+		if($data["user"]){
+			$loan_id = Input::get('loan_id');
+			$material_id = Input::get('material_id');
+			$is_reserved = MaterialReservation::where('material_id','=',$material_id)->first();
+			if(!$is_reserved){
+				
+				$profile = Profile::find($data["user"]->profile_id);
+				$material = Material::find($material_id);
+				$today = Date("Y-m-d");
+				
+				if($material->to_home == 1){
+
+					$devolution_period = DevolutionPeriod::getDevolutionPeriodByDate($today)->first();
+
+					if($devolution_period){
+						$max_days_devolution = $devolution_period->max_days_devolution;
+					}else{
+						$max_days_devolution = $profile->max_days_loan;
+					}
+					$str_date = "+".$max_days_devolution." days";
+
+
+					$devolution_date = date('Y-m-d', strtotime($str_date));
+
+					$branch_labor_days = Material::getBranchLaborDaysByMaterial($material->mid)->first();
+					$invalid_date = true;
+					while($invalid_date){
+						$is_holiday = Holiday::searchHoliday($devolution_date)->first();
+						$devolution_date_timestamp = strtotime($devolution_date);
+						$devolution_date_day = date('w', $devolution_date_timestamp);
+
+						if( ($devolution_date_day >= $branch_labor_days->day_ini) && ($devolution_date_day <= $branch_labor_days->day_end)){
+							$is_labor_day = true;
+						}else{
+							$is_labor_day = false;
+						}
+						
+						if($is_holiday || !$is_labor_day){
+							$devolution_date = date('Y-m-d', strtotime($devolution_date. ' + 1 days'));
+						}else{
+							$invalid_date = false;
+						}
+						
+					}
+
+					$loan = Loan::find($loan_id);
+					$loan->expire_at = $devolution_date;
+					$loan->save();
+					return Response::json(array( 'success' => true),200);
+				}
+				return Response::json(array( 'success' => true, 'error' => 'not_home' ),200);
+			}else{
+				return Response::json(array( 'success' => true, 'error' => 'is_reserved' ),200);
+			}
+
+		}else{
+			return Response::json(array( 'success' => false ),200);
+		}
+		
+	}
 
 }
