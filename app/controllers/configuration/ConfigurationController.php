@@ -800,7 +800,7 @@ class ConfigurationController extends BaseController
 			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 1 && $id){
+			if($id && $data["staff"]->role_id == 1 || $data["staff"]->role_id == 2){
 				// Check if the current user is the "System Admin"
 				$data["branch"] = Branch::withTrashed()->find($id);
 				return View::make('configuration/editBranch',$data);
