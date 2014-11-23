@@ -57,7 +57,7 @@ class MyAccountController extends BaseController
 			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["user"]->profile_id == 1 || $data["user"]->profile_id == 2){
+			if($data["user"]){
 				// Check if the current user is student or proffesor"
 				$data["material_request_types"] = MaterialRequestType::all();				
 				return View::make('myaccount/createMaterialRequest',$data);
@@ -80,7 +80,7 @@ class MyAccountController extends BaseController
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
-			if($data["user"]->profile_id == 1 || $data["user"]->profile_id == 2){
+			if($data["user"]){
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
