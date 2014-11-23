@@ -634,10 +634,10 @@ class ReportController extends BaseController
 
 						$str_table .= "<table><tr></tr><tr></tr><tr></tr></table>";
 
-						$str_table .= "<table border=1><tr><td><strong>Detalle de prestamos</strong></td></tr><tr><th>Codigo(4 letras)</th><th>Codigo completo</th><th>Titulo</th><th>Autor</th><th>Editorial</th><th>Fecha y hora de prestamo</th></tr>";
+						$str_table .= "<table border=1><tr><td><strong>Detalle de prestamos</strong></td></tr><tr><th>Codigo completo</th><th>Titulo</th><th>Autor</th><th>Editorial</th><th>Titular del prestamo</th><th>Fecha y hora de prestamo</th></tr>";
 						if($data["report_rows_detailed"]->count()>0){
 							foreach($data["report_rows_detailed"] as $report_row){
-								$str_table .= "<tr><td>".htmlentities($report_row->base_cod)."</td><td>".htmlentities($report_row->auto_cod)."</td><td>".htmlentities($report_row->title)."</td><td>".htmlentities($report_row->author)."</td><td>".htmlentities($report_row->editorial)."</td><td>".htmlentities($report_row->created_at)."</td></tr>";
+								$str_table .= "<tr><td>".htmlentities($report_row->auto_cod)."</td><td>".htmlentities($report_row->title)."</td><td>".htmlentities($report_row->author)."</td><td>".htmlentities($report_row->editorial)."</td><td>".htmlentities($report_row->lastname).", ".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->created_at)."</td></tr>";
 							}
 						}
 						$str_table .= "</table>";
@@ -802,10 +802,10 @@ class ReportController extends BaseController
 						}
 					}
 					$str_table .= "<tr><td><strong>Total de libros</strong></td><td>".$total."</td></tr><tr></tr></table>";
-					$str_table .= "<table border=1><tr><th>Codigo base</th><th>ISBN</th><th>Titulo</th><th>Autor</th><th>Editorial</th><th>Edicion</th><th>Cantidad</th></tr>";
+					$str_table .= "<table border=1><tr><th>Codigo base</th><th>ISBN</th><th>Titulo</th><th>Autor</th><th>Editorial</th><th>Area tematica</th><th>Sede</th><th>Cantidad</th></tr>";
 					if($report_rows->count()>0){
 						foreach($report_rows as $report_row){
-							$str_table .= "<tr><td>".htmlentities($report_row->base_cod)."</td><td>".htmlentities($report_row->isbn)."</td><td>".htmlentities($report_row->title)."</td><td>".htmlentities($report_row->author)."</td><td>".htmlentities($report_row->editorial)."</td><td>".htmlentities($report_row->edition)."</td><td>".htmlentities($report_row->total_entries)."</td></tr>";
+							$str_table .= "<tr><td>".htmlentities($report_row->base_cod)."</td><td>".htmlentities($report_row->isbn)."</td><td>".htmlentities($report_row->title)."</td><td>".htmlentities($report_row->author)."</td><td>".htmlentities($report_row->editorial)."</td><td>".htmlentities($report_row->thematic_area_name)."</td><td>".htmlentities($report_row->name)."</td><td>".htmlentities($report_row->total_entries)."</td></tr>";
 						}
 					}
 					$str_table .= "</table>";

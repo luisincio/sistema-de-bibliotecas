@@ -151,11 +151,12 @@ class Loan extends Eloquent{
 		$query->withTrashed()
 			  ->join('materials','loans.material_id','=','materials.mid')
 			  ->join('users','loans.user_id','=','users.id')
+			  ->join('persons','users.person_id','=','persons.id')
 			  ->where('loans.created_at','>=',$date_ini)
 			  ->where('loans.created_at','<=',$date_end)
 			  ->where('users.profile_id','=','2')
 			  ->orderBy('created_at','desc')
-			  ->select('materials.base_cod','materials.auto_cod','materials.title','materials.author','materials.editorial','loans.*');
+			  ->select('materials.base_cod','materials.auto_cod','materials.title','materials.author','materials.editorial','persons.name','persons.lastname','loans.*');
 		return $query;
 	}
 

@@ -35,7 +35,7 @@
 				<a href="" id="submit_last_material_entries_excel_button" class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span> Exportar a Excel</a>
 				{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
 			</div>
-			<div class="col-xs-6">
+			<div class="col-xs-6" style="margin-bottom:70px;">
 				<div class="row">
 					{{ Form::label('date_end','Fecha fin') }}
 					<div class="form-group input-group col-xs-8">
@@ -79,7 +79,8 @@
 				<th>Título</th>
 				<th>Autor</th>
 				<th>Editorial</th>
-				<th>Edición</th>
+				<th>Área temática</th>
+				<th>Sede</th>
 				<th>Cantidad</th>
 			</tr>
 			@foreach($report_rows as $report_row)
@@ -100,7 +101,10 @@
 					{{$report_row->editorial}}
 				</td>
 				<td>
-					{{$report_row->edition}}
+					{{$report_row->thematic_area_name}}
+				</td>
+				<td>
+					{{$report_row->name}}
 				</td>
 				<td>
 					{{$report_row->total_entries}}

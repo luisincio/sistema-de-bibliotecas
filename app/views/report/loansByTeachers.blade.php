@@ -78,18 +78,15 @@
 		<h4>Detalle de préstamos</h4>
 		<table class="table table-hover">
 			<tr class="info">
-				<th>Código(4 letras)</th>
 				<th>Código completo</th>
 				<th>Título</th>
 				<th>Autor</th>
 				<th>Editorial</th>
+				<th>Titular del préstamo</th>
 				<th>Fecha y hora de préstamo</th>
 			</tr>
 			@foreach($report_rows_detailed as $report_row_detailed)
 			<tr>
-				<td>
-					{{$report_row_detailed->base_cod}}
-				</td>
 				<td>
 					{{$report_row_detailed->auto_cod}}
 				</td>
@@ -101,6 +98,9 @@
 				</td>
 				<td>
 					{{$report_row_detailed->editorial}}
+				</td>
+				<td>
+					{{$report_row_detailed->lastname}}, {{$report_row_detailed->name}}
 				</td>
 				<td>
 					{{$report_row_detailed->created_at}}

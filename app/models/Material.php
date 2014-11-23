@@ -135,12 +135,15 @@ class Material extends Eloquent{
 	public function scopeGetLastBookEntriesByDate($query,$date_ini,$date_end)
 	{
 		$query->withTrashed()
+			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->join('branches','shelves.branch_id','=','branches.id')
+			  ->join('thematic_areas','materials.thematic_area','=','thematic_areas.id')
 			  ->where('material_type','=','1')
-			  ->where('created_at','>=',$date_ini)
-			  ->where('created_at','<=',$date_end)
-			  ->orderBy('created_at','asc')
-			  ->groupBy('base_cod')
-			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+			  ->where('materials.created_at','>=',$date_ini)
+			  ->where('materials.created_at','<=',$date_end)
+			  ->orderBy('materials.created_at','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','branches.name','thematic_areas.name as thematic_area_name',DB::raw('count(*) as total_entries'));
 		return $query;
 	}
 
@@ -148,26 +151,31 @@ class Material extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->join('branches','shelves.branch_id','=','branches.id')
+			  ->join('thematic_areas','materials.thematic_area','=','thematic_areas.id')
 			  ->where('material_type','=','1')
 			  ->where('materials.created_at','>=',$date_ini)
 			  ->where('materials.created_at','<=',$date_end)
 			  ->where('shelves.branch_id','=',$branch_id)
 			  ->orderBy('created_at','asc')
-			  ->groupBy('base_cod')
-			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','branches.name','thematic_areas.name as thematic_area_name',DB::raw('count(*) as total_entries'));
 		return $query;
 	}
 
 	public function scopeGetLastBookEntriesByDateThematicArea($query,$date_ini,$date_end,$thematic_area_id)
 	{
 		$query->withTrashed()
+			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->join('branches','shelves.branch_id','=','branches.id')
+			  ->join('thematic_areas','materials.thematic_area','=','thematic_areas.id')
 			  ->where('material_type','=','1')
-			  ->where('created_at','>=',$date_ini)
-			  ->where('created_at','<=',$date_end)
+			  ->where('materials.created_at','>=',$date_ini)
+			  ->where('materials.created_at','<=',$date_end)
 			  ->where('thematic_area','=',$thematic_area_id)
-			  ->orderBy('created_at','asc')
-			  ->groupBy('base_cod')
-			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+			  ->orderBy('materials.created_at','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','branches.name','thematic_areas.name as thematic_area_name',DB::raw('count(*) as total_entries'));
 		return $query;
 	}
 
@@ -175,14 +183,16 @@ class Material extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->join('branches','shelves.branch_id','=','branches.id')
+			  ->join('thematic_areas','materials.thematic_area','=','thematic_areas.id')
 			  ->where('material_type','=','1')
 			  ->where('materials.created_at','>=',$date_ini)
 			  ->where('materials.created_at','<=',$date_end)
 			  ->where('shelves.branch_id','=',$branch_id)
 			  ->where('thematic_area','=',$thematic_area_id)
-			  ->orderBy('created_at','asc')
-			  ->groupBy('base_cod')
-			  ->select('materials.*',DB::raw('count(*) as total_entries'));
+			  ->orderBy('materials.created_at','asc')
+			  ->groupBy('base_cod','branch_id')
+			  ->select('materials.*','branches.name','thematic_areas.name as thematic_area_name',DB::raw('count(*) as total_entries'));
 		return $query;
 	}
 

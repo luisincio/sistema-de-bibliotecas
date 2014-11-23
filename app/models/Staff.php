@@ -13,7 +13,8 @@ class Staff extends Eloquent{
 	
 	public function scopeSearchStaffByPerson($query,$person_id)
 	{
-		$query->where('person_id','=',$person_id);
+		$query->withTrashed()
+			  ->where('person_id','=',$person_id);
 		return $query;
 	}
 

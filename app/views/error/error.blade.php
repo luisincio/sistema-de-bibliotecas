@@ -8,7 +8,9 @@
 </head>
 
 <body>
-	<div id="main-container">
+	<div id="main-container" style="text-align:center;">
+		<h2>Usted está intentando ingresar a un contenido que no está permitido para su usuario</h2>
+		<h3>Para regresar haga click {{ "<a href=\"javascript:history.go(-1)\">aquí</a>" }}<h3>
 		<img src="{{asset('img/error_img.jpg')}}">
 	</div>
 </body>
