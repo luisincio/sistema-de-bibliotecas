@@ -1,7 +1,7 @@
 @extends('templates/materialTemplate')
 @section('content')
 
-	<h1>Detalle Orden de Compra</h1>
+	<h1>Detalle Orden de Compra ( @if($purchase_order->state == 0) No revisado @else Aprobado @endif )</h1>
 	@if ($errors->has())
 		<div class="alert alert-danger" role="alert">
 			<p><strong>{{ $errors->first('descripcion') }}</strong></p>
@@ -94,12 +94,14 @@
 			$today = Date("Y-m-d");			
 		?>
 		<br>
+		@if($staff->role_id == 2)
 		<div class = "row">
 			@if($purchase_order->expire_at > $today && $purchase_order->state == 0)
 				{{ Form::submit('Aprobar',array('id'=>'submit-check', 'class'=>'btn btn-primary')) }}
 				{{ HTML::link('','Rechazar',array('id'=>'submit-reject', 'class'=>'btn btn-danger','data-id'=> $purchase_order->id)) }}		
 			@endif
 		</div>
+		@endif
 	</div>	
 	{{ Form::close() }}
 @stop

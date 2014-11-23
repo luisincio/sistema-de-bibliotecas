@@ -480,8 +480,6 @@ class MaterialController extends BaseController
 							$purchase_order->save();
 
 							for($i=0;$i<$cant;$i++){
-								//$auto_cod = Input::get('codigo').($timestamp);
-								//$timestamp++;
 								$details_purchase_order = new DetailsPurchaseOrder;
 								$details_purchase_order->code = $details_code[$i];
 								$details_purchase_order->title = $details_title[$i];
@@ -523,8 +521,8 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3){
-				// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				// Check if the current user is the "Administrador de sede" or "Bibliotecario"
 				$data["purchase_orders"] = PurchaseOrder::getPurchaseOrderInfo()->paginate(10);
 				$data["date_ini"] = null;
 				$data["date_end"] = null;
@@ -549,8 +547,8 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3){
-				// Check if the current user is the "System Admin"
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				// Check if the current user is the "Administrador de sede" or "Bibliotecario"
 				$fecha_emision	= Input::get('fecha_emision');					
 				$fecha_vencimiento = Input::get('fecha_vencimiento');
 				$data["purchase_orders"] = PurchaseOrder::searchPurchaseOrderByDate($fecha_emision,$fecha_vencimiento)->paginate(10);
@@ -577,14 +575,13 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3 && $id){
-				// Check if the current user is the "System Admin"
+			if($id && $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
+				// Check if the current user is the "Administrador de sede" or "Bibliotecario"
 				$data["purchase_order"] = PurchaseOrder::find($id);
 				if($data["purchase_order"]){
 					$supplier_id = $data["purchase_order"]->supplier_id;
 					$data["suppliers"] = Supplier::find($supplier_id);					
 					$data["details_purchase_orders"] = DetailsPurchaseOrder::getDetailsByPurchaseOrder($id)->get();
-					//$data["thematic_areas"] = ThematicArea::all();
 					
 					return View::make('material/editPurchaseOrder',$data);
 				}else{
@@ -609,8 +606,8 @@ class MaterialController extends BaseController
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
-			if($data["staff"]->role_id == 3){
-				// Insert the material in the database
+			if($data["staff"]->role_id == 2){
+				// Check if the current user is the "Administrador de sede"
 				$id = Input::get('id');
 				$url = 'material/edit_purchase_order/'.$id;
 				$purchase_order = PurchaseOrder::find($id);
@@ -642,12 +639,10 @@ class MaterialController extends BaseController
 		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
-		if($data["staff"]->role_id == 3){
-			// Check if the current user is the "Bibliotecario"
+		if($data["staff"]->role_id == 2){
+			// Check if the current user is the "Administrador de sede"
 			$id = Input::get('id');
-			
 			$purchase_order = PurchaseOrder::find($id);
-			
 			$purchase_order->delete();
 				
 			
