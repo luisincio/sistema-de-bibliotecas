@@ -542,6 +542,7 @@ class UserController extends BaseController {
 					$user_id = Input::get('user_id');
 					$user = User::find($user_id);
 					$user->profile_id = Input::get('perfil');
+					$user->restricted_until = Input::get('penalizado_hasta');
 					$user->save();
 
 					Session::flash('message', 'Se editó correctamente al usuario.');

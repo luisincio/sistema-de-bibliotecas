@@ -63,6 +63,10 @@ $( document ).ready(function(){
 		endDate: '+0d'
 	});
 
+	$("input[name=penalizado_hasta]").datepicker({
+		format:'yyyy-mm-dd',
+	});
+
 	var num_documento = "";
 	$("input[name=num_documento]").blur(function(){
 		var input_length = $(this).val().length;

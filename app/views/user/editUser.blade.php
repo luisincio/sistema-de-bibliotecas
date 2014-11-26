@@ -123,6 +123,14 @@
 					</select>
 				</div>
 			</div>
+			<div class="row">
+				{{ Form::label('penalizado_hasta','Penalizado hasta') }}
+				<div class="form-group input-group col-xs-8 @if($errors->first('penalizado_hasta')) has-error has-feedback @endif">
+					
+					{{ Form::text('penalizado_hasta',$user_info->restricted_until,array('class'=>'form-control','readonly'=>'')) }}
+					<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+				</div>
+			</div>
 		</div>
 
 	{{ Form::close() }}
