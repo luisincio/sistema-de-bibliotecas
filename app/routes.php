@@ -88,6 +88,11 @@ Route::group(array('prefix'=>'config', 'before'=>'auth'),function(){
 	Route::get('/create_holiday','ConfigurationController@render_create_holiday'); 
 	Route::post('/delete_holiday_ajax','ConfigurationController@delete_holiday_ajax');
 	Route::post('/register_holiday_ajax','ConfigurationController@register_holiday_ajax');
+	/* Commands */
+	Route::get('/render_commands','ConfigurationController@render_commands'); 
+	Route::post('/clean_reservations_command','ConfigurationController@clean_reservations_command'); 
+	Route::post('/clean_users_command','ConfigurationController@clean_users_command'); 
+	Route::post('/penalize_users_command','ConfigurationController@penalize_users_command'); 
 });
 
 /* My Account */
@@ -119,7 +124,7 @@ Route::group(array('prefix'=>'user', 'before'=>'auth'),function(){
 	Route::post('/submit_edit_user','UserController@submit_edit_user');
 });
 
-/* staff */
+/* Staff */
 Route::group(array('prefix'=>'staff', 'before'=>'auth'),function(){
 	Route::get('/create_staff','StaffController@render_create_staff');
 	Route::post('/submit_create_staff','StaffController@submit_create_staff');
@@ -171,6 +176,7 @@ Route::group(array('prefix'=>'loan', 'before'=>'auth'),function(){
 	Route::post('/get_user_reservation_ajax','LoanController@get_user_reservation_ajax');
 	Route::post('/register_loan_with_reservation_ajax','LoanController@register_loan_with_reservation_ajax');
 	Route::get('/my_loans','LoanController@render_my_loans');
+	Route::get('/force_expiration/{id}','LoanController@force_expiration');
 	/* Register Material Damaged */
 	Route::get('/damage_register','LoanController@render_damage_register');
 	Route::get('/search_user_loans_damage','LoanController@search_user_loans_damage');
@@ -198,6 +204,7 @@ Route::group(array('prefix'=>'reservation', 'before'=>'auth'),function(){
 	Route::post('/submit_search_cubicle_reservations','ReservationController@submit_search_cubicle_reservations');
 	Route::get('/my_cubicle_reservations','ReservationController@render_my_cubicle_reservations');
 	Route::post('/delete_cubicle_reservations_ajax','ReservationController@delete_cubicle_reservations_ajax');
+	Route::get('/force_expiration/{id}','ReservationController@force_expiration');
 });
 
 /* Reports */

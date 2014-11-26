@@ -441,4 +441,34 @@ class ReservationController extends BaseController
 		}
 	}
 
+	public function force_expiration($id=null)
+	{
+		if(Auth::check()){
+			$uid = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3 && $id){
+				// Check if the current user is the "System Admin"
+
+				$material_reservation = MaterialReservation::find($id);
+				if($material_reservation){
+					$yesterday = Date('Y-m-d',strtotime("-1 days"));
+					$material_reservation->expire_at = $yesterday;
+					$material_reservation->save();
+					return Redirect::to('reservation/my_material_reservations');
+				}else{
+					return View::make('error/error');
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
 }

@@ -12,6 +12,7 @@
 				<th>Editorial</th>
 				<th>Fecha de vencimiento</th>
 				<th>Seleccione</th>
+				<th>Forzar expiración</th>
 			</tr>
 			@if($loans)
 				@foreach( $loans as $loan )
@@ -38,6 +39,9 @@
 						@if(!$user->restricted_until && ($loan->expire_at == $today))
 							{{ HTML::link('','Renovar',array('class'=>'btn btn-success renew-button','data-user'=>$user->id,'data-material'=>$loan->material_id,'data-loan'=>$loan->id)) }}
 						@endif
+					</td>
+					<td>
+						<a href="/loan/force_expiration/{{ $loan->id }}">Expirar</a>
 					</td>
 				</tr>
 				@endforeach

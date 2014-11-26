@@ -1673,4 +1673,94 @@ class ConfigurationController extends BaseController
 		}
 	}
 
+	public function render_commands()
+	{
+		if(Auth::check()){
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				return View::make('configuration/testCommands',$data);
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function clean_reservations_command()
+	{
+		if(Auth::check()){
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				Artisan::call('reservations:clean');
+				Session::flash('message', 'Se eliminaron las reservas caducadas.');
+				return Redirect::to('config/render_commands');
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function clean_users_command()
+	{
+		if(Auth::check()){
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				Artisan::call('users:clean');
+				Session::flash('message', 'Se quitó la penalidad a los usuarios penalizados.');
+				return Redirect::to('config/render_commands');
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
+	public function penalize_users_command()
+	{
+		if(Auth::check()){
+			$id = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($id)->user;
+			$data["staff"] = Person::find($id)->staff;
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 1){
+				// Check if the current user is the "System Admin"
+				Artisan::call('users:penalize');
+				Session::flash('message', 'Se aplicó la penalidad respectiva a los usuarios.');
+				return Redirect::to('config/render_commands');
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
 }

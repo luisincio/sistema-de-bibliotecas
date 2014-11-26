@@ -578,4 +578,34 @@ class LoanController extends BaseController
 		
 	}
 
+	public function force_expiration($id=null)
+	{
+		if(Auth::check()){
+			$uid = Auth::id();
+			$data["person"] = Auth::user();
+			$data["user"]= Person::find($uid)->user;
+			$data["staff"] = Person::find($uid)->staff;
+			$data["inside_url"] = Config::get('app.inside_url');
+			$data["config"] = GeneralConfiguration::first();
+			if($data["staff"]->role_id == 3 && $id){
+				// Check if the current user is the "System Admin"
+
+				$loan = Loan::find($id);
+				if($loan){
+					$yesterday = Date('Y-m-d',strtotime("-1 days"));
+					$loan->expire_at = $yesterday;
+					$loan->save();
+					return Redirect::to('loan/my_loans');
+				}else{
+					return View::make('error/error');
+				}
+			}else{
+				return View::make('error/error');
+			}
+
+		}else{
+			return View::make('error/error');
+		}
+	}
+
 }

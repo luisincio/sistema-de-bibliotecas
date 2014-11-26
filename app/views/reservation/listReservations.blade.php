@@ -11,6 +11,7 @@
 				<th>Fecha de reserva</th>
 				<th>Fecha de expiración</th>
 				<th class="text-center">Seleccione{{ Form::checkbox('select_all') }}</th>
+				<th>Forzar expiración</th>
 			</tr>
 			@foreach( $reservations as $reservation)
 			<tr>
@@ -35,6 +36,9 @@
 				</td>
 				<td class="text-center">
 					{{ Form::checkbox('reservations',$reservation->id) }}
+				</td>
+				<td>
+					<a href="/reservation/force_expiration/{{ $reservation->id }}">Expirar</a>
 				</td>
 			</tr>
 			@endforeach

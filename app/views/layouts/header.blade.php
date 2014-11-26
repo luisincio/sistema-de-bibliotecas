@@ -41,6 +41,8 @@
 								<li>{{ HTML::link('/config/create_cubicle_type','Registrar Tipo de Cubículo') }}</li>
 								<li class="divider"></li>
 								<li>{{ HTML::link('/config/create_holiday','Feriados') }}</li>
+								<li class="divider"></li>
+								<li>{{ HTML::link('/config/render_commands','Comandos') }}</li>
 							@endif
 						</ul>
 					</li>
