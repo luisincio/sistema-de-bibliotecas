@@ -78,7 +78,7 @@
 						<a href="" class="material-title" data-id="{{$material->mid}}">{{$material->title}}</a>
 					</td>
 					<td>
-						{{ $material->auto_cod }}
+						{{ $material->base_cod }}
 					</td>
 					<td>
 						{{ $material->author }}
