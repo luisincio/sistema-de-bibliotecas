@@ -1122,6 +1122,15 @@ class ConfigurationController extends BaseController
 				}else{
 					if(strtotime(Input::get('fecha_ini')) < strtotime(Input::get('fecha_fin'))){
 						// Insert the penalty period in the database
+
+						$date_ini = Input::get('fecha_ini');
+						$date_end = Input::get('fecha_fin');
+						$validate_ini = PenaltyPeriod::where('date_ini','<=',$date_ini)->where('date_end','>=',$date_ini)->first();
+						$validate_end = PenaltyPeriod::where('date_ini','<=',$date_end)->where('date_end','>=',$date_end)->first();
+						if($validate_ini || $validate_end){
+							Session::flash('danger', 'El rango de fechas ingresado se superpone con otra ya existente.');
+							return Redirect::to('config/create_penalty_period')->withInput(Input::all());
+						}
 						$penalty_period = new PenaltyPeriod;
 						$penalty_period->name = Input::get('nombre');
 						$penalty_period->date_ini = Input::get('fecha_ini');
@@ -1223,6 +1232,14 @@ class ConfigurationController extends BaseController
 				}else{
 					if(strtotime(Input::get('fecha_ini')) < strtotime(Input::get('fecha_fin'))){
 						// Insert the devolution period in the database
+						$date_ini = Input::get('fecha_ini');
+						$date_end = Input::get('fecha_fin');
+						$validate_ini = DevolutionPeriod::where('date_ini','<=',$date_ini)->where('date_end','>=',$date_ini)->first();
+						$validate_end = DevolutionPeriod::where('date_ini','<=',$date_end)->where('date_end','>=',$date_end)->first();
+						if($validate_ini || $validate_end){
+							Session::flash('danger', 'El rango de fechas ingresado se superpone con otra ya existente.');
+							return Redirect::to('config/create_devolution_period')->withInput(Input::all());
+						}
 						$devolution_period = new DevolutionPeriod;
 						$devolution_period->name = Input::get('nombre');
 						$devolution_period->date_ini = Input::get('fecha_ini');
@@ -1641,9 +1658,8 @@ class ConfigurationController extends BaseController
 
 
 
-	public function register_holiday_ajax(){
-
-
+	public function register_holiday_ajax()
+	{
 		if(!Request::ajax() || !Auth::check()){
 			return Response::json(array( 'success' => false ),200);
 		}

@@ -29,6 +29,9 @@
 	@if (Session::has('message'))
 		<div class="alert alert-success">{{ Session::get('message') }}</div>
 	@endif
+	@if (Session::has('error'))
+		<div class="alert alert-danger">{{ Session::get('error') }}</div>
+	@endif
 
 	{{ Form::open(array('url'=>'staff/submit_edit_staff', 'role'=>'form')) }}
 		{{ Form::hidden('staff_id', $staff_info->id) }}
@@ -129,7 +132,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('email')) has-error has-feedback @endif">
+				<div class="form-group col-xs-8 @if($errors->first('email') || Session::has('error') ) has-error has-feedback @endif">
 					{{ Form::label('email','E-mail') }}
 					{{ Form::text('email',$staff_info->email,array('class'=>'form-control')) }}
 				</div>

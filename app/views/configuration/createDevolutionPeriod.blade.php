@@ -35,7 +35,7 @@
 						</div>
 					</div>	
 					<div class="row">
-						<div class="form-group col-xs-8  @if($errors->first('nombre')) has-error has-feedback @endif">
+						<div class="form-group col-xs-8  @if($errors->first('max_dias_devolucion')) has-error has-feedback @endif">
 							{{ Form::label('max_dias_devolucion','Máximo días de devolución') }}
 							{{ Form::text('max_dias_devolucion',Input::old('max_dias_devolucion'),array('class'=>'form-control')) }}
 						</div>

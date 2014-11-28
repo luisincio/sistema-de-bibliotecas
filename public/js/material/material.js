@@ -184,6 +184,16 @@ $( document ).ready(function(){
 		}
 	});
 
+	$("input[type=checkbox][name=donacion]").change(function(){
+		if($(this).is(":checked")){
+			$("#toggle-donador").show();
+			$("#toggle-orden-de-compra").hide();
+		}else{
+			$("#toggle-orden-de-compra").show();
+			$("#toggle-donador").hide();
+		}
+	});
+
 	$("input[name=fecha_ini]").datepicker({
 		format:'yyyy-mm-dd',
 	});

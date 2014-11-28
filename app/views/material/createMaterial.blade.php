@@ -14,6 +14,9 @@
 			<p><strong>{{ $errors->first('num_paginas') }}</strong></p>
 			<p><strong>{{ $errors->first('cant_ejemplares') }}</strong></p>
 			<p><strong>{{ $errors->first('orden_compra') }}</strong></p>
+			@if($errors->first('donador'))
+				<p><strong>Si el material es una donación, se requiere expecificar el donador</strong></p>
+			@endif
 			@if($errors->first('fecha_ini'))
 				<p><strong>Si el material es una suscripción, la fecha inicial es requerida y debe ser menor a la final</strong></p>
 			@endif
@@ -37,7 +40,7 @@
 	@endif
 	
 	{{ Form::open(array('url'=>'material/submit_create_material', 'role'=>'form')) }}
-		<div class="col-xs-6">
+		<div class="col-xs-6" style="margin-bottom:20px;">
 			<div class="row">
 				<div class="form-group col-xs-8">
 					{{ Form::label('tipo_material','Tipo de material') }}
@@ -102,17 +105,17 @@
 					{{ Form::text('num_edicion',Input::old('num_edicion'),array('class'=>'form-control')) }}
 				</div>
 			</div>
-			{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
-			{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
-			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
-		</div>
-		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('num_paginas')) has-error has-feedback @endif">
 					{{ Form::label('num_paginas','Número de páginas') }}
 					{{ Form::text('num_paginas',Input::old('num_paginas'),array('class'=>'form-control')) }}
 				</div>
 			</div>
+			{{ Form::submit('Registrar',array('id'=>'submit-create', 'class'=>'btn btn-primary')) }}
+			{{ HTML::link('','Limpiar Campos',array('id'=>'clear-fields', 'class'=>'btn btn-default')) }}
+			{{ HTML::link('','Cancelar',array('id'=>'cancel')) }}
+		</div>
+		<div class="col-xs-6">
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('cant_ejemplares')) has-error has-feedback @endif">
 					{{ Form::label('cant_ejemplares','Cantidad de ejemplares') }}
@@ -129,12 +132,32 @@
 					</select>
 				</div>
 			</div>
+
 			<div class="row">
+				<div class="form-group col-xs-8">
+					{{ Form::label('donacion','Es donación') }}
+					{{ Form::checkbox('donacion') }}
+				</div>
+			</div>
+
+			<div class="row" id="toggle-donador" style="display:none;">
+				<div class="form-group col-xs-8">
+					{{ Form::label('donador','Donador') }}
+					<select name="donador" class="form-control">
+						@foreach($doners as $doner)
+						<option value="{{ $doner->id }}">{{ $doner->name }}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+
+			<div class="row" id="toggle-orden-de-compra">
 				<div class="form-group col-xs-8 @if($errors->first('orden_compra') || Session::has('danger')) has-error has-feedback @endif">
 					{{ Form::label('orden_compra','Orden de compra') }}
 					{{ Form::text('orden_compra',Input::old('orden_compra'),array('class'=>'form-control')) }}
 				</div>
 			</div>
+
 			<div class="row">
 				<div class="form-group col-xs-8">
 					{{ Form::label('to_home','Se puede prestar a casa') }}

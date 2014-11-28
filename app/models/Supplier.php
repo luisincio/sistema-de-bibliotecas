@@ -38,4 +38,11 @@ class Supplier extends Eloquent{
 			  ->orderBy('name','asc');
 		return $query;
 	}
+
+	public function scopeGetDoners($query)
+	{
+		$query->whereNotNull('flag_doner')
+			  ->orderBy('name','asc');
+		return $query;
+	}
 }

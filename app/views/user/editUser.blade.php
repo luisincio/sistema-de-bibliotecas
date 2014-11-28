@@ -22,6 +22,9 @@
 	@if (Session::has('message'))
 		<div class="alert alert-success">{{ Session::get('message') }}</div>
 	@endif
+	@if (Session::has('error'))
+		<div class="alert alert-danger">{{ Session::get('error') }}</div>
+	@endif
 
 	{{ Form::open(array('url'=>'user/submit_edit_user', 'role'=>'form')) }}
 		{{ Form::hidden('user_id', $user_info->id) }}
@@ -103,7 +106,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-xs-8 @if($errors->first('email')) has-error has-feedback @endif">
+				<div class="form-group col-xs-8 @if($errors->first('email') || Session::has('error') ) has-error has-feedback @endif">
 					{{ Form::label('email','E-mail') }}
 					{{ Form::text('email',$user_info->email,array('class'=>'form-control')) }}
 				</div>
@@ -126,8 +129,11 @@
 			<div class="row">
 				{{ Form::label('penalizado_hasta','Penalizado hasta') }}
 				<div class="form-group input-group col-xs-8 @if($errors->first('penalizado_hasta')) has-error has-feedback @endif">
-					
+					@if($user_info->restricted_until)
 					{{ Form::text('penalizado_hasta',$user_info->restricted_until,array('class'=>'form-control','readonly'=>'')) }}
+					@else
+					{{ Form::text('penalizado_hasta','',array('class'=>'form-control','readonly'=>'')) }}
+					@endif
 					<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
 				</div>
 			</div>

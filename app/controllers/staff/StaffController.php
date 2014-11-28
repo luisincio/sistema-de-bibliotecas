@@ -63,6 +63,11 @@ class StaffController extends BaseController {
 					$document_number = Input::get('num_documento');
 					$person = Person::searchPersonByDocument($document_number)->get();
 					if($person->isEmpty()){
+						$exist_mail = Person::where('email','=',Input::get('email'))->first();
+						if($exist_mail){
+							Session::flash('error', 'El E-mail ya está tomado por otro usuario.');
+							return Redirect::to('staff/create_staff')->withInput(Input::all());
+						}
 						// Create a random password
 						$password = Str::random(8);
 						//Create person
@@ -307,26 +312,34 @@ class StaffController extends BaseController {
 					$url = "staff/edit_staff"."/".$staff_id;
 					return Redirect::to($url)->withErrors($validator)->withInput(Input::all());
 				}else{
+					$staff_id = Input::get('staff_id');
+					$url = "staff/edit_staff"."/".$staff_id;
+					$edited_email = Input::get('email');
 					$person_id = Input::get('person_id');
 					$person = Person::find($person_id);
 					$person->name = Input::get('nombres');
 					$person->lastname = Input::get('apellidos');
 					$person->birth_date = Input::get('fecha_nacimiento');
-					$person->email = Input::get('email');
+					if( !($person->email == $edited_email) ){
+						$exist_mail = Person::where('email','=',$edited_email)->first();
+						if($exist_mail){
+							Session::flash('error', 'El E-mail ya está tomado por otro usuario.');
+							return Redirect::to($url);
+						}
+						$person->email = $edited_email;
+					}
 					$person->address = Input::get('direccion');
 					$person->gender = Input::get('genero');
 					$person->phone = Input::get('telefono');
 					$person->nacionality = Input::get('nacionalidad');
 					$person->save();
 
-					$staff_id = Input::get('staff_id');
 					$staff = Staff::find($staff_id);
 					$staff->role_id = Input::get('rol');
 					$staff->turn_id = Input::get('turno');
 					$staff->save();
 
 					Session::flash('message', 'Se editó correctamente al personal.');
-					$url = "staff/edit_staff"."/".$staff_id;
 					return Redirect::to($url);
 				}
 			}else{

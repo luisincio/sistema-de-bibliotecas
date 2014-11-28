@@ -73,7 +73,7 @@
 					<select name="area_tematica" class="form-control">
 						@foreach($thematic_areas as $thematic_area)
 							@if($thematic_area->id == $material->thematic_area)
-							<option value="{{ $thematic_area->id }}" checked>{{ $thematic_area->name }}</option>
+							<option value="{{ $thematic_area->id }}" selected>{{ $thematic_area->name }}</option>
 							@else
 							<option value="{{ $thematic_area->id }}">{{ $thematic_area->name }}</option>
 							@endif
@@ -115,7 +115,7 @@
 					<select name="estante" class="form-control">
 						@foreach($shelves as $shelf)
 						@if($shelf->id == $material->shelve_id)
-							<option value="{{ $shelf->id }}" checked>{{ $shelf->code }}</option>
+							<option value="{{ $shelf->id }}" selected>{{ $shelf->code }}</option>
 						@else
 							<option value="{{ $shelf->id }}">{{ $shelf->code }}</option>
 						@endif
@@ -123,12 +123,22 @@
 					</select>
 				</div>
 			</div>
+
+			@if($material->doner)
+			<div class="row">
+				<div class="form-group col-xs-8">
+					{{ Form::label('doner','Donador') }}
+					{{ Form::text('doner',$doner->name,array('class'=>'form-control','readonly'=>'')) }}
+				</div>
+			</div>
+			@else
 			<div class="row">
 				<div class="form-group col-xs-8 @if($errors->first('orden_compra')) has-error has-feedback @endif">
 					{{ Form::label('orden_compra','Orden de compra') }}
 					{{ Form::text('orden_compra',$material->purchase_order_id,array('class'=>'form-control','readonly'=>'')) }}
 				</div>
 			</div>
+			@endif
 			<div class="row">
 				<div class="form-group col-xs-8">
 					{{ Form::label('to_home','Se puede prestar a casa') }}					

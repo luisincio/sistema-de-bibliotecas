@@ -60,7 +60,7 @@
 							<li>{{ HTML::link('/material/create_purchase_order','Registrar Orden de Compra') }}</li>
 							<li>{{ HTML::link('/material/list_material_request','Ver Solicitudes') }}</li>
 							@endif
-							@if($staff->role_id == 3)
+							@if($staff->role_id == 2 || $staff->role_id == 3)
 							<li class="divider"></li>
 							<li>{{ HTML::link('/material/list_material','Buscar Materiales') }}</li>
 							<li>{{ HTML::link('/material/create_material','Registrar Material') }}</li>

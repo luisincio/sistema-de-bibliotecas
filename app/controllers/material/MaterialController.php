@@ -11,10 +11,11 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3){
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				// Check if the current user is the "Bibliotecario"
 				$data["material_types"] = MaterialType::orderBy('name','asc')->get();
 				$data["thematic_areas"] = ThematicArea::orderBy('name','asc')->get();
+				$data["doners"] = Supplier::getDoners()->get();
 				$turn_id = $data["staff"]->turn_id;
 				$turn = Turn::find($turn_id);
 				$branch_id = $turn->branch_id;
@@ -39,7 +40,7 @@ class MaterialController extends BaseController
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
-			if($data["staff"]->role_id == 3){
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
@@ -52,12 +53,15 @@ class MaterialController extends BaseController
 							'anio_publicacion' => 'numeric|integer|min:1000|max:4000',
 							'num_paginas' => 'required|integer|min:1|max:10000',
 							'cant_ejemplares' => 'required|integer|min:1|max:10000',
-							'orden_compra' => 'required|integer',
 							'materiales_adicionales' => 'max:255',
 							'suscripcion' => 'in:null,1',
 							'fecha_ini' => 'required_if:suscripcion,1',
 							'fecha_fin' => 'required_if:suscripcion,1|after:fecha_ini',
-							'periodicidad' => 'required_if:suscripcion,1|numeric|integer|min:1|max:365',
+							'periodicidad' => 'required_if:suscripcion,1|alpha_spaces|min:2|max:45',
+							'donacion' => 'in:null,1',
+							'donador' => 'required_if:donacion,1|integer',
+							'orden_compra' => 'required_if:donacion,null|integer',
+
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);
@@ -65,59 +69,71 @@ class MaterialController extends BaseController
 				if($validator->fails()){
 					return Redirect::to('material/create_material')->withErrors($validator)->withInput(Input::all());
 				}else{
-					// Check if the purchase order exists
-					$purchase_order_id = Input::get('orden_compra');
-					$purchase_order = PurchaseOrder::find($purchase_order_id);
-					if($purchase_order){
-						// Insert the material in the database
-						$cant = Input::get('cant_ejemplares');
-						$fecha = date_create();
-						$timestamp = date_timestamp_get($fecha);
-						if(Input::get('to_home') == 0){
-							$to_home = 0;
-						}else{
-							$to_home = 1;
-						}
-						if(Input::get('suscripcion') == 1){
-							$date_ini = Input::get('fecha_ini');
-							$date_end = Input::get('fecha_fin');
-							$periodicity = Input::get('periodicidad');
-						}else{
-							$date_ini = null;
-							$date_end = null;
-							$periodicity = null;
-						}
-						for($i=0;$i<$cant;$i++){
-							$auto_cod = Input::get('codigo').($timestamp);
-							$timestamp++;
-							$material = new Material;
-							$material->title = Input::get('titulo');
-							$material->base_cod = Input::get('codigo');
-							$material->auto_cod = $auto_cod;
-							$material->author = Input::get('autor');
-							$material->editorial = Input::get('editorial');
-							$material->additional_materials = Input::get('materiales_adicionales');
-							$material->num_pages = Input::get('num_paginas');
-							$material->edition = Input::get('num_edicion');
-							$material->publication_year = Input::get('anio_publicacion');
-							$material->isbn = Input::get('isbn');
-							$material->subscription = Input::get('suscripcion');
-							$material->material_type = Input::get('tipo_material');
-							$material->thematic_area = Input::get('area_tematica');
-							$material->shelve_id = Input::get('estante');
-							$material->purchase_order_id = Input::get('orden_compra');
-							$material->to_home = $to_home;
-							$material->date_ini = $date_ini;
-							$material->date_end = $date_end;
-							$material->periodicity = $periodicity;
-							$material->save();
-						}
-						Session::flash('message', 'Se registró correctamente el material.');
-						return Redirect::to('material/create_material');
+					$es_donacion = Input::get('donacion');
+
+					if($es_donacion){
+						$purchase_order = false;
 					}else{
-						Session::flash('danger', 'El código de la Orden de Compra es inválido.');
-						return Redirect::to('material/create_material')->withInput(Input::all());
+						$purchase_order_id = Input::get('orden_compra');
+						$purchase_order = PurchaseOrder::find($purchase_order_id);
+						if(!$purchase_order){
+							Session::flash('danger', 'El código de la Orden de Compra es inválido o no existe.');
+							return Redirect::to('material/create_material')->withInput(Input::all());
+						}
 					}
+					
+					// Insert the material in the database
+					$cant = Input::get('cant_ejemplares');
+					$fecha = date_create();
+					$timestamp = date_timestamp_get($fecha);
+					if(Input::get('to_home') == 0){
+						$to_home = 0;
+					}else{
+						$to_home = 1;
+					}
+					if(Input::get('suscripcion') == 1){
+						$date_ini = Input::get('fecha_ini');
+						$date_end = Input::get('fecha_fin');
+						$periodicity = Input::get('periodicidad');
+					}else{
+						$date_ini = null;
+						$date_end = null;
+						$periodicity = null;
+					}
+					for($i=0;$i<$cant;$i++){
+						$auto_cod = Input::get('codigo').($timestamp);
+						$timestamp++;
+						$material = new Material;
+						$material->title = Input::get('titulo');
+						$material->base_cod = Input::get('codigo');
+						$material->auto_cod = $auto_cod;
+						$material->author = Input::get('autor');
+						$material->editorial = Input::get('editorial');
+						$material->additional_materials = Input::get('materiales_adicionales');
+						$material->num_pages = Input::get('num_paginas');
+						$material->edition = Input::get('num_edicion');
+						$material->publication_year = Input::get('anio_publicacion');
+						$material->isbn = Input::get('isbn');
+						$material->subscription = Input::get('suscripcion');
+						$material->material_type = Input::get('tipo_material');
+						$material->thematic_area = Input::get('area_tematica');
+						$material->shelve_id = Input::get('estante');
+						if($purchase_order){
+							$material->doner = null;
+							$material->purchase_order_id = Input::get('orden_compra');
+						}else{
+							$material->doner = Input::get('donador');
+							$material->purchase_order_id = null;
+						}
+						$material->to_home = $to_home;
+						$material->date_ini = $date_ini;
+						$material->date_end = $date_end;
+						$material->periodicity = $periodicity;
+						$material->save();
+					}
+					Session::flash('message', 'Se registró correctamente el material.');
+					return Redirect::to('material/create_material');
+					
 				}
 			}else{
 				return View::make('error/error');
@@ -137,7 +153,7 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3){
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				// Check if the current user is the "System Admin"
 				$data["search_criteria"] = null;
 				//$data["materials"] = Material::paginate(20);
@@ -168,7 +184,7 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($id)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3){
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				// Check if the current user is the "System Admin"
 				$data["search_criteria"] = Input::get('search');
 				$data["search_filter"] = Input::get('search_filter');
@@ -204,7 +220,7 @@ class MaterialController extends BaseController
 		$data["staff"] = Person::find($id)->staff;
 		$data["inside_url"] = Config::get('app.inside_url');
 		$data["config"] = GeneralConfiguration::first();
-		if($data["staff"]->role_id == 3){
+		if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
@@ -232,12 +248,13 @@ class MaterialController extends BaseController
 			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3 && $id){
+			if($id && $data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				// Check if the current user is the "System Admin"
 				$data["material"] = Material::find($id);
 				if($data["material"]){
 					$data["material_types"] = MaterialType::orderBy('name','asc')->get();
 					$data["thematic_areas"] = ThematicArea::orderBy('name','asc')->get();
+					$data["doner"] = Supplier::find($data["material"]->doner);
 					$turn_id = $data["staff"]->turn_id;
 					$turn = Turn::find($turn_id);
 					$branch_id = $turn->branch_id;
@@ -265,7 +282,7 @@ class MaterialController extends BaseController
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			// Check if the current user is the "System Admin"
-			if($data["staff"]->role_id == 3){
+			if($data["staff"]->role_id == 2 || $data["staff"]->role_id == 3){
 				
 				// Validate the info, create rules for the inputs
 				$rules = array(
@@ -279,7 +296,7 @@ class MaterialController extends BaseController
 							'suscripcion' => 'in:null,1',
 							'fecha_ini' => 'required_if:suscripcion,1',
 							'fecha_fin' => 'required_if:suscripcion,1|after:fecha_ini',
-							'periodicidad' => 'required_if:suscripcion,1|numeric|integer|min:1|max:365',
+							'periodicidad' => 'required_if:suscripcion,1|alpha_spaces|min:2|max:45',
 						);
 				// Run the validation rules on the inputs from the form
 				$validator = Validator::make(Input::all(), $rules);

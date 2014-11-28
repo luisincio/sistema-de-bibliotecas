@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 25, 2014 at 09:51 PM
+-- Generation Time: Nov 27, 2014 at 09:19 PM
 -- Server version: 5.5.40-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.5
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `assistances` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `staffXassistances_idx` (`staff_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `branches` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `branches`
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `cubicles` (
   PRIMARY KEY (`id`),
   KEY `cubiclesXbranches_idx` (`branch_id`),
   KEY `cubiclesXtypeCubicles_idx` (`cubicle_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `cubicle_reservations` (
   PRIMARY KEY (`id`),
   KEY `cubicleReservationXcubicles_idx` (`user_id`),
   KEY `cubicleReservationXcubicles2_idx` (`cubicle_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `cubicle_types` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `cubicle_types`
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `details_purchase_orders` (
   `purchase_order_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `details_purchase_ordersXpurchaseOrder1_idx` (`purchase_order_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `devolution_periods` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
 
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `holidays` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -251,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `loans` (
   PRIMARY KEY (`id`),
   KEY `materialXloans_idXid_material_idx` (`material_id`),
   KEY `loansXusers_id_userXid_idx` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -280,7 +280,8 @@ CREATE TABLE IF NOT EXISTS `materials` (
   `to_home` int(1) NOT NULL,
   `date_ini` date DEFAULT NULL,
   `date_end` date DEFAULT NULL,
-  `periodicity` int(11) DEFAULT NULL,
+  `periodicity` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `doner` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -288,8 +289,9 @@ CREATE TABLE IF NOT EXISTS `materials` (
   KEY `material_typeXmaterial_idXid_idx` (`material_type`),
   KEY `materialXshleves_idXid_shelves_idx` (`shelve_id`),
   KEY `materialXdetails_idx` (`purchase_order_id`),
-  KEY `materialXthematic_area` (`thematic_area`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=140 ;
+  KEY `materialXthematic_area` (`thematic_area`),
+  KEY `doner` (`doner`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=146 ;
 
 -- --------------------------------------------------------
 
@@ -312,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `material_requests` (
   PRIMARY KEY (`id`),
   KEY `userXmaterial_request_idx` (`user_id`),
   KEY `userXmaterial_request2_idx` (`material_request_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -353,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `material_reservations` (
   PRIMARY KEY (`id`),
   KEY `materialReservationXmaterial_idx` (`material_id`),
   KEY `materialReservationXuser_idx` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -372,7 +374,7 @@ CREATE TABLE IF NOT EXISTS `material_types` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `material_types`
@@ -402,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `material_typexprofiles` (
   PRIMARY KEY (`id`),
   KEY `material_typeXprofile1_idx` (`profile_id`),
   KEY `material_typeXprofile2_idx` (`material_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -463,7 +465,7 @@ CREATE TABLE IF NOT EXISTS `penalty_periods` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -491,14 +493,16 @@ CREATE TABLE IF NOT EXISTS `persons` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `document_typeXperson_idx` (`document_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `persons`
 --
 
 INSERT INTO `persons` (`id`, `doc_number`, `password`, `name`, `lastname`, `birth_date`, `email`, `address`, `gender`, `phone`, `document_type`, `nacionality`, `remember_token`, `last_login`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, '00000000', '$2y$10$aHahX1q88aFYb1RcmMfweOpjMwQYNz2WSFX7C7nGwcFwRweVdMGuu', 'Super Admin', 'Webmaster', '2011-05-17', 'superadmin@host.com', '', 'M', '000000', 1, 'Anonimus', 'n5VNy5JnpMEao4ODWax7Fa45txN0z7X4kB1n4doi7kBVS5OiRVLne61m7Mdt', NULL, '2014-10-01 05:00:00', '2014-11-26 02:50:41', NULL);
+(1, '00000000', '$2y$10$aHahX1q88aFYb1RcmMfweOpjMwQYNz2WSFX7C7nGwcFwRweVdMGuu', 'Super Admin', 'Webmaster', '2011-05-17', 'superadmin@host.com', '', 'M', '000000', 1, 'Anonimus', 'BjmG5nZzhEoUhC1mbHstSA6F8jKu5DAwbK6Kd0ETgXEZ6ECI3eR9IThuC1Vv', NULL, '2014-10-01 05:00:00', '2014-11-27 17:58:01', NULL),
+(15, '47029368', '$2y$10$zUVZG0khtgY/vcsOeMwQN.smntcQ.GYia3muu6nfyGhft9mWNF2A6', 'Eduardo Antonio', 'Merino Tejada', '1991-04-09', 'proteus236@gmail.com', 'Av. Siempre Viva 743', 'M', '98765841', NULL, 'Peruano', NULL, NULL, '2014-11-27 17:57:29', '2014-11-27 21:01:01', NULL),
+(16, '47029369', '$2y$10$pRzdpnP1qI/YbeXz.6pm.epEiWVKwRUsfCD5J08yCL32nNhEKeXQS', 'Eduardo Antonio', 'Merino Tejada', '2014-11-13', 'proteus237@gmail.com', 'Av. Siempre Viva 742', 'M', '98765544', 1, 'Peruano', NULL, NULL, '2014-11-27 19:48:52', '2014-11-27 19:48:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -516,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `physical_elements` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `physical_elementXbranch` (`branch_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -534,7 +538,7 @@ CREATE TABLE IF NOT EXISTS `profiles` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `profiles`
@@ -563,7 +567,7 @@ CREATE TABLE IF NOT EXISTS `purchase_orders` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `purchase_orderXsupplier` (`supplier_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -604,7 +608,14 @@ CREATE TABLE IF NOT EXISTS `shelves` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `shelvesXbranches_idx` (`branch_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `shelves`
+--
+
+INSERT INTO `shelves` (`id`, `code`, `description`, `branch_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(8, 'ESTA001', 'Estante1', 1, '2014-11-27 18:46:56', '2014-11-27 18:46:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -625,7 +636,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
   KEY `staffXturns_idx` (`turn_id`),
   KEY `staffXrole_idx` (`role_id`),
   KEY `person_id` (`person_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
 
 --
 -- Dumping data for table `staff`
@@ -654,7 +665,7 @@ CREATE TABLE IF NOT EXISTS `suppliers` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -706,7 +717,7 @@ CREATE TABLE IF NOT EXISTS `turns` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `turnsXbranches` (`branch_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `turns`
@@ -734,7 +745,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `personXUser_idXid_idx` (`id`),
   KEY `profileXuser_idprofileXuser_idx` (`profile_id`),
   KEY `person_id` (`person_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
 -- Constraints for dumped tables
@@ -777,6 +788,7 @@ ALTER TABLE `loans`
 -- Constraints for table `materials`
 --
 ALTER TABLE `materials`
+  ADD CONSTRAINT `materialXdoner` FOREIGN KEY (`doner`) REFERENCES `suppliers` (`id`),
   ADD CONSTRAINT `materialXmaterial_type` FOREIGN KEY (`material_type`) REFERENCES `material_types` (`id`),
   ADD CONSTRAINT `materialXpurchase_order` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_orders` (`id`),
   ADD CONSTRAINT `materialXshelves` FOREIGN KEY (`shelve_id`) REFERENCES `shelves` (`id`),
