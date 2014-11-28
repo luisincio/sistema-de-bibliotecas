@@ -303,16 +303,16 @@ class ReservationController extends BaseController
 		if($data["user"]){
 			/* Validate if the user has no reservation */
 			$today = Date("Y-m-d");
-			$has_reservation = CubicleReservation::getReservationByUserDate($data["user"]->id,$today)->lockForUpdate()->first();
+			$has_reservation = CubicleReservation::getReservationByUserDate($data["user"]->id,$today)->first();
 			if(!$has_reservation){
 				/* If the user has no reservation */
 				$cubicle_id = Input::get('cubicle_id_form');
 				$cubicle_reservation_form_num_person = Input::get('cubicle_reservation_form_num_person');
 				$cubicle_reservation_form_hour_in = Input::get('cubicle_reservation_form_hour_in');
 				$cubicle_reservation_form_hour_out = Input::get('cubicle_reservation_form_hour_out');
-
-				$exist_hour_in = CubicleReservation::where('hour_in','>=',$cubicle_reservation_form_hour_in)->where('hour_out','<=',$cubicle_reservation_form_hour_in)->first();
-				$exist_hour_out = CubicleReservation::where('hour_in','>=',$cubicle_reservation_form_hour_out)->where('hour_out','<=',$cubicle_reservation_form_hour_out)->first();
+				DB::raw("LOCK TABLES cubicle_reservations");
+				$exist_hour_in = DB::table('cubicle_reservations')->where('hour_in','>=',$cubicle_reservation_form_hour_in)->where('hour_out','<=',$cubicle_reservation_form_hour_in)->lockForUpdate()->first();
+				$exist_hour_out = DB::table('cubicle_reservations')->where('hour_in','>=',$cubicle_reservation_form_hour_out)->where('hour_out','<=',$cubicle_reservation_form_hour_out)->lockForUpdate()->first();
 				if( !($exist_hour_in || $exist_hour_out) ){
 					$cubicle_reservation = new CubicleReservation;
 					$cubicle_reservation->hour_in = $cubicle_reservation_form_hour_in;
@@ -322,8 +322,10 @@ class ReservationController extends BaseController
 					$cubicle_reservation->user_id = $data["user"]->id;
 					$cubicle_reservation->reserved_at = $today;
 					$cubicle_reservation->save();
+					DB::raw("UNLOCK TABLES");
 					return Response::json(array( 'success' => true, 'reservation_done' => true ),200);
 				}else{
+					DB::raw("UNLOCK TABLES");
 					return Response::json(array( 'success' => false ),200);
 				}
 			}
