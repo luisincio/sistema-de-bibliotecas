@@ -303,7 +303,7 @@ class ReservationController extends BaseController
 		if($data["user"]){
 			/* Validate if the user has no reservation */
 			$today = Date("Y-m-d");
-			$has_reservation = CubicleReservation::getReservationByUserDate($data["user"]->id,$today)->first();
+			$has_reservation = CubicleReservation::getReservationByUserDate($data["user"]->id,$today)->lockForUpdate()->first();
 			
 			if(!$has_reservation){
 				/* If the user has no reservation */
@@ -424,9 +424,9 @@ class ReservationController extends BaseController
 		}
 		$id = Auth::id();
 		$data["person"] = Auth::user();
-		$data["user"]= Person::find($id)->user;
+		$data["user"] = Person::find($id)->user;
 		$data["staff"] = Person::find($id)->staff;
-		if($data["staff"]->role_id == 3){
+		if($data["user"] || $data["staff"]->role_id == 3){
 			// Check if the current user is the "Bibliotecario"
 			$selected_ids = Input::get('selected_id');
 			foreach($selected_ids as $selected_id){
