@@ -313,7 +313,7 @@ class ReservationController extends BaseController
 
 				$exist_hour_in = CubicleReservation::where('hour_in','>=',$cubicle_reservation_form_hour_in)->where('hour_out','<=',$cubicle_reservation_form_hour_in)->first();
 				$exist_hour_out = CubicleReservation::where('hour_in','>=',$cubicle_reservation_form_hour_out)->where('hour_out','<=',$cubicle_reservation_form_hour_out)->first();
-				return Response::json(array( 'success' => true, 'reservation_done' => true, 'a' => $exist_hour_in, 'b' => $exist_hour_out ),200);
+				//return Response::json(array( 'success' => true, 'reservation_done' => true, 'a' => $exist_hour_in, 'b' => $exist_hour_out ),200);
 				if( !($exist_hour_in || $exist_hour_out) ){
 					$cubicle_reservation = new CubicleReservation;
 					$cubicle_reservation->hour_in = $cubicle_reservation_form_hour_in;
