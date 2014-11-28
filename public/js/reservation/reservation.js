@@ -113,6 +113,7 @@ $( document ).ready(function(){
 						success: function(response){
 							if(response.success){
 								if(response.reservation_done){
+									console.log(response);
 									alert('Se reservó correctamente el cubículo.');
 								}else{
 									alert('Usted ya tiene una reserva vigente, no puede reservar más cubículos.');
