@@ -19,7 +19,8 @@ class Loan extends Eloquent{
 		$query->join('materials','materials.mid','=','loans.material_id')
 			  ->join('shelves','shelves.id','=','materials.shelve_id')
 			  ->where('loans.user_id','=',$user_id)
-			  ->where('shelves.branch_id','=',$branch_id);
+			  ->where('shelves.branch_id','=',$branch_id)
+			  ->select('loans.*','materials.*');
 		return $query;
 	}
 

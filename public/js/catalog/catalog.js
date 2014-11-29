@@ -88,13 +88,14 @@ $( document ).ready(function(){
 						material_reservation = true;
 					},
 					success: function(response){
+						console.log(response);
 						if(response.success){
 							switch(response.material_available){
-								case 1: alert('El material fue reservado exitosamente.');
+								case '1': alert('El material fue reservado exitosamente.');
 										break;
-								case 2: alert('El material fue reservado exitosamente pero usted está en la cola de espera.\nEsté atento a las notificaciones que le enviaremos a su correo.');
+								case '2': alert('El material fue reservado exitosamente pero usted está en la cola de espera.\nEsté atento a las notificaciones que le enviaremos a su correo.');
 										break;
-								case 3: alert('El material fue reservado exitosamente aunque todos los ejemplares están prestados.\nEsté atento a las notificaciones que le enviaremos a su correo.');
+								case '3': alert('El material fue reservado exitosamente aunque todos los ejemplares están prestados.\nEsté atento a las notificaciones que le enviaremos a su correo.');
 										break;
 							}
 							location.reload();

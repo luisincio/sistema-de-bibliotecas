@@ -82,7 +82,6 @@ class LoanController extends BaseController
 			foreach($selected_ids as $selected_id){
 				$loan = Loan::find($selected_id);
 				if($loan){
-					$loan->delete();
 					$edit_user->current_reservations = $edit_user->current_reservations - 1;
 					$material = Material::find($loan->material_id);
 
@@ -107,7 +106,7 @@ class LoanController extends BaseController
 					}else{
 						$material->available = 1;
 					}
-
+					$loan->delete();
 					$material->save();
 				}
 			}
@@ -355,6 +354,10 @@ class LoanController extends BaseController
 					$loan->material_id = $material_reservation->material_id;
 					$loan->user_id = $material_reservation->user_id;
 					$loan->save();
+
+					$material = Material::find($material_reservation->material_id);
+					$material->available = 3;
+					$material->save();
 
 					$material_reservation->delete();
 

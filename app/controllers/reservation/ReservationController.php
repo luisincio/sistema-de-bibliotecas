@@ -72,8 +72,6 @@ class ReservationController extends BaseController
 									}
 									
 								}
-								
-
 								$material_reservation->expire_at = $expire_at;
 							}
 							$material_reservation->save();
@@ -189,7 +187,9 @@ class ReservationController extends BaseController
 								->subject('Libro disponible para préstamo');
 					});
 				}else{
-					$material->available = 1;
+					if($material_reservation->expire_at){
+						$material->available = 1;
+					}
 				}
 				$material->save();
 			}
