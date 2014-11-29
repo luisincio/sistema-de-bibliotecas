@@ -587,7 +587,7 @@ class LoanController extends BaseController
 			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3 && $id){
+			if( $id && $data["user"]){
 				// Check if the current user is the "System Admin"
 
 				$loan = Loan::find($id);
