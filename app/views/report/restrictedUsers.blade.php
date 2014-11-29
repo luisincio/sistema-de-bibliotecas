@@ -18,7 +18,7 @@
 			<th>Dirección</th>
 			<th>Teléfono</th>
 			<th>Género</th>
-			<th>Fecha de Re-incorporación</th>
+			<th>Fecha de Reincorporación</th>
 		</tr>
 		@foreach($restricted_users as $restricted_user)
 		<tr>
