@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 27, 2014 at 09:19 PM
+-- Generation Time: Nov 28, 2014 at 07:18 PM
 -- Server version: 5.5.40-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.5
 
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `devolution_periods` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -291,7 +291,14 @@ CREATE TABLE IF NOT EXISTS `materials` (
   KEY `materialXdetails_idx` (`purchase_order_id`),
   KEY `materialXthematic_area` (`thematic_area`),
   KEY `doner` (`doner`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=146 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=153 ;
+
+--
+-- Dumping data for table `materials`
+--
+
+INSERT INTO `materials` (`mid`, `base_cod`, `auto_cod`, `title`, `author`, `editorial`, `additional_materials`, `num_pages`, `edition`, `publication_year`, `isbn`, `subscription`, `material_type`, `thematic_area`, `shelve_id`, `purchase_order_id`, `available`, `to_home`, `date_ini`, `date_end`, `periodicity`, `doner`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(152, 'ABCD', 'ABCD123456', 'asdasdasd', 'asdasdasd', 'asdasdasd', 'asdasdasd', '123', 'asdasdas', 1990, '12312312', 1, 1, 1, 8, NULL, 1, 1, '2014-11-26', '2014-11-29', 'bimsetral', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -465,7 +472,7 @@ CREATE TABLE IF NOT EXISTS `penalty_periods` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -500,9 +507,7 @@ CREATE TABLE IF NOT EXISTS `persons` (
 --
 
 INSERT INTO `persons` (`id`, `doc_number`, `password`, `name`, `lastname`, `birth_date`, `email`, `address`, `gender`, `phone`, `document_type`, `nacionality`, `remember_token`, `last_login`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, '00000000', '$2y$10$aHahX1q88aFYb1RcmMfweOpjMwQYNz2WSFX7C7nGwcFwRweVdMGuu', 'Super Admin', 'Webmaster', '2011-05-17', 'superadmin@host.com', '', 'M', '000000', 1, 'Anonimus', 'BjmG5nZzhEoUhC1mbHstSA6F8jKu5DAwbK6Kd0ETgXEZ6ECI3eR9IThuC1Vv', NULL, '2014-10-01 05:00:00', '2014-11-27 17:58:01', NULL),
-(15, '47029368', '$2y$10$zUVZG0khtgY/vcsOeMwQN.smntcQ.GYia3muu6nfyGhft9mWNF2A6', 'Eduardo Antonio', 'Merino Tejada', '1991-04-09', 'proteus236@gmail.com', 'Av. Siempre Viva 743', 'M', '98765841', NULL, 'Peruano', NULL, NULL, '2014-11-27 17:57:29', '2014-11-27 21:01:01', NULL),
-(16, '47029369', '$2y$10$pRzdpnP1qI/YbeXz.6pm.epEiWVKwRUsfCD5J08yCL32nNhEKeXQS', 'Eduardo Antonio', 'Merino Tejada', '2014-11-13', 'proteus237@gmail.com', 'Av. Siempre Viva 742', 'M', '98765544', 1, 'Peruano', NULL, NULL, '2014-11-27 19:48:52', '2014-11-27 19:48:52', NULL);
+(1, '00000000', '$2y$10$aHahX1q88aFYb1RcmMfweOpjMwQYNz2WSFX7C7nGwcFwRweVdMGuu', 'Super Admin', 'Webmaster', '2011-05-17', 'superadmin@host.com', '', 'M', '000000', 1, 'Anonimus', 'xOiIuYe4nkNr8IseuBok1p0FcrHSqwCLZz9HGcOJ37BWkFVDiTdgh7aGPLKe', NULL, '2014-10-01 05:00:00', '2014-11-29 00:16:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -636,7 +641,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
   KEY `staffXturns_idx` (`turn_id`),
   KEY `staffXrole_idx` (`role_id`),
   KEY `person_id` (`person_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `staff`
@@ -665,7 +670,7 @@ CREATE TABLE IF NOT EXISTS `suppliers` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -745,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `personXUser_idXid_idx` (`id`),
   KEY `profileXuser_idprofileXuser_idx` (`profile_id`),
   KEY `person_id` (`person_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
