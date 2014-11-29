@@ -9,7 +9,7 @@
 
 <body>
 	<div id="main-container" style="text-align:center;">
-		<h2>Usted está intentando ingresar a un contenido que no está permitido para su usuario</h2>
+		<h2>Usted está intentando ingresar a contenido no autorizado</h2>
 		<h3>Para regresar al inicio haga click <a href="{{ URL::to('/') }}">aquí</a><h3>
 		<img src="{{asset('img/error_img.jpg')}}">
 	</div>
