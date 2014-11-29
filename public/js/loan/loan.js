@@ -32,11 +32,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -94,7 +94,7 @@ $( document ).ready(function(){
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -124,12 +124,12 @@ $( document ).ready(function(){
 							$("input[name=nr_titulo_libro]").val(response.material[0].title);
 							$("input[name=nr_autor_libro]").val(response.material[0].author);							
 						}else{
-							alert('No se ha encontrado un material con el código solicitado.');
+							alert('No se ha encontrado un material con el código solicitado en esta sede.');
 						}
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -172,7 +172,7 @@ $( document ).ready(function(){
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -213,7 +213,7 @@ $( document ).ready(function(){
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -256,11 +256,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}else{
@@ -310,11 +310,11 @@ $( document ).ready(function(){
 							}
 							location.reload();
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo2.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -351,11 +351,11 @@ function loan_register(e,reservation_id)
 				alert('Se registró correctamente el préstamo.');
 				$("input#search-user-loans").trigger("click");
 			}else{
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		},
 		error: function(){
-			alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+			alert('La petición no se pudo completar, inténtelo de nuevo.');
 		}
 	});
 }

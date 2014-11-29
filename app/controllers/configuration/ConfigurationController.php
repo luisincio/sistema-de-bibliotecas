@@ -1444,13 +1444,13 @@ class ConfigurationController extends BaseController
 		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
+			$branch_id = Input::get('branch_id');
 			$code = Input::get('code');
-			$validate_code = Cubicle::getCubicleByCode($code)->first();
+			$validate_code = Cubicle::getCubicleByCodeBranch($code,$branch_id)->first();
 
 			if(!$validate_code){
 				$capacity = Input::get('capacity');
 				$cubicle_type = Input::get('cubicle_type');
-				$branch_id = Input::get('branch_id');
 				$cubicle = new Cubicle;
 				$cubicle->code = $code;
 				$cubicle->capacity = $capacity;
@@ -1479,11 +1479,11 @@ class ConfigurationController extends BaseController
 		if($data["staff"]->role_id == 1){
 			// Check if the current user is the "System Admin"
 			$code = Input::get('code');
-			$validate_code = Shelf::getShelfByCode($code)->first();
+			$branch_id = Input::get('branch_id');
+			$validate_code = Shelf::getShelfByCodeBranch($code,$branch_id)->first();
 
 			if(!$validate_code){
 				$description = Input::get('description');
-				$branch_id = Input::get('branch_id');
 				$shelf = new Shelf;
 				$shelf->code = $code;
 				$shelf->description = $description;

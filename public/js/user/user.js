@@ -32,11 +32,11 @@ $( document ).ready(function(){
 								if(response.success){
 									location.reload();
 								}else{
-									alert('¡Ocurrió un error! Inténtelo de nuevo.');
+									alert('La petición no se pudo completar, inténtelo de nuevo.');
 								}
 							},
 							error: function(){
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						});
 					}
@@ -98,7 +98,7 @@ $( document ).ready(function(){
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -143,11 +143,11 @@ $( document ).ready(function(){
 									}
 									location.reload();
 								}else{
-									alert('¡Ocurrió un error! Inténtelo de nuevo.');
+									alert('La petición no se pudo completar, inténtelo de nuevo.');
 								}
 							},
 							error: function(){
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						});
 					}
@@ -170,30 +170,19 @@ $( document ).ready(function(){
 				type: 'POST',
 				data: { 'user_id' : user_id },
 				beforeSend: function(){
-					/*
-					$("#delete-selected-users").addClass("disabled");
-					$("#delete-selected-users").hide();
-					$(".loader_container").show();
-					*/
 				},
 				complete: function(){
-					/*
-					$(".loader_container").hide();
-					$("#delete-selected-users").removeClass("disabled");
-					$("#delete-selected-users").show();
-					delete_selected_users = true;
-					*/
 					reactivate_user = true;
 				},
 				success: function(response){
 					if(response.success){
 						location.reload();
 					}else{
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}

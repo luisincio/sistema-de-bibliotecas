@@ -20,4 +20,11 @@ class Turn extends Eloquent{
 		return $query;
 	}
 
+	public function scopeGetBranchByTurn($query,$turn_id)
+	{
+		$query->where('id','=',$turn_id)
+			  ->select('branch_id');
+		return $query;
+	}
+
 }

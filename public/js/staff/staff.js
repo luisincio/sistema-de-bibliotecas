@@ -47,7 +47,7 @@ $( document ).ready(function(){
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -86,11 +86,11 @@ var delete_selected_staffs = true;
 								if(response.success){
 									location.reload();
 								}else{
-									alert('¡Ocurrió un error! Inténtelo de nuevo.');
+									alert('La petición no se pudo completar, inténtelo de nuevo.');
 								}
 							},
 							error: function(){
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						});
 					}
@@ -132,11 +132,11 @@ var delete_selected_staffs = true;
 					if(response.success){
 						location.reload();
 					}else{
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -176,11 +176,11 @@ var delete_selected_staffs = true;
 						$("select[name=turno]").prop('disabled', false);
 						$("select[name=turno]").append(str_turns);
 					}else{
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}

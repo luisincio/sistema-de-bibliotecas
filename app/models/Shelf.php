@@ -27,4 +27,11 @@ class Shelf extends Eloquent{
 		return $query;
 	}
 
+	public function scopeGetShelfByCodeBranch($query,$code,$branch_id)
+	{
+		$query->where('code','=',$code)
+			  ->where('branch_id','=',$branch_id);
+		return $query;
+	}
+
 }

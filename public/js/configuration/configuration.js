@@ -31,11 +31,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -75,11 +75,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -121,11 +121,11 @@ $( document ).ready(function(){
 								if(response.success){
 									location.reload();
 								}else{
-									alert('¡Ocurrió un error! Inténtelo de nuevo.');
+									alert('La petición no se pudo completar, inténtelo de nuevo.');
 								}
 							},
 							error: function(){
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						});
 				}
@@ -170,11 +170,11 @@ $( document ).ready(function(){
 						if(response.success){
 							location.reload();
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}
@@ -214,11 +214,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -262,11 +262,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -328,11 +328,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -376,11 +376,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -420,11 +420,11 @@ $( document ).ready(function(){
 						if(response.success){
 							render_physical_elements(response.branch_cubicles,response.cubicle_types,response.branch_physical_elements,response.branch_shelves);
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -484,11 +484,11 @@ $( document ).ready(function(){
 							$("#edit-physical-element").modal("hide");
 						}
 					}else{
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}else{
@@ -540,11 +540,11 @@ $( document ).ready(function(){
 						$("#edit-shelf").modal("hide");
 					}
 				}else{
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			},
 			error: function(){
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		});
 		
@@ -602,11 +602,11 @@ $( document ).ready(function(){
 						$("#edit-cubicle").modal("hide");
 					}
 				}else{
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			},
 			error: function(){
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		});
 	});
@@ -686,11 +686,11 @@ $( document ).ready(function(){
 								$("#submit-search-physical-elements-form").trigger('click');
 							}
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -758,11 +758,11 @@ $( document ).ready(function(){
 								$("#submit-search-physical-elements-form").trigger('click');
 							}
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -839,11 +839,11 @@ $( document ).ready(function(){
 								$("#submit-search-physical-elements-form").trigger('click');
 							}
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}else{
@@ -902,11 +902,11 @@ $( document ).ready(function(){
 					}							
 					location.reload();
 				}else{
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			},
 			error: function(){
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		});
 	
@@ -947,11 +947,11 @@ $( document ).ready(function(){
 							if(response.success){								
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -1026,11 +1026,11 @@ function delete_physical_element(e,id)
 				$("#submit-search-physical-elements-form").trigger('click');
 				alert('Se eliminó correctamente el elemento físico.');
 			}else{
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		},
 		error: function(){
-			alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			alert('La petición no se pudo completar, inténtelo de nuevo.');
 		}
 	});
 }
@@ -1058,11 +1058,11 @@ function delete_shelf(e,id)
 					alert('Se eliminó correctamente el estante.');
 				}
 			}else{
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		},
 		error: function(){
-			alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			alert('La petición no se pudo completar, inténtelo de nuevo.');
 		}
 	});
 }
@@ -1090,11 +1090,11 @@ function delete_cubicle(e,id)
 					alert('Se eliminó correctamente el cubículo.');
 				}
 			}else{
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		},
 		error: function(){
-			alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			alert('La petición no se pudo completar, inténtelo de nuevo.');
 		}
 	});
 }

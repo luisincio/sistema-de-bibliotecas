@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="robots" content="noindex, follow">
-	<title>Error | Sistema de Biblioteca</title>
+	<title>Acceso No Autorizado | Sistema de Biblioteca</title>
 </head>
 
 <body>

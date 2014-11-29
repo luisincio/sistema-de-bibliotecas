@@ -31,11 +31,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}else{
@@ -74,11 +74,11 @@ $( document ).ready(function(){
 					if(response.success){
 						render_cubicle_reservation_table(response);
 					}else{
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -113,17 +113,16 @@ $( document ).ready(function(){
 						success: function(response){
 							if(response.success){
 								if(response.reservation_done){
-									console.log(response);
 									alert('Se reservó correctamente el cubículo.');
 								}else{
-									alert('Usted ya tiene una reserva vigente, no puede reservar más cubículos.');
+									alert('No se pudo realizar la acción, usted ya tiene una reserva vigente o el cubículo ya está reservado por otra persona.');
 								}
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}else{
@@ -168,11 +167,11 @@ $( document ).ready(function(){
 							if(response.success){
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}else{
@@ -280,11 +279,11 @@ function cubicle_reservation_detail(reservation_id)
 				$(".modal-header").show();
 				$(".modal-body").show();
 			}else{
-				alert('¡Ocurrió un error! Inténtelo de nuevo.');
+				alert('La petición no se pudo completar, inténtelo de nuevo.');
 			}
 		},
 		error: function(){
-			alert('¡Ocurrió un error! Inténtelo de nuevo.');
+			alert('La petición no se pudo completar, inténtelo de nuevo.');
 		}
 	});
 }

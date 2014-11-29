@@ -32,11 +32,11 @@ $( document ).ready(function(){
 								alert('Algunos materiales no pudieron ser eliminados ya que existen préstamos o reservas pendientes.');
 								location.reload();
 							}else{
-								alert('¡Ocurrió un error! Inténtelo de nuevo.');
+								alert('La petición no se pudo completar, inténtelo de nuevo.');
 							}
 						},
 						error: function(){
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					});
 				}
@@ -153,11 +153,11 @@ $( document ).ready(function(){
 						if(response.success){
 							window.location.replace(inside_url+'material/list_purchase_order');
 						}else{
-							alert('¡Ocurrió un error! Inténtelo de nuevo.');
+							alert('La petición no se pudo completar, inténtelo de nuevo.');
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 				
@@ -235,7 +235,7 @@ $( document ).ready(function(){
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! No se pudo conectar con el servidor.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}

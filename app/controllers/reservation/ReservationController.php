@@ -310,10 +310,10 @@ class ReservationController extends BaseController
 				$cubicle_reservation_form_num_person = Input::get('cubicle_reservation_form_num_person');
 				$cubicle_reservation_form_hour_in = Input::get('cubicle_reservation_form_hour_in');
 				$cubicle_reservation_form_hour_out = Input::get('cubicle_reservation_form_hour_out');
-
-				$exist_hour_in = CubicleReservation::where('hour_in','>=',$cubicle_reservation_form_hour_in)->where('hour_out','<=',$cubicle_reservation_form_hour_in)->first();
-				$exist_hour_out = CubicleReservation::where('hour_in','>=',$cubicle_reservation_form_hour_out)->where('hour_out','<=',$cubicle_reservation_form_hour_out)->first();
-				//return Response::json(array( 'success' => true, 'reservation_done' => true, 'a' => $exist_hour_in, 'b' => $exist_hour_out,'c' => $cubicle_reservation_form_hour_in,'d' => $cubicle_reservation_form_hour_out),200);
+				$a = DateTime::createFromFormat('H:m:s',$cubicle_reservation_form_hour_in);
+				$b = DateTime::createFromFormat('H:m:s',$cubicle_reservation_form_hour_out);
+				$exist_hour_in = CubicleReservation::where('hour_in','<',$a)->where('hour_out','>',$a)->first();
+				$exist_hour_out = CubicleReservation::where('hour_in','<',$b)->where('hour_out','>',$b)->first();
 				if( !($exist_hour_in || $exist_hour_out) ){
 					$cubicle_reservation = new CubicleReservation;
 					$cubicle_reservation->hour_in = $cubicle_reservation_form_hour_in;
@@ -325,7 +325,7 @@ class ReservationController extends BaseController
 					$cubicle_reservation->save();
 					return Response::json(array( 'success' => true, 'reservation_done' => true ),200);
 				}else{
-					return Response::json(array( 'success' => false ),200);
+					return Response::json(array( 'success' => true, 'reservation_done' => false ),200);
 				}
 			}
 			
@@ -383,7 +383,8 @@ class ReservationController extends BaseController
 				if($data["reservation_person"]){
 					$reservation_user = User::searchUserByPersonId($data["reservation_person"]->id)->first();
 					if($reservation_user){
-						$data["reservations"] = CubicleReservation::getReservationCubicleByUserDate($reservation_user->id,$today)->get();
+						$branch = Turn::getBranchByTurn($data["staff"]->turn_id)->first();
+						$data["reservations"] = CubicleReservation::getReservationCubicleByUserDateBranch($reservation_user->id,$today,$branch->branch_id)->get();
 					}else{
 						$data["reservations"] = null;
 					}
@@ -456,9 +457,8 @@ class ReservationController extends BaseController
 			$data["staff"] = Person::find($uid)->staff;
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
-			if($data["staff"]->role_id == 3 && $id){
+			if($id && $data["user"]){
 				// Check if the current user is the "System Admin"
-
 				$material_reservation = MaterialReservation::find($id);
 				if($material_reservation){
 					$yesterday = Date('Y-m-d',strtotime("-1 days"));

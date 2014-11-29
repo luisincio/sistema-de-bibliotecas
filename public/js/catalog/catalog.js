@@ -55,11 +55,11 @@ $( document ).ready(function(){
 						$("#material-branch").text(branch);
 						$("#material-total-materials").text(total_materials);
 					}else{
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				},
 				error: function(){
-					alert('¡Ocurrió un error! Inténtelo de nuevo.');
+					alert('La petición no se pudo completar, inténtelo de nuevo.');
 				}
 			});
 		}
@@ -114,7 +114,7 @@ $( document ).ready(function(){
 						}
 					},
 					error: function(){
-						alert('¡Ocurrió un error! Inténtelo de nuevo.');
+						alert('La petición no se pudo completar, inténtelo de nuevo.');
 					}
 				});
 			}

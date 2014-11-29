@@ -35,6 +35,7 @@ class LoanController extends BaseController
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
+				$branch = Turn::getBranchByTurn($data["staff"]->turn_id)->first();
 				// Check if the current user is the "Bibliotecario"
 				Input::merge(array_map('trim', Input::all()));
 				$data["search_criteria"] = Input::get('search');
@@ -47,7 +48,7 @@ class LoanController extends BaseController
 					$user = User::searchUserByPerson($person->id)->first();
 					if($user){
 						$data["searched_user_name"] = $person->name." ".$person->lastname;
-						$data["loans"] = Loan::searchUserLoans($user->id)->paginate(10);
+						$data["loans"] = Loan::searchUserLoansByBranch($user->id,$branch->branch_id)->paginate(10);
 						$data["user_id"] = $user->id;
 					}
 				}
@@ -180,9 +181,10 @@ class LoanController extends BaseController
 		$data["user"]= Person::find($id)->user;
 		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 3){
+			$branch = Turn::getBranchByTurn($data["staff"]->turn_id)->first();
 			$material_code = Input::get('material_code');
 			if(ctype_alpha($material_code)){
-				$material = Material::searchMaterialByCode($material_code)->get();
+				$material = Material::searchMaterialByCodeBranch($material_code,$branch->branch_id)->get();
 				return Response::json(array( 'success' => true , 'material'=> $material),200);
 			}else{
 				return Response::json(array( 'success' => false ),200);
@@ -264,8 +266,6 @@ class LoanController extends BaseController
 								$devolution_date = $today;
 							}
 
-
-
 							$loan = new Loan;
 							$loan->expire_at = $devolution_date;
 							$loan->material_id = $material->mid;
@@ -304,11 +304,12 @@ class LoanController extends BaseController
 		$data["user"]= Person::find($id)->user;
 		$data["staff"] = Person::find($id)->staff;
 		if($data["staff"]->role_id == 3){
+			$branch = Turn::getBranchByTurn($data["staff"]->turn_id)->first();
 			$document_number = Input::get('document_number');
 			if(ctype_digit($document_number)){
 				$user = User::searchUserByDocument($document_number)->first();
 				if($user){
-					$material_reservations = MaterialReservation::getUserReservationsForLoans($user->id)->get();
+					$material_reservations = MaterialReservation::getUserReservationsForLoansByBranch($user->id,$branch->branch_id)->get();
 					return Response::json(array( 'success' => true, 'problem' => null ,'material_reservations'=> $material_reservations),200);
 				}else{
 					return Response::json(array( 'success' => true,'problem' => 'user_no_exist' ,'material_reservations'=> null ),200);
@@ -425,6 +426,7 @@ class LoanController extends BaseController
 			$data["inside_url"] = Config::get('app.inside_url');
 			$data["config"] = GeneralConfiguration::first();
 			if($data["staff"]->role_id == 3){
+				$branch = Turn::getBranchByTurn($data["staff"]->turn_id)->first();
 				// Check if the current user is the "Bibliotecario"
 				Input::merge(array_map('trim', Input::all()));
 				$data["search_criteria"] = Input::get('search');
@@ -437,7 +439,7 @@ class LoanController extends BaseController
 					$user = User::searchUserByPerson($person->id)->first();
 					if($user){
 						$data["searched_user_name"] = $person->name." ".$person->lastname;
-						$data["loans"] = Loan::searchUserLoans($user->id)->paginate(10);
+						$data["loans"] = Loan::searchUserLoansByBranch($user->id,$branch->branch_id)->paginate(10);
 						$data["user_id"] = $user->id;
 					}
 				}

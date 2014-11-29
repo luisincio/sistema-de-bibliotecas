@@ -35,4 +35,14 @@ class MaterialReservation extends Eloquent{
 			  ->select('materials.auto_cod','materials.title','materials.author','materials.editorial','material_reservations.*');
 		return $query;
 	}
+
+	public function scopeGetUserReservationsForLoansByBranch($query,$user_id,$branch_id)
+	{
+		$query->join('materials','materials.mid','=','material_reservations.material_id')
+			  ->join('shelves','shelves.id','=','materials.shelve_id')
+			  ->where('user_id','=',$user_id)
+			  ->where('branch_id','=',$branch_id)
+			  ->select('shelves.branch_id','materials.auto_cod','materials.title','materials.author','materials.editorial','material_reservations.*');
+		return $query;
+	}
 }

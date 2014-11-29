@@ -123,6 +123,14 @@ class Material extends Eloquent{
 		return $query;
 	}
 
+	public function scopeSearchMaterialByCodeBranch($query,$material_code,$branch_id)
+	{
+		$query->join('shelves','materials.shelve_id','=','shelves.id')
+			  ->where('materials.base_cod','=',$material_code)
+			  ->where('shelves.branch_id','=',$branch_id);
+		return $query;
+	}
+
 	public function scopeGetAvailableMaterialByCodeBranch($query,$material_code,$branch_id)
 	{
 		$query->join('shelves','materials.shelve_id','=','shelves.id')

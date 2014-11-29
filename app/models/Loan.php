@@ -14,6 +14,15 @@ class Loan extends Eloquent{
 		return $query;
 	}
 
+	public function scopeSearchUserLoansByBranch($query,$user_id,$branch_id)
+	{
+		$query->join('materials','materials.mid','=','loans.material_id')
+			  ->join('shelves','shelves.id','=','materials.shelve_id')
+			  ->where('loans.user_id','=',$user_id)
+			  ->where('shelves.branch_id','=',$branch_id);
+		return $query;
+	}
+
 	public function scopeSearchUserLoansByMaterial($query,$user_id,$materia_code)
 	{
 		$query->join('materials','materials.mid','=','loans.material_id')

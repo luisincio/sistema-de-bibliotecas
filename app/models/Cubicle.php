@@ -32,4 +32,11 @@ class Cubicle extends Eloquent{
 		$query->where('code','=',$code);
 		return $query;
 	}
+
+	public function scopeGetCubicleByCodeBranch($query,$code,$branch_id)
+	{
+		$query->where('code','=',$code)
+			  ->where('branch_id','=',$branch_id);
+		return $query;
+	}
 }

@@ -6,6 +6,7 @@
 
 		<table class="table table-hover" style="margin-top:20px;">
 			<tr class="info">
+				<th>Sede</th>
 				<th>Cubículo</th>
 				<th>Número de personas</th>
 				<th>Hora de inicio</th>
@@ -15,6 +16,9 @@
 			</tr>
 			@foreach( $reservations as $reservation)
 			<tr>
+				<td>
+					{{$reservation->name}}
+				</td>
 				<td>
 					{{$reservation->code}}
 				</td>
