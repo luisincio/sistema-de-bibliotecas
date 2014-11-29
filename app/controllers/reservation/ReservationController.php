@@ -22,7 +22,7 @@ class ReservationController extends BaseController
 				$material_branch = Input::get('material_branch');
 				$material_shelf = Input::get('material_shelf');
 
-				$material = Material::getMaterialForReservation($material_code,$material_shelf)->first();
+				$material = Material::getMaterialForReservation($material_code,$material_shelf)->lockForUpdate()->first();
 
 				// Check if the current user can reserve the material by its material type permission
 				$material_types_available = MaterialTypexprofile::getMaterialTypesXProfile($data["user"]->profile_id)->get();
@@ -33,7 +33,7 @@ class ReservationController extends BaseController
 					}
 				}
 				if( in_array($material->material_type,$material_types_available_array) ){
-					$has_reservation = MaterialReservation::getReservationByUserMaterialCode($data["user"]->id,$material->base_cod)->first();
+					$has_reservation = MaterialReservation::getReservationByUserMaterialCode($data["user"]->id,$material->base_cod)->lockForUpdate()->first();
 					if(!$has_reservation){
 						$has_loan = Loan::searchUserLoansByMaterial($data["user"]->id,$material->base_cod)->first();
 						if(!$has_loan){
