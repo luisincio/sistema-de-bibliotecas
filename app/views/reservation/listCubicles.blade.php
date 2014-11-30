@@ -5,6 +5,16 @@
 		var max_hour_cubicle_loan = "{{$config->max_hours_loan_cubicle}}";
 	</script>
 	<h1>Reservar Cubículo</h1>
+	@if($user && $user->restricted_until)
+		<div class="alert alert-danger" role="alert">
+			<p><strong>Su usario está restringido hasta el
+				<?php 
+					$date = new DateTime($user->restricted_until);
+				?>
+				{{ $date->format('d-m-Y') }}
+			</strong></p>
+		</div>
+	@endif
 	<div class="container">
 		{{ Form::open(array('url'=>'','role'=>'form', 'id'=>'search-form','class' => 'form-inline')) }}
 			<div class="search-cubicles-bar">
