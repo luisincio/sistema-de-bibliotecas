@@ -40,12 +40,24 @@
 					@if($thematic_area_filter == 0)
 						en todas las áreas temáticas
 					@else
-						en el área temática "<strong>{{ $thematic_areas[$thematic_area_filter-1]->name }}</strong>"
+						en el área temática "<strong>
+						@foreach($thematic_areas as $thematic_area)
+							@if($thematic_area->id == $thematic_area_filter)
+								{{ $thematic_area->name }}
+							@endif
+						@endforeach
+						</strong>"
 					@endif
 					@if($branch_filter == 0)
 						y en todas las sedes
 					@else
-						y en la sede "<strong>{{ $branches[$branch_filter-1]->name }}</strong>"
+						y en la sede "<strong>
+						@foreach($branches as $branch)
+							@if($branch->id == $branch_filter)
+								{{ $branch->name }}
+							@endif
+						@endforeach
+						</strong>"
 					@endif
 				</h3>
 			@endif
