@@ -304,6 +304,9 @@ class ReservationController extends BaseController
 			/* Validate if the user has no reservation */
 			$today = Date("Y-m-d");
 			$has_reservation = CubicleReservation::getReservationByUserDate($data["user"]->id,$today)->first();
+			if($data["user"]->restricted_until){
+				return Response::json(array( 'success' => true, 'reservation_done' => false, 'problem' => 'penalize' ),200);
+			}
 			if(!$has_reservation){
 				/* If the user has no reservation */
 				$cubicle_id = Input::get('cubicle_id_form');
@@ -325,7 +328,7 @@ class ReservationController extends BaseController
 					$cubicle_reservation->save();
 					return Response::json(array( 'success' => true, 'reservation_done' => true ),200);
 				}else{
-					return Response::json(array( 'success' => true, 'reservation_done' => false ),200);
+					return Response::json(array( 'success' => true, 'reservation_done' => false, 'problem' => 'has_reservation' ),200);
 				}
 			}
 			

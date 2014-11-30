@@ -115,7 +115,13 @@ $( document ).ready(function(){
 								if(response.reservation_done){
 									alert('Se reservó correctamente el cubículo.');
 								}else{
-									alert('No se pudo realizar la acción, usted ya tiene una reserva vigente o el cubículo ya está reservado por otra persona.');
+									switch(response.problem){
+										case 'penalize': alert('No se pudo realizar la acción, usted está penalizado.');
+														 break;
+										case 'has_reservation': alert('No se pudo realizar la acción, usted ya tiene una reserva vigente o el cubículo ya está reservado por otra persona.');
+																break;
+									}
+									
 								}
 							}else{
 								alert('La petición no se pudo completar, inténtelo de nuevo.');
