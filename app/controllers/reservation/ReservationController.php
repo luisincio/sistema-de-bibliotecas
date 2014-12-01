@@ -315,8 +315,8 @@ class ReservationController extends BaseController
 				$cubicle_reservation_form_hour_out = Input::get('cubicle_reservation_form_hour_out');
 				$a = DateTime::createFromFormat('H:m:s',$cubicle_reservation_form_hour_in);
 				$b = DateTime::createFromFormat('H:m:s',$cubicle_reservation_form_hour_out);
-				$exist_hour_in = CubicleReservation::where('hour_in','<',$a)->where('hour_out','>',$a)->first();
-				$exist_hour_out = CubicleReservation::where('hour_in','<',$b)->where('hour_out','>',$b)->first();
+				$exist_hour_in = CubicleReservation::where('hour_in','<',$a)->where('hour_out','>',$a)->where('reserved_at','=',$today)->first();
+				$exist_hour_out = CubicleReservation::where('hour_in','<',$b)->where('hour_out','>',$b)->where('reserved_at','=',$today)->first();
 				if( !($exist_hour_in || $exist_hour_out) ){
 					$cubicle_reservation = new CubicleReservation;
 					$cubicle_reservation->hour_in = $cubicle_reservation_form_hour_in;
