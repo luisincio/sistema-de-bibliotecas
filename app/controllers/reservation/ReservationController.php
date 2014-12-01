@@ -328,8 +328,10 @@ class ReservationController extends BaseController
 					$cubicle_reservation->save();
 					return Response::json(array( 'success' => true, 'reservation_done' => true ),200);
 				}else{
-					return Response::json(array( 'success' => true, 'reservation_done' => false, 'problem' => 'has_reservation' ),200);
+					return Response::json(array( 'success' => true, 'reservation_done' => false, 'problem' => 'another_reservation' ),200);
 				}
+			}else{
+				return Response::json(array( 'success' => true, 'reservation_done' => false, 'problem' => 'has_reservation' ),200);
 			}
 			
 			return Response::json(array( 'success' => true , 'reservation_done' => false ),200);

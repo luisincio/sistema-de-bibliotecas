@@ -118,7 +118,9 @@ $( document ).ready(function(){
 									switch(response.problem){
 										case 'penalize': alert('No se pudo realizar la acción, usted está penalizado.');
 														 break;
-										case 'has_reservation': alert('No se pudo realizar la acción, usted ya tiene una reserva vigente o el cubículo ya está reservado por otra persona.');
+										case 'another_reservation': alert('No se pudo realizar la acción, el cubículo ya está reservado por otra persona.');
+																break;
+										case 'has_reservation': alert('No se pudo realizar la acción, usted ya tiene una reserva vigente.');
 																break;
 									}
 									
