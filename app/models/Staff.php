@@ -24,8 +24,9 @@ class Staff extends Eloquent{
 			  ->join('persons','persons.id','=','staff.person_id')
 			  ->join('turns','turns.id','=','staff.turn_id')
 			  ->join('branches','branches.id','=','turns.branch_id')
+			  ->join('roles','roles.id','=','staff.role_id')
 			  ->where('role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name');
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name');
 		return $query;
 	}
 
@@ -35,12 +36,13 @@ class Staff extends Eloquent{
 			  ->join('persons','persons.id','=','staff.person_id')
 			  ->join('turns','turns.id','=','staff.turn_id')
 			  ->join('branches','branches.id','=','turns.branch_id')
+			  ->join('roles','roles.id','=','staff.role_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -48,12 +50,15 @@ class Staff extends Eloquent{
 	public function scopeSearchActiveStaffs($query,$search_criteria)
 	{
 		$query->join('persons','persons.id','=','staff.person_id')
+			  ->join('roles','roles.id','=','staff.role_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -62,12 +67,15 @@ class Staff extends Eloquent{
 	{
 		$query->onlyTrashed()
 			  ->join('persons','persons.id','=','staff.person_id')
+			  ->join('roles','roles.id','=','staff.role_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -84,9 +92,12 @@ class Staff extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','staff.person_id')
+			  ->join('roles','roles.id','=','staff.role_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('role_id','<>',1)
-			  ->select('staff.*','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality');
+			  ->select('roles.name as role_name','staff.*','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','turns.hour_ini','turns.hour_end','branches.name as branch_name');
 		return $query;
 	}
 
@@ -96,6 +107,9 @@ class Staff extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','staff.person_id')
+			  ->join('roles','roles.id','=','staff.role_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
@@ -103,7 +117,7 @@ class Staff extends Eloquent{
 			  })
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('staff.role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -111,6 +125,9 @@ class Staff extends Eloquent{
 	public function scopeSearchActiveStaffsByTurns($query,$search_criteria,$turns_array)
 	{
 		$query->join('persons','persons.id','=','staff.person_id')
+			  ->join('roles','roles.id','=','staff.role_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
@@ -118,7 +135,7 @@ class Staff extends Eloquent{
 			  })
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('staff.role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -127,6 +144,9 @@ class Staff extends Eloquent{
 	{
 		$query->onlyTrashed()
 			  ->join('persons','persons.id','=','staff.person_id')
+			  ->join('roles','roles.id','=','staff.role_id')
+			  ->join('turns','turns.id','=','staff.turn_id')
+			  ->join('branches','branches.id','=','turns.branch_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
@@ -134,7 +154,7 @@ class Staff extends Eloquent{
 			  })
 			  ->whereIn('staff.turn_id',$turns_array)
 			  ->where('staff.role_id','<>',1)
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*')
+			  ->select('roles.name as role_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','staff.*','turns.hour_ini','turns.hour_end','branches.name as branch_name')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}

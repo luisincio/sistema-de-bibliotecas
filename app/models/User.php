@@ -17,7 +17,8 @@ class User extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','users.person_id')
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*');
+			  ->join('profiles','profiles.id','=','users.profile_id')
+			  ->select('profiles.name as profile_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*');
 		return $query;
 	}
 
@@ -25,12 +26,13 @@ class User extends Eloquent{
 	{
 		$query->withTrashed()
 			  ->join('persons','persons.id','=','users.person_id')
+			  ->join('profiles','profiles.id','=','users.profile_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			  ->select('profiles.name as profile_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -38,12 +40,13 @@ class User extends Eloquent{
 	public function scopeSearchActiveUsers($query,$search_criteria)
 	{
 		$query->join('persons','persons.id','=','users.person_id')
+			  ->join('profiles','profiles.id','=','users.profile_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			   ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			  ->select('profiles.name as profile_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}
@@ -52,12 +55,13 @@ class User extends Eloquent{
 	{
 		$query->onlyTrashed()
 			  ->join('persons','persons.id','=','users.person_id')
+			  ->join('profiles','profiles.id','=','users.profile_id')
 			  ->whereNested(function($query) use($search_criteria){
 			  		$query->where('persons.name','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.lastname','LIKE',"%$search_criteria%")
 			  			  ->orWhere('persons.doc_number','LIKE',"%$search_criteria%");
 			  })
-			  ->select('persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
+			  ->select('profiles.name as profile_name','persons.doc_number','persons.name','persons.lastname','persons.birth_date','persons.email','persons.address','persons.gender','persons.phone','persons.document_type','persons.nacionality','users.*')
 			  ->orderBy('persons.name','asc');
 		return $query;
 	}

@@ -23,6 +23,7 @@
 				<th>Nombres</th>
 				<th>Apellidos</th>
 				<th>E-mail</th>
+				<th>Perfil</th>
 				<th class="text-center">Seleccione @if($search_filter!=2) {{ Form::checkbox('select_all') }} @endif</th>
 			</tr>
 			@foreach($users_data as $user_data)
@@ -42,6 +43,9 @@
 				</td>
 				<td>
 					{{$user_data->email}}
+				</td>
+				<td>
+					{{$user_data->profile_name}}
 				</td>
 				<td class="text-center">
 					@if($user_data->deleted_at)

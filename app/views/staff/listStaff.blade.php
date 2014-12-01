@@ -25,7 +25,7 @@
 				<th>Hora de salida</th>
 				<th>Asistencia</th>
 				<th>Sede</th>
-				<th>E-mail</th>
+				<th>Rol</th>
 				<th class="text-center">Seleccione @if($search_filter!=2) {{ Form::checkbox('select_all') }} @endif</th>
 			</tr>
 			@foreach($staffs_data as $staff_data)
@@ -57,7 +57,7 @@
 					{{$staff_data->branch_name}}
 				</td>
 				<td>
-					{{$staff_data->email}}
+					{{$staff_data->role_name}}
 				</td>
 				<td class="text-center">
 					@if($staff_data->deleted_at)
